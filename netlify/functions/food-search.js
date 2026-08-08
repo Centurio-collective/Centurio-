@@ -29,28 +29,48 @@ const PAGE_SIZE = 12;
 
 // USDA nutrient IDs are more stable than nutrientName strings across data
 // types, so match on nutrientId first and fall back to a name match.
+//
+// IMPORTANT: USDA records commonly carry TWO "Energy" entries -- one in
+// kcal (nutrientId 1008) and one in kJ (nutrientId 1062), both with
+// nutrientName "Energy". Matching by id-or-name in a single pass can grab
+// the kJ entry ahead of the kcal one depending on array order, silently
+// returning a value ~4.18x too high. `unit` pins the fallback to the
+// entry with the expected unit so that can't happen even when a record
+// lacks nutrientId and we have to fall back to name matching.
 const NUTRIENT_MATCHERS = {
-  calories: { id: 1008, names: ['energy'] },
-  protein: { id: 1003, names: ['protein'] },
-  fat: { id: 1004, names: ['total lipid (fat)', 'total fat'] },
-  carbs: { id: 1005, names: ['carbohydrate, by difference', 'carbohydrate'] },
-  fibre: { id: 1079, names: ['fiber, total dietary', 'fiber'] },
+  calories: { id: 1008, names: ['energy'], unit: 'KCAL' },
+  protein: { id: 1003, names: ['protein'], unit: 'G' },
+  fat: { id: 1004, names: ['total lipid (fat)', 'total fat'], unit: 'G' },
+  carbs: { id: 1005, names: ['carbohydrate, by difference', 'carbohydrate'], unit: 'G' },
+  fibre: { id: 1079, names: ['fiber, total dietary', 'fiber'], unit: 'G' },
 };
 
 function findNutrientValue(foodNutrients, matcher) {
   if (!Array.isArray(foodNutrients)) return null;
-  for (const n of foodNutrients) {
-    // /foods/search returns a flat shape ({ nutrientId, nutrientName, value, ... }).
-    // Handle a nested { nutrient: { id, name }, amount } shape defensively too,
-    // in case USDA changes the response or a detail-endpoint call is added later.
-    const id = n.nutrientId ?? n.nutrient?.id;
-    const name = (n.nutrientName ?? n.nutrient?.name ?? '').toLowerCase();
-    const value = n.value ?? n.amount;
-    if (id === matcher.id || matcher.names.includes(name)) {
-      return typeof value === 'number' ? value : null;
-    }
-  }
-  return null;
+
+  // /foods/search returns a flat shape ({ nutrientId, nutrientName, value, unitName }).
+  // Handle a nested { nutrient: { id, name, unitName }, amount } shape defensively too,
+  // in case USDA changes the response or a detail-endpoint call is added later.
+  const idOf = (n) => n.nutrientId ?? n.nutrient?.id;
+  const nameOf = (n) => (n.nutrientName ?? n.nutrient?.name ?? '').toLowerCase();
+  const unitOf = (n) => (n.unitName ?? n.nutrient?.unitName ?? '').toUpperCase();
+  const valueOf = (n) => {
+    const v = n.value ?? n.amount;
+    return typeof v === 'number' ? v : null;
+  };
+
+  // Pass 1: an exact nutrient ID match is authoritative -- check the whole
+  // array first so a same-named-but-wrong-unit entry earlier in the array
+  // (e.g. kJ Energy before kcal Energy) can never win over it.
+  const byId = foodNutrients.find((n) => idOf(n) === matcher.id);
+  if (byId) return valueOf(byId);
+
+  // Pass 2: no ID match found (some records omit nutrientId) -- fall back
+  // to name, preferring whichever candidate has the expected unit.
+  const byName = foodNutrients.filter((n) => matcher.names.includes(nameOf(n)));
+  if (!byName.length) return null;
+  const preferred = matcher.unit ? byName.find((n) => unitOf(n) === matcher.unit) : null;
+  return valueOf(preferred || byName[0]);
 }
 
 function normalizeFood(food) {
