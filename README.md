@@ -1,16 +1,20 @@
 # Centurio Collective — centuriocollective.com
 
 Static site source for centuriocollective.com, plus the serverless
-function that connects its two Netlify Forms to Supabase.
+functions that connect its Netlify Forms to Supabase and power the
+nutrition tool's food search.
 
 ```
 index.html, join.html, 1on1.html, score.html,
 welcome.html, welcome-1on1.html, welcome-1on1-single.html,
-privacy.html, terms.html            the site pages (no build step)
-netlify/functions/form-webhook.js   Netlify Forms -> Supabase webhook
-netlify.toml                        publish dir + functions config
-package.json                        @supabase/supabase-js dependency
-.env.example                        env var names (no real values)
+privacy.html, terms.html             the main site pages (no build step)
+nutrition.html                       nutrition/macro calculator -- no nav link,
+                                      reached only via its dedicated URL
+netlify/functions/form-webhook.js    Netlify Forms -> Supabase webhook
+netlify/functions/food-search.js     USDA FoodData Central search proxy
+netlify.toml                         publish dir + functions config
+package.json                         @supabase/supabase-js dependency
+.env.example                         env var names (no real values)
 ```
 
 ## Forms → Supabase mapping
@@ -110,3 +114,53 @@ steps twice — once for `waitlist`, once for `mental-fitness-score`:
   failure logs the Supabase error or the missing-field list.
 - Confirm the row landed in the corresponding Supabase table (Supabase
   dashboard → Table editor).
+
+## 6. Nutrition tool (`/nutrition.html`) — USDA food search setup
+
+`nutrition.html` is a separate, unlinked page (per request — no link
+from the main nav; you'll point a dedicated URL at it yourself). It has
+a daily macro calculator (unchanged from the prototype) and a meal
+calculator that now searches USDA FoodData Central first, with manual
+entry kept only as a fallback for foods it can't find.
+
+1. **Get a USDA FoodData Central API key** (skip if you already have
+   the one from the prior build): https://fdc.nal.usda.gov/api-key-signup.html
+   — free, no cost, just an email address.
+2. **Add it to Netlify**: Site configuration → Environment variables →
+   add `USDA_API_KEY` with that value. Same rule as the Supabase key —
+   never paste it into chat, commit it, or put it in client-side code.
+   It's read server-side only, in `netlify/functions/food-search.js`.
+3. Redeploy (env vars only take effect on the next deploy).
+4. **Test the function directly** before trusting the UI:
+   `https://centuriocollective.com/.netlify/functions/food-search?q=chicken%20breast%20cooked`
+   should return `200` with a JSON body like
+   `{"query":"...","results":[{"fdcId":...,"description":"...","calories":...,"protein":...,"carbs":...,"fat":...,"fibre":...}, ...]}`.
+   If it doesn't, check **Functions → food-search → Logs** before
+   touching the front end (mirrors the handover doc's own troubleshooting order).
+5. Then test the page itself: search a food, confirm results appear,
+   select one, confirm it's added at 100g with the right macros, and
+   that editing grams updates the totals immediately.
+
+**What I could and couldn't verify myself:** I could not make a live
+call to `api.nal.usda.gov` from this sandbox (network egress is
+blocked here, same as it is to centuriocollective.com), so
+`food-search.js`'s nutrient normalization is built to USDA's documented
+`/foods/search` response shape but has not been exercised against a
+real response. I did verify, with local tests (mocking both the
+Supabase client and `fetch`, no network involved):
+- `form-webhook.js`'s insert payload for both forms.
+- `food-search.js`'s handler logic (missing-query 400, normalization
+  shape).
+- The full `nutrition.html` meal-calculator flow end-to-end in a real
+  DOM (jsdom): search → select a result → adds a row at 100g with the
+  correct per-100g macros, readonly on the USDA-sourced fields, a
+  source caption (`USDA · <dataType> · fdcId <id>`) so provenance isn't
+  lost; changing grams to 200 exactly doubles the row's macros; a
+  second manually-added food sums into the meal total; removing a row
+  also removes its source caption; a search result with no usable
+  nutrient data renders disabled rather than being added with fabricated
+  zeros.
+
+None of that substitutes for the handover doc's own acceptance tests
+against the real USDA API and real deploy — do those (step 4 above)
+before relying on this for real members.
