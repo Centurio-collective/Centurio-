@@ -394,7 +394,18 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
   fetch("/", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: encodeFormData({ "form-name": "mental-fitness-score", name, email, score: String(computedScores.overall) })
+    body: encodeFormData({
+      "form-name": "mental-fitness-score",
+      name,
+      email,
+      score: String(computedScores.overall),
+      lead_score: String(computedScores.byCapacity.lead),
+      align_score: String(computedScores.byCapacity.align),
+      regulate_score: String(computedScores.byCapacity.regulate),
+      connect_score: String(computedScores.byCapacity.connect),
+      grow_score: String(computedScores.byCapacity.grow),
+      perform_score: String(computedScores.byCapacity.perform)
+    })
   }).catch(err => console.error("Background form submission failed:", err));
 
   renderResults();
