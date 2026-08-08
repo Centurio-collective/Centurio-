@@ -1,11 +1,10 @@
-# Netlify build/deploy configuration.
+# Netlify build/deploy configuration for centuriocollective.com.
 #
-# NOTE: This repo currently only contains the serverless function for the
-# Netlify Forms -> Supabase webhook, not the full site source for
-# centuriocollective.com (that lives wherever the site is currently
-# deployed from). If/when this repo becomes the site's git-based deploy
-# source, add a [build] section with the real `publish` directory and
-# `command`, and merge this [functions] block into that config.
+# The site is static HTML with no build step (no bundler, no framework) --
+# the HTML files at the repo root are published as-is.
+
+[build]
+  publish = "."
 
 [functions]
   directory = "netlify/functions"

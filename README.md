@@ -1,51 +1,35 @@
-# Centurio — Netlify Forms → Supabase webhook
+# Centurio Collective — centuriocollective.com
 
-This repo currently contains the serverless function that connects
-Netlify Forms submissions on **centuriocollective.com** to Supabase,
-plus its deployment config. It does **not** yet contain the site's own
-HTML/CSS/JS — see "What's not in this repo yet" below.
+Static site source for centuriocollective.com, plus the serverless
+function that connects its two Netlify Forms to Supabase.
 
-## What this does
+```
+index.html, join.html, 1on1.html, score.html,
+welcome.html, welcome-1on1.html, welcome-1on1-single.html,
+privacy.html, terms.html            the site pages (no build step)
+netlify/functions/form-webhook.js   Netlify Forms -> Supabase webhook
+netlify.toml                        publish dir + functions config
+package.json                        @supabase/supabase-js dependency
+.env.example                        env var names (no real values)
+```
+
+## Forms → Supabase mapping
 
 `netlify/functions/form-webhook.js` receives a POST from a Netlify
 Forms "outgoing webhook" notification, figures out which form was
-submitted, and inserts the relevant fields into Supabase using the
-`service_role` key (required because both tables have RLS enabled):
+submitted, and inserts into Supabase using the `service_role` key
+(required because both tables have RLS enabled). Field names below are
+confirmed against the live form markup:
 
-| Netlify form name       | Supabase table          | Columns inserted |
-|--------------------------|--------------------------|-------------------|
-| `waitlist`                | `waitlist_signups`        | `first_name`, `email` |
-| `mental-fitness-score`    | `assessment_submissions`  | `name`, `email`, `overall_score`, `lead_score`, `align_score`, `regulate_score`, `connect_score`, `grow_score`, `perform_score` |
+| Netlify form (`form_name`) | Form fields (`<input name="...">`) | Supabase table | Columns inserted |
+|---|---|---|---|
+| `waitlist` (index.html, 2 instances) | `name`, `email` | `waitlist_signups` | `first_name` ← `name`, `email` ← `email` |
+| `mental-fitness-score` (score.html) | `name`, `email`, `score`, `lead_score`, `align_score`, `regulate_score`, `connect_score`, `grow_score`, `perform_score` | `assessment_submissions` | `name`, `email`, `overall_score` ← `score`, and the six `*_score` columns 1:1 |
 
-> **Field-name caveat:** the field names read from the submission
-> (`first_name`, `email`, `name`, `overall_score`, ...) are assumed to
-> match the `name` attributes on the live form's `<input>` elements.
-> This function could not fetch the live site to verify that — double
-> check the deployed form markup against `FORM_HANDLERS` in
-> `netlify/functions/form-webhook.js` and adjust if the input names
-> differ.
-
-## What's not in this repo yet
-
-The actual site source for centuriocollective.com isn't in this repo —
-only this function and its deploy config. **Do not** point Netlify's
-continuous (git-based) deploy at this repo as-is; because there's no
-`publish` directory with real site content, a git-based deploy would
-replace the live site with an empty one. Two safe ways to get this
-function live instead:
-
-1. **Merge into the existing site project.** Copy
-   `netlify/functions/form-webhook.js`, the `@supabase/supabase-js`
-   dependency, and the `[functions]` block from `netlify.toml` into
-   whatever project/folder is currently used to produce the manual
-   deploys for centuriocollective.com, then deploy that combined
-   folder as usual.
-2. **Migrate to git-based deploy properly.** Add the site's real HTML/
-   CSS/JS into this repo (so it matches what's live today), then link
-   this GitHub repo to the Netlify site (Site configuration → Build &
-   deploy → Link repository) so Netlify builds/publishes from git
-   going forward instead of manual uploads. Once that's done, this
-   function ships automatically with every deploy.
+Note the two renames: the waitlist form's `name` field feeds the
+`first_name` column, and the assessment's `score` field feeds the
+`overall_score` column — every other field matches its column name
+directly.
 
 ## 1. Get the Supabase service role key (do this in the Supabase dashboard, not in chat)
 
@@ -71,21 +55,30 @@ a variable**, and add both:
 | `SUPABASE_SERVICE_ROLE_KEY` | the `service_role` key from step 1 |
 
 Scope them to "All deploy contexts" (or at least Production) so the
-function can read them at runtime. Redeploy after adding them —
-env vars only take effect on the next deploy.
+function can read them at runtime. Redeploy after adding them — env
+vars only take effect on the next deploy.
 
-## 3. Deploy the function
+## 3. Link this repo to the Netlify site (switch from manual deploys to git deploys)
 
-See "What's not in this repo yet" above — merge this function into
-your live site deploy (option 1) or migrate to git deploy with full
-site content (option 2). Once deployed, its URL will be:
+1. Netlify UI → your `centuriocollective.com` site → **Site
+   configuration → Build & deploy → Continuous deployment → Link
+   repository** (or "Link site to Git" if it currently shows no git
+   source).
+2. Choose GitHub → authorize/select the `Centurio-collective/Centurio-`
+   repository → branch `claude/github-netlify-setup-pz7pxp` (or `main`,
+   once this is merged there).
+3. Build settings: **Build command** — leave blank. **Publish
+   directory** — `.` (repo root). These match `netlify.toml`, so
+   Netlify should pick them up automatically — just confirm they show
+   correctly before saving.
+4. Save. Netlify will run a deploy from this branch immediately.
+5. **Check the deploy log** (Deploys tab → the new deploy) for two
+   things before trusting it: it should list all 9 HTML pages as
+   published, and it should show `form-webhook` under the Functions
+   section as successfully bundled.
 
-```
-https://<your-site>.netlify.app/.netlify/functions/form-webhook
-```
-
-(or the equivalent path on `centuriocollective.com` once custom-domain
-routing applies).
+Once linked, every future push to the connected branch redeploys the
+site automatically — no more manual uploads.
 
 ## 4. Configure the two outgoing webhooks in Netlify
 
@@ -106,6 +99,10 @@ steps twice — once for `waitlist`, once for `mental-fitness-score`:
 
 ## 5. Verify
 
+- Load the live pages after the git-deploy switch and confirm they
+  render exactly as before (nav, forms, styling) — since this deploy
+  now serves from git instead of the previous manual upload, this is
+  the check that nothing regressed.
 - Submit a test entry through each live form.
 - Check **Functions → form-webhook → Logs** in the Netlify UI — a
   successful run logs
@@ -113,12 +110,3 @@ steps twice — once for `waitlist`, once for `mental-fitness-score`:
   failure logs the Supabase error or the missing-field list.
 - Confirm the row landed in the corresponding Supabase table (Supabase
   dashboard → Table editor).
-
-## Local reference
-
-```
-netlify/functions/form-webhook.js   the webhook handler
-netlify.toml                        functions directory config
-package.json                        @supabase/supabase-js dependency
-.env.example                        env var names (no real values)
-```

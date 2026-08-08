@@ -28,17 +28,22 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // insert. Each entry defines the destination table and a `map` function
 // that pulls the right fields off Netlify's submission `data` payload.
 //
-// NOTE: the field names read from `data` below (first_name, email, name,
-// overall_score, ...) are assumed to match the `name` attributes on the
-// live form's <input> elements 1:1, per the submitted spec. If the actual
-// deployed form uses different input names, update the `data.xxx` lookups
-// here to match -- this function was not able to fetch the live site to
-// verify the exact input names.
+// Field names below were confirmed against the live form markup
+// (index.html #signupForm/#signupForm2, score.html #gateForm):
+//   waitlist:             <input name="name">, <input name="email">
+//   mental-fitness-score: <input name="name">, <input name="email">,
+//                          hidden inputs name="score", "lead_score",
+//                          "align_score", "regulate_score",
+//                          "connect_score", "grow_score", "perform_score"
+// Note the waitlist form's field is "name" (mapped to the first_name
+// column) and the assessment's overall score field is "score" (mapped
+// to the overall_score column) -- neither form field is named the same
+// as its destination column.
 const FORM_HANDLERS = {
   waitlist: {
     table: 'waitlist_signups',
     map: (data) => ({
-      first_name: str(data.first_name),
+      first_name: str(data.name),
       email: str(data.email),
     }),
     required: ['first_name', 'email'],
@@ -48,7 +53,7 @@ const FORM_HANDLERS = {
     map: (data) => ({
       name: str(data.name),
       email: str(data.email),
-      overall_score: num(data.overall_score),
+      overall_score: num(data.score),
       lead_score: num(data.lead_score),
       align_score: num(data.align_score),
       regulate_score: num(data.regulate_score),
