@@ -1,0 +1,12 @@
+# Netlify build/deploy configuration.
+#
+# NOTE: This repo currently only contains the serverless function for the
+# Netlify Forms -> Supabase webhook, not the full site source for
+# centuriocollective.com (that lives wherever the site is currently
+# deployed from). If/when this repo becomes the site's git-based deploy
+# source, add a [build] section with the real `publish` directory and
+# `command`, and merge this [functions] block into that config.
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

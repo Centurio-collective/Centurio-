@@ -1,0 +1,12 @@
+{
+  "name": "centurio-netlify-functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Netlify serverless functions for centuriocollective.com, including the Netlify Forms -> Supabase webhook.",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}
