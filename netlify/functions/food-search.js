@@ -4,20 +4,29 @@
 //
 // Server-side proxy that searches multiple free/open nutrition sources in
 // parallel and returns a merged, normalized result set. The browser never
-// sees the USDA API key -- it's read from process.env.USDA_API_KEY here.
-// Open Food Facts needs no key at all.
+// sees the USDA API key or the Supabase key -- read from process.env
+// here. Open Food Facts needs no key at all.
 //
-// Sources, in priority order (per the project's nutrition data
-// architecture -- USDA primary, Open Food Facts secondary):
+// Sources, in result order:
 //   1. USDA FoodData Central  -- generic/whole foods, US-centric
-//   2. Open Food Facts        -- packaged/branded products, barcode data,
+//   2. AFCD (Australian Food Composition Database, FSANZ Release 3) --
+//      generic/whole foods incl. standard butcher meats, Australian
+//      conventions/cuts. Our own Supabase table (imported once from
+//      FSANZ's published dataset), not a live external API -- no
+//      reliability risk from a third party here.
+//   3. Open Food Facts        -- packaged/branded products, barcode data,
 //                                notably better AU/international brand
-//                                coverage than USDA
+//                                coverage than USDA (coverage varies by
+//                                query -- see searchOpenFoodFacts)
 //
-// Required environment variable (set in Netlify: Site configuration ->
+// Required environment variables (set in Netlify: Site configuration ->
 // Environment variables):
-//   USDA_API_KEY   your USDA FoodData Central API key (never commit this,
-//                   never log it, never echo it back in a response)
+//   USDA_API_KEY        USDA FoodData Central API key
+//   SUPABASE_URL        same Supabase project used by form-webhook.js
+//   SUPABASE_ANON_KEY   the anon/publishable key (NOT the service role --
+//                       this only ever reads public reference data
+//                       through an RLS policy that already permits it)
+// Never commit, log, or echo any of these back in a response.
 // Open Food Facts requires no signup or key.
 //
 // DESIGN NOTES / WHY IT'S BUILT THIS WAY:
@@ -48,6 +57,8 @@
 //   care applies to Open Food Facts, where the kcal figure is read from
 //   the explicitly-suffixed `energy-kcal_100g` field rather than the
 //   ambiguous `energy_100g` (which is kJ).
+
+const { createClient } = require('@supabase/supabase-js');
 
 const USDA_SEARCH_URL = 'https://api.nal.usda.gov/fdc/v1/foods/search';
 const OFF_SEARCH_URL = 'https://world.openfoodfacts.org/cgi/search.pl';
@@ -281,6 +292,95 @@ async function searchOpenFoodFacts(query) {
 }
 
 // ---------------------------------------------------------------------
+// AFCD (Australian Food Composition Database, FSANZ Release 3)
+// ---------------------------------------------------------------------
+//
+// Unlike USDA/OFF, this is OUR OWN Supabase table (public.afcd_foods),
+// imported once from FSANZ's published dataset -- not a live external
+// API call, so it doesn't share USDA/OFF's reliability risk. Queried via
+// the search_afcd_foods() Postgres function (trigram similarity ranking
+// over food_name -- see the migration for why a plain substring match
+// doesn't work against AFCD's comma-separated naming convention).
+//
+// Uses the anon/publishable key, not the service role: this is public,
+// read-only reference data protected by an RLS policy that already
+// allows anon SELECT -- least privilege, no need for a key that bypasses
+// RLS (that's reserved for form-webhook.js's inserts).
+//
+// Data licensed CC BY-SA 3.0 Australia by FSANZ -- attribution required,
+// carried on nutrition.html alongside the USDA/OFF credit line.
+
+const AFCD_RESULT_LIMIT = PAGE_SIZE_PER_SOURCE;
+
+function normalizeAfcdRow(row) {
+  const num = (v) => (typeof v === 'number' ? v : v == null ? null : Number(v));
+  return {
+    source: 'afcd',
+    fdcId: null,
+    code: row.public_food_key ?? null,
+    description: row.food_name ?? null,
+    brandName: null,
+    // FSANZ's own data-quality signal (Analysed/Recipe/Borrowed/Imputed/
+    // Label Data/Estimated) folded into dataType -- reuses the existing
+    // [brandName, dataType] meta-line rendering on the client with no
+    // extra client-side branching needed.
+    dataType: 'AFCD' + (row.derivation ? ' · ' + row.derivation : ''),
+    servingSize: null,
+    servingSizeUnit: null,
+    calories: num(row.calories_kcal),
+    protein: num(row.protein_g),
+    carbs: num(row.carbs_g),
+    fat: num(row.fat_g),
+    fibre: num(row.fibre_g),
+  };
+}
+
+let afcdClient;
+function getAfcdClient() {
+  if (!afcdClient) {
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_ANON_KEY;
+    if (!url || !key) {
+      throw new Error('SUPABASE_URL or SUPABASE_ANON_KEY not set');
+    }
+    afcdClient = createClient(url, key, { auth: { persistSession: false } });
+  }
+  return afcdClient;
+}
+
+async function searchAfcd(query) {
+  let client;
+  try {
+    client = getAfcdClient();
+  } catch (err) {
+    console.warn('food-search: AFCD not configured -- skipping AFCD source:', err.message);
+    return { ok: false, error: 'AFCD not configured', results: [] };
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  let data, error;
+  try {
+    ({ data, error } = await client
+      .rpc('search_afcd_foods', { search_query: query, result_limit: AFCD_RESULT_LIMIT })
+      .abortSignal(controller.signal));
+  } catch (err) {
+    console.error('food-search: AFCD request failed or timed out:', err.message);
+    return { ok: false, error: 'AFCD request failed', results: [] };
+  } finally {
+    clearTimeout(timer);
+  }
+
+  if (error) {
+    console.error('food-search: AFCD query error:', error.message);
+    return { ok: false, error: 'AFCD query error', results: [] };
+  }
+
+  const results = Array.isArray(data) ? data.map(normalizeAfcdRow) : [];
+  return { ok: true, results };
+}
+
+// ---------------------------------------------------------------------
 // Handler
 // ---------------------------------------------------------------------
 
@@ -294,23 +394,31 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing required query parameter "q"' }) };
   }
 
-  const [usdaOutcome, offOutcome] = await Promise.allSettled([searchUsda(q), searchOpenFoodFacts(q)]);
+  const [usdaOutcome, offOutcome, afcdOutcome] = await Promise.allSettled([
+    searchUsda(q),
+    searchOpenFoodFacts(q),
+    searchAfcd(q),
+  ]);
 
   // Promise.allSettled means neither branch throws past this point even if
   // a source's promise rejected outright (vs. resolving with ok:false) --
   // normalize both shapes so one source's unexpected crash can't 500 the
-  // whole search when the other source is fine.
+  // whole search when the others are fine.
   const usda = usdaOutcome.status === 'fulfilled'
     ? usdaOutcome.value
     : { ok: false, error: usdaOutcome.reason && usdaOutcome.reason.message || 'USDA search failed unexpectedly', results: [] };
   const off = offOutcome.status === 'fulfilled'
     ? offOutcome.value
     : { ok: false, error: offOutcome.reason && offOutcome.reason.message || 'Open Food Facts search failed unexpectedly', results: [] };
+  const afcd = afcdOutcome.status === 'fulfilled'
+    ? afcdOutcome.value
+    : { ok: false, error: afcdOutcome.reason && afcdOutcome.reason.message || 'AFCD search failed unexpectedly', results: [] };
 
-  const results = [...usda.results, ...off.results];
+  const results = [...usda.results, ...afcd.results, ...off.results];
 
   console.log(
     `food-search: query "${q}" -> USDA: ${usda.ok ? usda.results.length + ' result(s)' : 'failed (' + usda.error + ')'}, ` +
+    `AFCD: ${afcd.ok ? afcd.results.length + ' result(s)' : 'failed (' + afcd.error + ')'}, ` +
     `Open Food Facts: ${off.ok ? off.results.length + ' result(s)' : 'failed (' + off.error + ')'}`
   );
 
@@ -322,6 +430,7 @@ exports.handler = async (event) => {
       results,
       sources: {
         usda: { ok: usda.ok, count: usda.results.length, error: usda.ok ? undefined : usda.error },
+        afcd: { ok: afcd.ok, count: afcd.results.length, error: afcd.ok ? undefined : afcd.error },
         openFoodFacts: { ok: off.ok, count: off.results.length, error: off.ok ? undefined : off.error },
       },
     }),

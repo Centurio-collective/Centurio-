@@ -120,15 +120,22 @@ steps twice — once for `waitlist`, once for `mental-fitness-score`:
 `nutrition.html` is a separate, unlinked page (per request — no link
 from the main nav; you'll point a dedicated URL at it yourself). It has
 a daily macro calculator (unchanged from the prototype) and a meal
-calculator that searches **two** free sources in parallel — USDA
-FoodData Central (primary) and Open Food Facts (secondary, no key
-needed, notably better for packaged/branded and AU products) — with
-manual entry kept only as a fallback for foods neither source finds.
+calculator that searches **three** free sources in parallel — USDA
+FoodData Central, the Australian Food Composition Database (AFCD), and
+Open Food Facts — with manual entry kept only as a fallback for foods
+none of them find.
+
+| Source | What it's for | Access |
+|---|---|---|
+| USDA FoodData Central | Generic/whole foods, US-centric | Free API key required |
+| AFCD (FSANZ Release 3) | Generic foods incl. **standard butcher meats**, Australian conventions/cuts | Our own Supabase table (imported once — see §7) |
+| Open Food Facts | Packaged/branded products, barcode data | No key/signup needed |
 
 1. **Get a USDA FoodData Central API key** (skip if you already have
    the one from the prior build): https://fdc.nal.usda.gov/api-key-signup.html
    — free, no cost, just an email address. Open Food Facts needs no key
-   or signup at all.
+   or signup at all. AFCD setup is in §7 below (it's a one-time import,
+   not a per-deploy step).
 2. **Add the USDA key to Netlify**: Site configuration → Environment
    variables → add `USDA_API_KEY` with that value. Same rule as the
    Supabase key — never paste it into chat, commit it, or put it in
@@ -138,10 +145,11 @@ manual entry kept only as a fallback for foods neither source finds.
 4. **Test the function directly** before trusting the UI:
    `https://centuriocollective.com/.netlify/functions/food-search?q=chicken%20breast%20cooked`
    should return `200` with a JSON body containing a merged `results`
-   array (each item tagged `"source":"usda"` or `"source":"openfoodfacts"`)
-   and a `sources` object showing both sources' status, e.g.
-   `"sources":{"usda":{"ok":true,"count":8},"openFoodFacts":{"ok":true,"count":6}}`.
-   If either source shows `"ok":false`, check **Functions →
+   array (each item tagged `"source":"usda"`, `"source":"afcd"`, or
+   `"source":"openfoodfacts"`) and a `sources` object showing all three
+   sources' status, e.g.
+   `"sources":{"usda":{"ok":true,"count":8},"afcd":{"ok":true,"count":6},"openFoodFacts":{"ok":true,"count":8}}`.
+   If any source shows `"ok":false`, check **Functions →
    food-search → Logs** for the reason before touching the front end —
    a single source being down does *not* fail the whole request (see
    below), so check `sources` even on a `200`.
@@ -151,12 +159,13 @@ manual entry kept only as a fallback for foods neither source finds.
 
 ### Multi-source design notes
 
-- **Runs in parallel, degrades gracefully.** Both sources are queried
-  with `Promise.allSettled`, each behind an 8s timeout. If one is slow,
-  down, or misconfigured (e.g. `USDA_API_KEY` missing), the response is
-  still `200` with whatever the healthy source returned — never a
-  blanket failure because of one source. `sources.usda`/`sources.openFoodFacts`
-  report each one's `ok`/`error`/`count` for debugging.
+- **Runs in parallel, degrades gracefully.** All three sources are
+  queried with `Promise.allSettled`, each behind an 8s timeout (AFCD's
+  Supabase RPC call included). If one is slow, down, or misconfigured
+  (e.g. `USDA_API_KEY` or `SUPABASE_ANON_KEY` missing), the response is
+  still `200` with whatever the healthy sources returned — never a
+  blanket failure because of one. `sources.usda`/`sources.afcd`/
+  `sources.openFoodFacts` each report `ok`/`error`/`count` for debugging.
 - **The same kcal/kJ trap exists in both APIs.** USDA reports "Energy"
   twice (kcal *and* kJ, same nutrient name) — this already caused a
   live bug here (690 kJ read as if it were 165 kcal) fixed by matching
@@ -216,29 +225,103 @@ manual entry kept only as a fallback for foods neither source finds.
   attribution line near the search box, and every Open-Food-Facts-sourced
   meal row is captioned with its source and barcode — never silently
   merged into "the database" with no provenance.
+- **AFCD is our own Supabase table, not a live external API** — see §7
+  for the import. Because of that it doesn't share USDA/OFF's
+  reliability risk (no third-party endpoint to break), and it's queried
+  with the anon/publishable key rather than the service role: it's
+  public read-only reference data behind an RLS policy that already
+  permits anon `SELECT`, so there's no reason to use a key that bypasses
+  RLS (that's reserved for `form-webhook.js`'s inserts). AFCD also has
+  the same kJ-only energy figure as the others (no kcal column at all in
+  the source data) — converted once at import time and stored alongside
+  the original kJ value for traceability. Search uses `pg_trgm` trigram
+  similarity rather than substring matching, because AFCD's
+  comma-separated naming convention ("Chicken, breast, lean flesh,
+  baked, no added fat") means a natural query like "chicken breast
+  cooked" almost never appears as one contiguous substring — an early
+  version of the search function required exact substring containment
+  and returned zero results for realistic queries before this was
+  caught and fixed. AFCD data is CC BY-SA 3.0 Australia licensed
+  (attribution + share-alike) — credited on `nutrition.html` alongside
+  the USDA/OFF lines, and each AFCD-sourced meal row is captioned with
+  FSANZ's own data-quality signal for that food (`Analysed` / `Recipe` /
+  `Borrowed` / `Imputed` / `Label Data` / `Estimated`) so a lab-measured
+  figure isn't presented with the same implied confidence as an
+  estimated one.
 
-**What I could and couldn't verify myself:** I could not make a live
-call to `api.nal.usda.gov` or `world.openfoodfacts.org` from this
-sandbox (network egress is blocked here, same as it is to
-centuriocollective.com) — the real USDA response (pasted back after
-your live test) surfaced the kJ/kcal bug above, which is now fixed and
-covered by a regression test. Local, no-network tests currently cover:
+## 7. AFCD one-time import (already done — for reference/re-running only)
+
+Unlike USDA/OFF, AFCD isn't a live API call per search — it's a
+Supabase table (`public.afcd_foods`, 1,588 rows) imported once from the
+FSANZ-published Release 3 Excel file you provided. This section is for
+reference (what was done and why) and for re-running the import if the
+data ever needs refreshing from a newer FSANZ release.
+
+1. **Schema**: `public.afcd_foods` (public_food_key, classification,
+   derivation, food_name, energy_kj, calories_kcal, protein_g, carbs_g,
+   fat_g, fibre_g) with RLS enabled and a public-read policy (`anon`,
+   `authenticated`) — no insert/update/delete policy for anon, so the
+   table can only be written to via an admin-run import (service role
+   or dashboard), never at request time.
+2. **Search function**: `public.search_afcd_foods(search_query text,
+   result_limit int)` — a `pg_trgm` trigram-similarity search over
+   `food_name`, threshold `0.15`, granted `EXECUTE` to `anon`. Verified
+   directly against the live table (not a fixture) with real queries —
+   "chicken breast cooked", "beef mince", "lamb chop", "salmon fillet"
+   all returned correctly-ranked matches; a nonsense query returned
+   nothing.
+3. **Add `SUPABASE_ANON_KEY` to Netlify**: Site configuration →
+   Environment variables → add `SUPABASE_ANON_KEY` with the
+   anon/publishable key from Supabase (Project Settings → API — either
+   the legacy `anon` JWT or the newer `sb_publishable_...` key works).
+   This is **not** the service role key — it's meant to be public,
+   gated only by the RLS policy above, so the usual "never expose this"
+   warning doesn't apply the same way here, but it still shouldn't be
+   hardcoded client-side; read server-side in `food-search.js` like the
+   other keys.
+4. Redeploy, then re-test the function URL from §6 step 4 and confirm
+   `sources.afcd.ok` is `true` with a non-zero `count`.
+
+**Re-running the import** (only needed if FSANZ publishes a newer
+release): re-run the same extraction/load process against the new
+Excel file — `public_food_key` is the natural primary key, so a
+straightforward re-import (truncate + reload, or upsert on
+`public_food_key`) keeps things consistent.
+
+## What I could and couldn't verify myself
+
+I could not make a live call to `api.nal.usda.gov` or
+`world.openfoodfacts.org` from this sandbox (network egress is blocked
+here, same as it is to centuriocollective.com) — the real USDA response
+(pasted back after your live test) surfaced the kJ/kcal bug above,
+which is now fixed and covered by a regression test. **AFCD is
+different**: since it's our own Supabase table, I *could* and did
+verify it directly against the live database (not just fixtures) —
+schema, all 1,588 rows loaded with no duplicates/missing nutrients, the
+search function's ranking, and the chicken-breast rows byte-for-byte
+against the source spreadsheet.
+
+Local, no-network tests currently cover:
 - `form-webhook.js`'s insert payload for both forms.
 - `food-search.js`: missing-query 400; correct kcal (not kJ) extraction
-  for both USDA and Open Food Facts against fixtures shaped like their
-  real responses; graceful degradation when either source fails or
-  `USDA_API_KEY` is missing (still `200`, still returns the healthy
-  source's results).
+  for USDA, AFCD, and Open Food Facts against fixtures shaped like their
+  real responses/rows (AFCD fixture uses string-typed numeric columns,
+  matching real Postgres-via-postgrest behavior, to catch a missing
+  `Number()` coercion); graceful degradation when any source fails,
+  errors, or its required env var is missing (still `200`, still
+  returns the healthy sources' results); the derivation-in-dataType
+  folding for AFCD captions.
 - The full `nutrition.html` meal-calculator flow end-to-end in a real
-  DOM (jsdom): search → results from both sources render with correct
-  captions/attribution → select a USDA result → row added at 100g with
-  correct readonly macros and a `USDA · <dataType> · fdcId <id>`
-  caption → select an Open Food Facts result → captioned
-  `Open Food Facts · <brand> · barcode <code>` instead → changing grams
-  to 200 exactly doubles the row's macros → a second manually-added
-  food sums into the meal total → removing a row also removes its
-  caption → a search result with no usable nutrient data renders
-  disabled rather than being added with fabricated zeros.
+  DOM (jsdom): search → results from all three sources render with
+  correct captions/attribution → select a USDA result → row added at
+  100g with correct readonly macros and a `USDA · <dataType> · fdcId
+  <id>` caption → select an Open Food Facts result → captioned
+  `Open Food Facts · <brand> · barcode <code>` instead → select an AFCD
+  result → captioned `AFCD · <derivation> · food key <key>` instead →
+  changing grams to 200 exactly doubles the row's macros → a second
+  manually-added food sums into the meal total → removing a row also
+  removes its caption → a search result with no usable nutrient data
+  renders disabled rather than being added with fabricated zeros.
 
 Live-test Open Food Facts the same way you tested USDA — search
 something with strong AU packaged-food coverage (e.g. a Coles/Woolworths
