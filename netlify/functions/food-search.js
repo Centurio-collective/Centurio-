@@ -177,9 +177,20 @@ async function searchUsda(query) {
 // Open Food Facts
 // ---------------------------------------------------------------------
 
+// Open Food Facts numbers come from crowdsourced label entry, not a
+// curated dataset like USDA's -- they arrive with noise like
+// 103.967495219885 (likely back-computed from a per-serving value). Round
+// to sensible display/edit precision rather than passing raw floats
+// through to an editable input field.
+function roundOffValue(v, decimals) {
+  if (typeof v !== 'number') return null;
+  const factor = 10 ** decimals;
+  return Math.round(v * factor) / factor;
+}
+
 function normalizeOffProduct(product) {
   const n = product.nutriments || {};
-  const pick = (key) => (typeof n[key] === 'number' ? n[key] : null);
+  const pick = (key, decimals) => (typeof n[key] === 'number' ? roundOffValue(n[key], decimals) : null);
   return {
     source: 'openfoodfacts',
     fdcId: null,
@@ -192,15 +203,15 @@ function normalizeOffProduct(product) {
     // Explicitly the KCAL-suffixed field. OFF also has `energy_100g`, which
     // is kJ -- reading that instead would silently repeat the exact
     // kJ/kcal bug already found and fixed on the USDA side.
-    calories: pick('energy-kcal_100g'),
-    protein: pick('proteins_100g'),
-    carbs: pick('carbohydrates_100g'),
-    fat: pick('fat_100g'),
-    fibre: pick('fiber_100g'),
+    calories: pick('energy-kcal_100g', 0),
+    protein: pick('proteins_100g', 1),
+    carbs: pick('carbohydrates_100g', 1),
+    fat: pick('fat_100g', 1),
+    fibre: pick('fiber_100g', 1),
   };
 }
 
-async function searchOpenFoodFacts(query) {
+async function fetchOffProducts(query, { countryTag } = {}) {
   const url = new URL(OFF_SEARCH_URL);
   url.searchParams.set('search_terms', query);
   url.searchParams.set('search_simple', '1');
@@ -208,17 +219,26 @@ async function searchOpenFoodFacts(query) {
   url.searchParams.set('json', '1');
   url.searchParams.set('page_size', String(PAGE_SIZE_PER_SOURCE));
   url.searchParams.set('fields', 'code,product_name,brands,nutriments');
+  if (countryTag) {
+    // Classic OFF CGI filter syntax: restrict to products tagged as sold
+    // in a given country. Used to bias toward Australian products (see
+    // searchOpenFoodFacts) without hard-excluding everything else, since
+    // country tagging is inconsistent across products.
+    url.searchParams.set('tagtype_0', 'countries');
+    url.searchParams.set('tag_contains_0', 'contains');
+    url.searchParams.set('tag_0', countryTag);
+  }
 
   let res;
   try {
     res = await fetchWithTimeout(url.toString(), { headers: { 'User-Agent': OFF_USER_AGENT } });
   } catch (err) {
-    console.error('food-search: Open Food Facts request failed or timed out:', err.message);
+    console.error(`food-search: Open Food Facts request failed or timed out (countryTag=${countryTag || 'none'}):`, err.message);
     return { ok: false, error: 'Open Food Facts request failed', results: [] };
   }
 
   if (!res.ok) {
-    console.error(`food-search: Open Food Facts responded ${res.status} for query "${query}"`);
+    console.error(`food-search: Open Food Facts responded ${res.status} for query "${query}" (countryTag=${countryTag || 'none'})`);
     return { ok: false, error: `Open Food Facts error ${res.status}`, results: [] };
   }
 
@@ -232,6 +252,41 @@ async function searchOpenFoodFacts(query) {
 
   const results = Array.isArray(data.products) ? data.products.map(normalizeOffProduct) : [];
   return { ok: true, results };
+}
+
+// Open Food Facts is French-founded and French-heaviest by contributor
+// volume -- an unfiltered global search skews French by default, which
+// undercuts the exact reason this source was added (better AU branded-food
+// coverage than USDA). Query Australia-tagged products and the unfiltered
+// global set in parallel, put AU matches first, then fill in with global
+// results not already included. Never hard-restrict to AU-only: country
+// tagging is inconsistent, so a hard filter would silently return zero
+// results for plenty of legitimately findable products.
+async function searchOpenFoodFacts(query) {
+  const [auOutcome, worldOutcome] = await Promise.allSettled([
+    fetchOffProducts(query, { countryTag: 'Australia' }),
+    fetchOffProducts(query),
+  ]);
+  const au = auOutcome.status === 'fulfilled'
+    ? auOutcome.value
+    : { ok: false, error: auOutcome.reason && auOutcome.reason.message || 'AU-filtered search failed unexpectedly', results: [] };
+  const world = worldOutcome.status === 'fulfilled'
+    ? worldOutcome.value
+    : { ok: false, error: worldOutcome.reason && worldOutcome.reason.message || 'Global search failed unexpectedly', results: [] };
+
+  if (!au.ok && !world.ok) {
+    return { ok: false, error: world.error || au.error, results: [] };
+  }
+
+  const seen = new Set();
+  const merged = [];
+  for (const item of [...au.results, ...world.results]) {
+    if (item.code && seen.has(item.code)) continue;
+    if (item.code) seen.add(item.code);
+    merged.push(item);
+  }
+
+  return { ok: true, results: merged.slice(0, PAGE_SIZE_PER_SOURCE) };
 }
 
 // ---------------------------------------------------------------------

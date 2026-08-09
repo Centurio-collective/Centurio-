@@ -167,6 +167,26 @@ manual entry kept only as a fallback for foods neither source finds.
   usage policy — a generic one risks being rate-limited. Set in
   `food-search.js` (`OFF_USER_AGENT`); update the contact info there if
   it should point somewhere other than centuriocollective.com.
+- **Open Food Facts is French-heaviest by default, confirmed live.** A
+  real test query ("chicken breast cooked") returned only French deli
+  brands (Fleury Michon, Herta, Carrefour) — zero AU products — because
+  OFF's global search isn't locale-aware and it has the most
+  contributors/data in France. Since better AU coverage was the whole
+  reason this source was added, `food-search.js` now runs two OFF
+  sub-queries in parallel per search: one filtered to
+  `countries_tags` containing Australia, one unfiltered/global. AU
+  matches are listed first, then global results fill in (deduped by
+  product code, capped at 8 total). It's a soft priority, not a hard
+  filter — country tagging is inconsistent on OFF, so hard-restricting
+  to AU-only would silently return zero results for plenty of
+  legitimately findable products. Worth re-testing with an AU-brand
+  query (Coles/Woolworths) to see how much this actually improves it.
+- **Open Food Facts nutrient values are noisy.** Real data came back as
+  `103.967495219885` kcal/100g (crowdsourced, likely back-computed from
+  a per-serving figure) — `food-search.js` now rounds OFF's calories to
+  the nearest whole number and other macros to 1 decimal before they
+  ever reach the UI, so nothing that precise-looking lands in an
+  editable field.
 - **Open Food Facts data is ODbL-licensed**, which requires attribution
   when displayed publicly (USDA is US public domain, no such
   requirement, credited anyway). `nutrition.html` carries a permanent
