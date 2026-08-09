@@ -188,16 +188,22 @@ manual entry kept only as a fallback for foods neither source finds.
   is clean, but "chicken breast cooked" still came back all-French —
   because OFF only requested its own top 8 by relevance before
   sorting, and if an AU product ranks outside that top 8 in OFF's own
-  ranking, the sort never even sees it. Fixed by requesting a deeper
-  pool (`OFF_CANDIDATE_POOL_SIZE = 24`) in the same single request,
-  sorting AU-tagged products to the front across that full pool, then
-  trimming to the final display count of 8 — still one request, still
-  no added risk to reliability, just a wider net for the sort to work
-  with. If a real AU test query still comes back all-non-AU after
-  this, that means OFF genuinely doesn't have an AU-tagged product for
-  that search term in its top 24 either — a real coverage gap, not a
-  bug — and that's the point where the NUTTAB/AFCD import becomes the
-  better answer.
+  ranking, the sort never even sees it. Tried requesting a deeper pool
+  (`page_size=24`) in the same single request to give the sort more to
+  work with — **this also 503'd live.** Two separate attempts to get
+  more out of this endpoint (a second parallel request, then a larger
+  page_size) each broke it in production. That's not bad luck twice —
+  it means OFF's legacy `cgi/search.pl` endpoint is fragile to
+  anything beyond the exact minimal shape that's worked reliably:
+  `page_size=8`, no extra filter params. **Reverted for good** —
+  `OFF_CANDIDATE_POOL_SIZE` is now pinned to `PAGE_SIZE_PER_SOURCE`
+  (8), with a test asserting `page_size` stays `8` so this doesn't get
+  re-attempted by accident. AU-tagged products still sort to the front
+  *within* whatever those 8 results are, but a match ranked outside
+  OFF's own top 8 is out of reach — an accepted trade-off for not
+  breaking the source again. If AU coverage needs to be better than
+  "whatever happens to be in OFF's top 8," that's the point to reach
+  for the NUTTAB/AFCD import instead of tuning this endpoint further.
 - **Open Food Facts nutrient values are noisy.** Real data came back as
   `103.967495219885` kcal/100g (crowdsourced, likely back-computed from
   a per-serving figure) — `food-search.js` now rounds OFF's calories to

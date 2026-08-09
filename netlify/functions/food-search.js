@@ -53,14 +53,18 @@ const USDA_SEARCH_URL = 'https://api.nal.usda.gov/fdc/v1/foods/search';
 const OFF_SEARCH_URL = 'https://world.openfoodfacts.org/cgi/search.pl';
 const OFF_USER_AGENT = 'CenturioNutritionTool/1.0 (https://centuriocollective.com)';
 const PAGE_SIZE_PER_SOURCE = 8;
-// Open Food Facts' own relevance ranking is what determines which 8
-// products would be visible without any AU sorting -- if an AU-tagged
-// product exists but ranks below the top 8, requesting only 8 candidates
-// means the AU sort never even sees it. Fetch a deeper pool from OFF in
-// the same single request (no extra requests -- just a larger page_size),
-// sort AU-tagged products to the front, then trim to PAGE_SIZE_PER_SOURCE
-// for the actual response so the UI list doesn't grow unbounded.
-const OFF_CANDIDATE_POOL_SIZE = 24;
+// NOT larger. Two separate live attempts to widen OFF's result pool for
+// better AU sorting -- first via a second parallel country-filtered
+// request, then via page_size=24 on the single request -- both caused
+// live 503s from OFF's legacy cgi/search.pl endpoint. page_size=8 with no
+// extra params is the one request shape confirmed reliable twice in
+// production; do not change this without a live-verified reason. AU
+// products are sorted to the front of whatever this returns (see
+// searchOpenFoodFacts), but only within this page size -- if better AU
+// coverage is needed beyond what a soft sort of 8 results can deliver,
+// the fix is a separate AU-specific data source (see README), not
+// pushing this endpoint further.
+const OFF_CANDIDATE_POOL_SIZE = PAGE_SIZE_PER_SOURCE;
 const FETCH_TIMEOUT_MS = 8000;
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS) {
