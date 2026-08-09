@@ -191,6 +191,7 @@ function roundOffValue(v, decimals) {
 function normalizeOffProduct(product) {
   const n = product.nutriments || {};
   const pick = (key, decimals) => (typeof n[key] === 'number' ? roundOffValue(n[key], decimals) : null);
+  const countriesTags = Array.isArray(product.countries_tags) ? product.countries_tags : [];
   return {
     source: 'openfoodfacts',
     fdcId: null,
@@ -208,37 +209,39 @@ function normalizeOffProduct(product) {
     carbs: pick('carbohydrates_100g', 1),
     fat: pick('fat_100g', 1),
     fibre: pick('fiber_100g', 1),
+    // Internal only, stripped before the response goes out -- used to sort
+    // AU-tagged products first. Not part of the public result shape.
+    _isAu: countriesTags.includes('en:australia'),
   };
 }
 
-async function fetchOffProducts(query, { countryTag } = {}) {
+// A SINGLE unfiltered query -- deliberately not a second country-filtered
+// request. An earlier version of this function issued two parallel
+// requests to OFF's cgi/search.pl (one filtered by countries_tags, one
+// not) to bias toward Australian products, and that doubled load on OFF's
+// older/less reliable legacy search endpoint, which then started
+// returning 503s in production. Requesting `countries_tags` as an extra
+// field on the one query that was already working reliably gets the same
+// "AU products first" outcome via a local sort, with no extra requests.
+async function searchOpenFoodFacts(query) {
   const url = new URL(OFF_SEARCH_URL);
   url.searchParams.set('search_terms', query);
   url.searchParams.set('search_simple', '1');
   url.searchParams.set('action', 'process');
   url.searchParams.set('json', '1');
   url.searchParams.set('page_size', String(PAGE_SIZE_PER_SOURCE));
-  url.searchParams.set('fields', 'code,product_name,brands,nutriments');
-  if (countryTag) {
-    // Classic OFF CGI filter syntax: restrict to products tagged as sold
-    // in a given country. Used to bias toward Australian products (see
-    // searchOpenFoodFacts) without hard-excluding everything else, since
-    // country tagging is inconsistent across products.
-    url.searchParams.set('tagtype_0', 'countries');
-    url.searchParams.set('tag_contains_0', 'contains');
-    url.searchParams.set('tag_0', countryTag);
-  }
+  url.searchParams.set('fields', 'code,product_name,brands,nutriments,countries_tags');
 
   let res;
   try {
     res = await fetchWithTimeout(url.toString(), { headers: { 'User-Agent': OFF_USER_AGENT } });
   } catch (err) {
-    console.error(`food-search: Open Food Facts request failed or timed out (countryTag=${countryTag || 'none'}):`, err.message);
+    console.error('food-search: Open Food Facts request failed or timed out:', err.message);
     return { ok: false, error: 'Open Food Facts request failed', results: [] };
   }
 
   if (!res.ok) {
-    console.error(`food-search: Open Food Facts responded ${res.status} for query "${query}" (countryTag=${countryTag || 'none'})`);
+    console.error(`food-search: Open Food Facts responded ${res.status} for query "${query}"`);
     return { ok: false, error: `Open Food Facts error ${res.status}`, results: [] };
   }
 
@@ -250,43 +253,16 @@ async function fetchOffProducts(query, { countryTag } = {}) {
     return { ok: false, error: 'Invalid Open Food Facts response', results: [] };
   }
 
-  const results = Array.isArray(data.products) ? data.products.map(normalizeOffProduct) : [];
+  const products = Array.isArray(data.products) ? data.products.map(normalizeOffProduct) : [];
+
+  // Stable sort (guaranteed by the spec since ES2019 / Node 12+): AU-tagged
+  // products move to the front, everything else keeps its original
+  // relevance order from OFF. Soft priority, not a filter -- nothing is
+  // dropped just for lacking a country tag, since tagging is inconsistent.
+  products.sort((a, b) => (b._isAu ? 1 : 0) - (a._isAu ? 1 : 0));
+  const results = products.map(({ _isAu, ...rest }) => rest);
+
   return { ok: true, results };
-}
-
-// Open Food Facts is French-founded and French-heaviest by contributor
-// volume -- an unfiltered global search skews French by default, which
-// undercuts the exact reason this source was added (better AU branded-food
-// coverage than USDA). Query Australia-tagged products and the unfiltered
-// global set in parallel, put AU matches first, then fill in with global
-// results not already included. Never hard-restrict to AU-only: country
-// tagging is inconsistent, so a hard filter would silently return zero
-// results for plenty of legitimately findable products.
-async function searchOpenFoodFacts(query) {
-  const [auOutcome, worldOutcome] = await Promise.allSettled([
-    fetchOffProducts(query, { countryTag: 'Australia' }),
-    fetchOffProducts(query),
-  ]);
-  const au = auOutcome.status === 'fulfilled'
-    ? auOutcome.value
-    : { ok: false, error: auOutcome.reason && auOutcome.reason.message || 'AU-filtered search failed unexpectedly', results: [] };
-  const world = worldOutcome.status === 'fulfilled'
-    ? worldOutcome.value
-    : { ok: false, error: worldOutcome.reason && worldOutcome.reason.message || 'Global search failed unexpectedly', results: [] };
-
-  if (!au.ok && !world.ok) {
-    return { ok: false, error: world.error || au.error, results: [] };
-  }
-
-  const seen = new Set();
-  const merged = [];
-  for (const item of [...au.results, ...world.results]) {
-    if (item.code && seen.has(item.code)) continue;
-    if (item.code) seen.add(item.code);
-    merged.push(item);
-  }
-
-  return { ok: true, results: merged.slice(0, PAGE_SIZE_PER_SOURCE) };
 }
 
 // ---------------------------------------------------------------------

@@ -171,16 +171,18 @@ manual entry kept only as a fallback for foods neither source finds.
   real test query ("chicken breast cooked") returned only French deli
   brands (Fleury Michon, Herta, Carrefour) — zero AU products — because
   OFF's global search isn't locale-aware and it has the most
-  contributors/data in France. Since better AU coverage was the whole
-  reason this source was added, `food-search.js` now runs two OFF
-  sub-queries in parallel per search: one filtered to
-  `countries_tags` containing Australia, one unfiltered/global. AU
-  matches are listed first, then global results fill in (deduped by
-  product code, capped at 8 total). It's a soft priority, not a hard
-  filter — country tagging is inconsistent on OFF, so hard-restricting
-  to AU-only would silently return zero results for plenty of
-  legitimately findable products. Worth re-testing with an AU-brand
-  query (Coles/Woolworths) to see how much this actually improves it.
+  contributors/data in France. First fix attempt ran two parallel OFF
+  requests per search (one country-filtered, one global) — that doubled
+  load on OFF's older `cgi/search.pl` endpoint and started producing
+  live `503`s, confirmed by a follow-up live test. Reverted to a
+  **single** request (the one already proven reliable), just requesting
+  the extra `countries_tags` field and sorting AU-tagged products first
+  locally — same "AU products surface first when present" outcome, no
+  second request, no added load on OFF. Still a soft priority, not a
+  hard filter: country tagging is inconsistent on OFF, so nothing gets
+  dropped just for lacking a country tag. Worth re-testing with an
+  AU-brand query (Coles/Woolworths) to see how much this actually
+  improves it, now that it won't risk 503ing the whole source.
 - **Open Food Facts nutrient values are noisy.** Real data came back as
   `103.967495219885` kcal/100g (crowdsourced, likely back-computed from
   a per-serving figure) — `food-search.js` now rounds OFF's calories to
