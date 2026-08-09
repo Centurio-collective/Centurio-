@@ -183,6 +183,21 @@ manual entry kept only as a fallback for foods neither source finds.
   dropped just for lacking a country tag. Worth re-testing with an
   AU-brand query (Coles/Woolworths) to see how much this actually
   improves it, now that it won't risk 503ing the whole source.
+
+  Confirmed live after the single-request fix: no more 503s, rounding
+  is clean, but "chicken breast cooked" still came back all-French —
+  because OFF only requested its own top 8 by relevance before
+  sorting, and if an AU product ranks outside that top 8 in OFF's own
+  ranking, the sort never even sees it. Fixed by requesting a deeper
+  pool (`OFF_CANDIDATE_POOL_SIZE = 24`) in the same single request,
+  sorting AU-tagged products to the front across that full pool, then
+  trimming to the final display count of 8 — still one request, still
+  no added risk to reliability, just a wider net for the sort to work
+  with. If a real AU test query still comes back all-non-AU after
+  this, that means OFF genuinely doesn't have an AU-tagged product for
+  that search term in its top 24 either — a real coverage gap, not a
+  bug — and that's the point where the NUTTAB/AFCD import becomes the
+  better answer.
 - **Open Food Facts nutrient values are noisy.** Real data came back as
   `103.967495219885` kcal/100g (crowdsourced, likely back-computed from
   a per-serving figure) — `food-search.js` now rounds OFF's calories to

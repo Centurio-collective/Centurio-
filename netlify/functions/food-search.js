@@ -53,6 +53,14 @@ const USDA_SEARCH_URL = 'https://api.nal.usda.gov/fdc/v1/foods/search';
 const OFF_SEARCH_URL = 'https://world.openfoodfacts.org/cgi/search.pl';
 const OFF_USER_AGENT = 'CenturioNutritionTool/1.0 (https://centuriocollective.com)';
 const PAGE_SIZE_PER_SOURCE = 8;
+// Open Food Facts' own relevance ranking is what determines which 8
+// products would be visible without any AU sorting -- if an AU-tagged
+// product exists but ranks below the top 8, requesting only 8 candidates
+// means the AU sort never even sees it. Fetch a deeper pool from OFF in
+// the same single request (no extra requests -- just a larger page_size),
+// sort AU-tagged products to the front, then trim to PAGE_SIZE_PER_SOURCE
+// for the actual response so the UI list doesn't grow unbounded.
+const OFF_CANDIDATE_POOL_SIZE = 24;
 const FETCH_TIMEOUT_MS = 8000;
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS) {
@@ -229,7 +237,7 @@ async function searchOpenFoodFacts(query) {
   url.searchParams.set('search_simple', '1');
   url.searchParams.set('action', 'process');
   url.searchParams.set('json', '1');
-  url.searchParams.set('page_size', String(PAGE_SIZE_PER_SOURCE));
+  url.searchParams.set('page_size', String(OFF_CANDIDATE_POOL_SIZE));
   url.searchParams.set('fields', 'code,product_name,brands,nutriments,countries_tags');
 
   let res;
@@ -259,8 +267,11 @@ async function searchOpenFoodFacts(query) {
   // products move to the front, everything else keeps its original
   // relevance order from OFF. Soft priority, not a filter -- nothing is
   // dropped just for lacking a country tag, since tagging is inconsistent.
+  // Sorted across the full OFF_CANDIDATE_POOL_SIZE pool (not just the
+  // final display count) so an AU product ranked outside OFF's own top
+  // PAGE_SIZE_PER_SOURCE still gets a chance to surface.
   products.sort((a, b) => (b._isAu ? 1 : 0) - (a._isAu ? 1 : 0));
-  const results = products.map(({ _isAu, ...rest }) => rest);
+  const results = products.slice(0, PAGE_SIZE_PER_SOURCE).map(({ _isAu, ...rest }) => rest);
 
   return { ok: true, results };
 }
