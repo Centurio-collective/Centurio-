@@ -2,30 +2,72 @@
 //
 // GET /.netlify/functions/food-search?q=chicken%20breast%20cooked
 //
-// Server-side proxy to USDA FoodData Central's food search endpoint. The
-// browser never sees the USDA API key -- this function reads it from
-// process.env.USDA_API_KEY and returns a normalized, minimal result set.
+// Server-side proxy that searches multiple free/open nutrition sources in
+// parallel and returns a merged, normalized result set. The browser never
+// sees the USDA API key -- it's read from process.env.USDA_API_KEY here.
+// Open Food Facts needs no key at all.
+//
+// Sources, in priority order (per the project's nutrition data
+// architecture -- USDA primary, Open Food Facts secondary):
+//   1. USDA FoodData Central  -- generic/whole foods, US-centric
+//   2. Open Food Facts        -- packaged/branded products, barcode data,
+//                                notably better AU/international brand
+//                                coverage than USDA
 //
 // Required environment variable (set in Netlify: Site configuration ->
 // Environment variables):
 //   USDA_API_KEY   your USDA FoodData Central API key (never commit this,
 //                   never log it, never echo it back in a response)
+// Open Food Facts requires no signup or key.
 //
-// NOTE ON NUTRIENT BASIS: USDA's /foods/search endpoint reports
-// foodNutrients values per 100g of the food for Foundation, SR Legacy and
-// most Branded records. This function trusts that convention and returns
-// nutrientsPer100g accordingly. Per the project handover doc's caveat,
-// this has NOT been verified against a live response in this environment
-// (this sandbox cannot reach api.nal.usda.gov) -- test with a real query
-// after deploy and spot-check a couple of dataTypes (esp. "Branded")
-// before relying on it for anything beyond an estimate. If a food's
-// nutrients turn out to be serving-based rather than per-100g, this
-// function has no way to detect that from the search response alone; the
-// "Preferred robust direction" in the handover (a second per-fdcId detail
-// call) is the fix if that turns out to matter.
+// DESIGN NOTES / WHY IT'S BUILT THIS WAY:
+//
+// - Both sources are queried with Promise.allSettled, not sequentially --
+//   if one is slow or down, it doesn't hold up the other, and a total
+//   failure on one source still returns results from the other rather
+//   than a blanket 500. Each source's ok/error state is included in the
+//   response's `sources` field for debugging (check Netlify function logs
+//   for the same information server-side).
+// - Each fetch has an explicit timeout via AbortController. Netlify
+//   Functions have their own execution time limit; without this, one
+//   hanging upstream request could eat the whole budget and take the
+//   other source down with it.
+// - Open Food Facts sends a descriptive User-Agent, per their API usage
+//   policy (https://openfoodfacts.github.io/api-documentation/) -- a
+//   generic/missing User-Agent risks being rate-limited or blocked.
+// - Open Food Facts data is ODbL-licensed (Open Database License), which
+//   requires attribution when the data is displayed publicly. The
+//   `source` field on every normalized result exists so the UI can credit
+//   the right source per item; nutrition.html also carries a persistent
+//   attribution line. USDA data is US public domain (no attribution
+//   legally required, credited anyway as good practice).
+// - Both USDA and Open Food Facts report an "Energy" nutrient in BOTH
+//   kcal and kJ under near-identical field names. Getting this wrong
+//   silently returns a calorie value ~4.18x too high -- this exact bug
+//   was caught live for USDA (see NUTRIENT_MATCHERS below) and the same
+//   care applies to Open Food Facts, where the kcal figure is read from
+//   the explicitly-suffixed `energy-kcal_100g` field rather than the
+//   ambiguous `energy_100g` (which is kJ).
 
 const USDA_SEARCH_URL = 'https://api.nal.usda.gov/fdc/v1/foods/search';
-const PAGE_SIZE = 12;
+const OFF_SEARCH_URL = 'https://world.openfoodfacts.org/cgi/search.pl';
+const OFF_USER_AGENT = 'CenturioNutritionTool/1.0 (https://centuriocollective.com)';
+const PAGE_SIZE_PER_SOURCE = 8;
+const FETCH_TIMEOUT_MS = 8000;
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ---------------------------------------------------------------------
+// USDA FoodData Central
+// ---------------------------------------------------------------------
 
 // USDA nutrient IDs are more stable than nutrientName strings across data
 // types, so match on nutrientId first and fall back to a name match.
@@ -37,7 +79,7 @@ const PAGE_SIZE = 12;
 // returning a value ~4.18x too high. `unit` pins the fallback to the
 // entry with the expected unit so that can't happen even when a record
 // lacks nutrientId and we have to fall back to name matching.
-const NUTRIENT_MATCHERS = {
+const USDA_NUTRIENT_MATCHERS = {
   calories: { id: 1008, names: ['energy'], unit: 'KCAL' },
   protein: { id: 1003, names: ['protein'], unit: 'G' },
   fat: { id: 1004, names: ['total lipid (fat)', 'total fat'], unit: 'G' },
@@ -45,7 +87,7 @@ const NUTRIENT_MATCHERS = {
   fibre: { id: 1079, names: ['fiber, total dietary', 'fiber'], unit: 'G' },
 };
 
-function findNutrientValue(foodNutrients, matcher) {
+function findUsdaNutrientValue(foodNutrients, matcher) {
   if (!Array.isArray(foodNutrients)) return null;
 
   // /foods/search returns a flat shape ({ nutrientId, nutrientName, value, unitName }).
@@ -73,22 +115,128 @@ function findNutrientValue(foodNutrients, matcher) {
   return valueOf(preferred || byName[0]);
 }
 
-function normalizeFood(food) {
+function normalizeUsdaFood(food) {
   const foodNutrients = food.foodNutrients || [];
   return {
+    source: 'usda',
     fdcId: food.fdcId ?? null,
+    code: null,
     description: food.description ?? null,
     brandName: food.brandName ?? food.brandOwner ?? null,
     dataType: food.dataType ?? null,
     servingSize: typeof food.servingSize === 'number' ? food.servingSize : null,
     servingSizeUnit: food.servingSizeUnit ?? null,
-    calories: findNutrientValue(foodNutrients, NUTRIENT_MATCHERS.calories),
-    protein: findNutrientValue(foodNutrients, NUTRIENT_MATCHERS.protein),
-    carbs: findNutrientValue(foodNutrients, NUTRIENT_MATCHERS.carbs),
-    fat: findNutrientValue(foodNutrients, NUTRIENT_MATCHERS.fat),
-    fibre: findNutrientValue(foodNutrients, NUTRIENT_MATCHERS.fibre),
+    calories: findUsdaNutrientValue(foodNutrients, USDA_NUTRIENT_MATCHERS.calories),
+    protein: findUsdaNutrientValue(foodNutrients, USDA_NUTRIENT_MATCHERS.protein),
+    carbs: findUsdaNutrientValue(foodNutrients, USDA_NUTRIENT_MATCHERS.carbs),
+    fat: findUsdaNutrientValue(foodNutrients, USDA_NUTRIENT_MATCHERS.fat),
+    fibre: findUsdaNutrientValue(foodNutrients, USDA_NUTRIENT_MATCHERS.fibre),
   };
 }
+
+async function searchUsda(query) {
+  const apiKey = process.env.USDA_API_KEY;
+  if (!apiKey) {
+    console.warn('food-search: USDA_API_KEY is not set -- skipping USDA source for this search');
+    return { ok: false, error: 'USDA not configured', results: [] };
+  }
+
+  const url = new URL(USDA_SEARCH_URL);
+  url.searchParams.set('api_key', apiKey);
+  url.searchParams.set('query', query);
+  url.searchParams.set('pageSize', String(PAGE_SIZE_PER_SOURCE));
+
+  let res;
+  try {
+    res = await fetchWithTimeout(url.toString());
+  } catch (err) {
+    console.error('food-search: USDA request failed or timed out:', err.message);
+    return { ok: false, error: 'USDA request failed', results: [] };
+  }
+
+  if (!res.ok) {
+    // Never forward the raw USDA error body -- it can echo query params
+    // back, and there's no reason to expose upstream response internals.
+    console.error(`food-search: USDA responded ${res.status} for query "${query}"`);
+    return { ok: false, error: res.status === 429 ? 'USDA rate limit exceeded' : `USDA error ${res.status}`, results: [] };
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch (err) {
+    console.error('food-search: failed to parse USDA response as JSON:', err.message);
+    return { ok: false, error: 'Invalid USDA response', results: [] };
+  }
+
+  const results = Array.isArray(data.foods) ? data.foods.map(normalizeUsdaFood) : [];
+  return { ok: true, results };
+}
+
+// ---------------------------------------------------------------------
+// Open Food Facts
+// ---------------------------------------------------------------------
+
+function normalizeOffProduct(product) {
+  const n = product.nutriments || {};
+  const pick = (key) => (typeof n[key] === 'number' ? n[key] : null);
+  return {
+    source: 'openfoodfacts',
+    fdcId: null,
+    code: product.code || null,
+    description: product.product_name || null,
+    brandName: product.brands || null,
+    dataType: 'Open Food Facts',
+    servingSize: null, // OFF's `quantity` is freeform label text (e.g. "500 g bottle"),
+    servingSizeUnit: null, // not a reliable structured number -- leave unset rather than guess.
+    // Explicitly the KCAL-suffixed field. OFF also has `energy_100g`, which
+    // is kJ -- reading that instead would silently repeat the exact
+    // kJ/kcal bug already found and fixed on the USDA side.
+    calories: pick('energy-kcal_100g'),
+    protein: pick('proteins_100g'),
+    carbs: pick('carbohydrates_100g'),
+    fat: pick('fat_100g'),
+    fibre: pick('fiber_100g'),
+  };
+}
+
+async function searchOpenFoodFacts(query) {
+  const url = new URL(OFF_SEARCH_URL);
+  url.searchParams.set('search_terms', query);
+  url.searchParams.set('search_simple', '1');
+  url.searchParams.set('action', 'process');
+  url.searchParams.set('json', '1');
+  url.searchParams.set('page_size', String(PAGE_SIZE_PER_SOURCE));
+  url.searchParams.set('fields', 'code,product_name,brands,nutriments');
+
+  let res;
+  try {
+    res = await fetchWithTimeout(url.toString(), { headers: { 'User-Agent': OFF_USER_AGENT } });
+  } catch (err) {
+    console.error('food-search: Open Food Facts request failed or timed out:', err.message);
+    return { ok: false, error: 'Open Food Facts request failed', results: [] };
+  }
+
+  if (!res.ok) {
+    console.error(`food-search: Open Food Facts responded ${res.status} for query "${query}"`);
+    return { ok: false, error: `Open Food Facts error ${res.status}`, results: [] };
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch (err) {
+    console.error('food-search: failed to parse Open Food Facts response as JSON:', err.message);
+    return { ok: false, error: 'Invalid Open Food Facts response', results: [] };
+  }
+
+  const results = Array.isArray(data.products) ? data.products.map(normalizeOffProduct) : [];
+  return { ok: true, results };
+}
+
+// ---------------------------------------------------------------------
+// Handler
+// ---------------------------------------------------------------------
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'GET') {
@@ -100,51 +248,36 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing required query parameter "q"' }) };
   }
 
-  const apiKey = process.env.USDA_API_KEY;
-  if (!apiKey) {
-    console.error('food-search: USDA_API_KEY environment variable is not set');
-    return { statusCode: 500, body: JSON.stringify({ error: 'Server misconfiguration' }) };
-  }
+  const [usdaOutcome, offOutcome] = await Promise.allSettled([searchUsda(q), searchOpenFoodFacts(q)]);
 
-  const url = new URL(USDA_SEARCH_URL);
-  url.searchParams.set('api_key', apiKey);
-  url.searchParams.set('query', q);
-  url.searchParams.set('pageSize', String(PAGE_SIZE));
+  // Promise.allSettled means neither branch throws past this point even if
+  // a source's promise rejected outright (vs. resolving with ok:false) --
+  // normalize both shapes so one source's unexpected crash can't 500 the
+  // whole search when the other source is fine.
+  const usda = usdaOutcome.status === 'fulfilled'
+    ? usdaOutcome.value
+    : { ok: false, error: usdaOutcome.reason && usdaOutcome.reason.message || 'USDA search failed unexpectedly', results: [] };
+  const off = offOutcome.status === 'fulfilled'
+    ? offOutcome.value
+    : { ok: false, error: offOutcome.reason && offOutcome.reason.message || 'Open Food Facts search failed unexpectedly', results: [] };
 
-  let usdaResponse;
-  try {
-    usdaResponse = await fetch(url.toString());
-  } catch (err) {
-    console.error('food-search: network error calling USDA API:', err);
-    return { statusCode: 502, body: JSON.stringify({ error: 'Failed to reach USDA FoodData Central' }) };
-  }
+  const results = [...usda.results, ...off.results];
 
-  if (!usdaResponse.ok) {
-    // Never forward the raw USDA error body -- it can echo query params
-    // back, and there's no reason to expose upstream response internals.
-    console.error(`food-search: USDA API returned ${usdaResponse.status} for query "${q}"`);
-    const status = usdaResponse.status === 429 ? 429 : 502;
-    return {
-      statusCode: status,
-      body: JSON.stringify({ error: status === 429 ? 'USDA API rate limit exceeded, try again shortly' : 'USDA API error' }),
-    };
-  }
-
-  let data;
-  try {
-    data = await usdaResponse.json();
-  } catch (err) {
-    console.error('food-search: failed to parse USDA response as JSON:', err);
-    return { statusCode: 502, body: JSON.stringify({ error: 'Invalid response from USDA FoodData Central' }) };
-  }
-
-  const foods = Array.isArray(data.foods) ? data.foods.map(normalizeFood) : [];
-
-  console.log(`food-search: query "${q}" returned ${foods.length} normalized result(s)`);
+  console.log(
+    `food-search: query "${q}" -> USDA: ${usda.ok ? usda.results.length + ' result(s)' : 'failed (' + usda.error + ')'}, ` +
+    `Open Food Facts: ${off.ok ? off.results.length + ' result(s)' : 'failed (' + off.error + ')'}`
+  );
 
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: q, results: foods }),
+    body: JSON.stringify({
+      query: q,
+      results,
+      sources: {
+        usda: { ok: usda.ok, count: usda.results.length, error: usda.ok ? undefined : usda.error },
+        openFoodFacts: { ok: off.ok, count: off.results.length, error: off.ok ? undefined : off.error },
+      },
+    }),
   };
 };

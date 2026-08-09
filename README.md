@@ -115,51 +115,91 @@ steps twice — once for `waitlist`, once for `mental-fitness-score`:
 - Confirm the row landed in the corresponding Supabase table (Supabase
   dashboard → Table editor).
 
-## 6. Nutrition tool (`/nutrition.html`) — USDA food search setup
+## 6. Nutrition tool (`/nutrition.html`) — food search setup
 
 `nutrition.html` is a separate, unlinked page (per request — no link
 from the main nav; you'll point a dedicated URL at it yourself). It has
 a daily macro calculator (unchanged from the prototype) and a meal
-calculator that now searches USDA FoodData Central first, with manual
-entry kept only as a fallback for foods it can't find.
+calculator that searches **two** free sources in parallel — USDA
+FoodData Central (primary) and Open Food Facts (secondary, no key
+needed, notably better for packaged/branded and AU products) — with
+manual entry kept only as a fallback for foods neither source finds.
 
 1. **Get a USDA FoodData Central API key** (skip if you already have
    the one from the prior build): https://fdc.nal.usda.gov/api-key-signup.html
-   — free, no cost, just an email address.
-2. **Add it to Netlify**: Site configuration → Environment variables →
-   add `USDA_API_KEY` with that value. Same rule as the Supabase key —
-   never paste it into chat, commit it, or put it in client-side code.
-   It's read server-side only, in `netlify/functions/food-search.js`.
+   — free, no cost, just an email address. Open Food Facts needs no key
+   or signup at all.
+2. **Add the USDA key to Netlify**: Site configuration → Environment
+   variables → add `USDA_API_KEY` with that value. Same rule as the
+   Supabase key — never paste it into chat, commit it, or put it in
+   client-side code. It's read server-side only, in
+   `netlify/functions/food-search.js`.
 3. Redeploy (env vars only take effect on the next deploy).
 4. **Test the function directly** before trusting the UI:
    `https://centuriocollective.com/.netlify/functions/food-search?q=chicken%20breast%20cooked`
-   should return `200` with a JSON body like
-   `{"query":"...","results":[{"fdcId":...,"description":"...","calories":...,"protein":...,"carbs":...,"fat":...,"fibre":...}, ...]}`.
-   If it doesn't, check **Functions → food-search → Logs** before
-   touching the front end (mirrors the handover doc's own troubleshooting order).
-5. Then test the page itself: search a food, confirm results appear,
-   select one, confirm it's added at 100g with the right macros, and
+   should return `200` with a JSON body containing a merged `results`
+   array (each item tagged `"source":"usda"` or `"source":"openfoodfacts"`)
+   and a `sources` object showing both sources' status, e.g.
+   `"sources":{"usda":{"ok":true,"count":8},"openFoodFacts":{"ok":true,"count":6}}`.
+   If either source shows `"ok":false`, check **Functions →
+   food-search → Logs** for the reason before touching the front end —
+   a single source being down does *not* fail the whole request (see
+   below), so check `sources` even on a `200`.
+5. Then test the page itself: search a food, confirm results from both
+   sources appear (each with its own source caption once added), and
    that editing grams updates the totals immediately.
 
+### Multi-source design notes
+
+- **Runs in parallel, degrades gracefully.** Both sources are queried
+  with `Promise.allSettled`, each behind an 8s timeout. If one is slow,
+  down, or misconfigured (e.g. `USDA_API_KEY` missing), the response is
+  still `200` with whatever the healthy source returned — never a
+  blanket failure because of one source. `sources.usda`/`sources.openFoodFacts`
+  report each one's `ok`/`error`/`count` for debugging.
+- **The same kcal/kJ trap exists in both APIs.** USDA reports "Energy"
+  twice (kcal *and* kJ, same nutrient name) — this already caused a
+  live bug here (690 kJ read as if it were 165 kcal) fixed by matching
+  on nutrient ID first. Open Food Facts has the same duplication
+  (`energy_100g` is kJ, `energy-kcal_100g` is kcal) — `food-search.js`
+  explicitly reads the kcal-suffixed field for that reason.
+- **Open Food Facts requires a descriptive `User-Agent`** per their API
+  usage policy — a generic one risks being rate-limited. Set in
+  `food-search.js` (`OFF_USER_AGENT`); update the contact info there if
+  it should point somewhere other than centuriocollective.com.
+- **Open Food Facts data is ODbL-licensed**, which requires attribution
+  when displayed publicly (USDA is US public domain, no such
+  requirement, credited anyway). `nutrition.html` carries a permanent
+  attribution line near the search box, and every Open-Food-Facts-sourced
+  meal row is captioned with its source and barcode — never silently
+  merged into "the database" with no provenance.
+
 **What I could and couldn't verify myself:** I could not make a live
-call to `api.nal.usda.gov` from this sandbox (network egress is
-blocked here, same as it is to centuriocollective.com), so
-`food-search.js`'s nutrient normalization is built to USDA's documented
-`/foods/search` response shape but has not been exercised against a
-real response. I did verify, with local tests (mocking both the
-Supabase client and `fetch`, no network involved):
+call to `api.nal.usda.gov` or `world.openfoodfacts.org` from this
+sandbox (network egress is blocked here, same as it is to
+centuriocollective.com) — the real USDA response (pasted back after
+your live test) surfaced the kJ/kcal bug above, which is now fixed and
+covered by a regression test. Local, no-network tests currently cover:
 - `form-webhook.js`'s insert payload for both forms.
-- `food-search.js`'s handler logic (missing-query 400, normalization
-  shape).
+- `food-search.js`: missing-query 400; correct kcal (not kJ) extraction
+  for both USDA and Open Food Facts against fixtures shaped like their
+  real responses; graceful degradation when either source fails or
+  `USDA_API_KEY` is missing (still `200`, still returns the healthy
+  source's results).
 - The full `nutrition.html` meal-calculator flow end-to-end in a real
-  DOM (jsdom): search → select a result → adds a row at 100g with the
-  correct per-100g macros, readonly on the USDA-sourced fields, a
-  source caption (`USDA · <dataType> · fdcId <id>`) so provenance isn't
-  lost; changing grams to 200 exactly doubles the row's macros; a
-  second manually-added food sums into the meal total; removing a row
-  also removes its source caption; a search result with no usable
-  nutrient data renders disabled rather than being added with fabricated
-  zeros.
+  DOM (jsdom): search → results from both sources render with correct
+  captions/attribution → select a USDA result → row added at 100g with
+  correct readonly macros and a `USDA · <dataType> · fdcId <id>`
+  caption → select an Open Food Facts result → captioned
+  `Open Food Facts · <brand> · barcode <code>` instead → changing grams
+  to 200 exactly doubles the row's macros → a second manually-added
+  food sums into the meal total → removing a row also removes its
+  caption → a search result with no usable nutrient data renders
+  disabled rather than being added with fabricated zeros.
+
+Live-test Open Food Facts the same way you tested USDA — search
+something with strong AU packaged-food coverage (e.g. a Coles/Woolworths
+branded item) and confirm the numbers look right before relying on it.
 
 None of that substitutes for the handover doc's own acceptance tests
 against the real USDA API and real deploy — do those (step 4 above)
