@@ -3,10 +3,10 @@
 // Receives Netlify Forms "outgoing webhook" notifications and writes the
 // submitted data into the matching Supabase table.
 //
-// Configure this as the target for TWO separate outgoing webhooks in
-// Netlify (Site settings -> Forms -> Form notifications -> Outgoing
-// webhook), one per form ("waitlist" and "mental-fitness-score"). Both
-// point at this same function URL; the function branches on form_name.
+// Configure this as the target for the outgoing webhooks in Netlify
+// (Site settings -> Forms -> Form notifications -> Outgoing webhook), one
+// per form ("waitlist", "mental-fitness-score", "affiliate-application").
+// All point at this same function URL; the function branches on form_name.
 //
 // Required environment variables (set in Netlify: Site settings ->
 // Environment variables):
@@ -29,16 +29,21 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // that pulls the right fields off Netlify's submission `data` payload.
 //
 // Field names below were confirmed against the live form markup
-// (index.html #signupForm/#signupForm2, score.html #gateForm):
+// (index.html #signupForm/#signupForm2, score.html #gateForm,
+// affiliates.html #affiliate-form):
 //   waitlist:             <input name="name">, <input name="email">
 //   mental-fitness-score: <input name="name">, <input name="email">,
 //                          hidden inputs name="score", "lead_score",
 //                          "align_score", "regulate_score",
 //                          "connect_score", "grow_score", "perform_score"
+//   affiliate-application: <input name="gym_name">, "contact_name",
+//                          "email", "phone", "suburb", "member_count",
+//                          "website", "notes"
 // Note the waitlist form's field is "name" (mapped to the first_name
 // column) and the assessment's overall score field is "score" (mapped
 // to the overall_score column) -- neither form field is named the same
-// as its destination column.
+// as its destination column. affiliate-application's fields already
+// match their destination columns 1:1.
 const FORM_HANDLERS = {
   waitlist: {
     table: 'waitlist_signups',
@@ -62,6 +67,20 @@ const FORM_HANDLERS = {
       perform_score: num(data.perform_score),
     }),
     required: ['name', 'email'],
+  },
+  'affiliate-application': {
+    table: 'affiliate_applications',
+    map: (data) => ({
+      gym_name: str(data.gym_name),
+      contact_name: str(data.contact_name),
+      email: str(data.email),
+      phone: str(data.phone),
+      suburb: str(data.suburb),
+      member_count: str(data.member_count),
+      website: str(data.website),
+      notes: str(data.notes),
+    }),
+    required: ['gym_name', 'contact_name', 'email'],
   },
 };
 
