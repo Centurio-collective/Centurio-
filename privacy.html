@@ -17,7 +17,9 @@
   :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
   .wrap{ max-width:760px; margin:0 auto; padding:0 24px; }
   header{ padding:26px 0; border-bottom:1px solid var(--line); }
-  .header-row{ display:flex; justify-content:space-between; align-items:baseline; max-width:760px; margin:0 auto; padding:0 24px; }
+  .header-row{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; max-width:760px; margin:0 auto; padding:0 24px; }
+  .member-login-btn{display:inline-block;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  .member-login-btn:hover{background:var(--accent);color:#17120b;}
   .wordmark{ font-family:"League Gothic","Arial Narrow",Impact,sans-serif; font-size:31px; font-weight:400; letter-spacing:.5px; line-height:.85; }
   .wordmark a{ text-decoration:none; color:var(--text); }
   main{ padding:56px 0 90px; }
@@ -40,6 +42,7 @@
 <header>
   <div class="header-row">
     <div class="wordmark"><a href="/">CENTURIO</a></div>
+    <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
     <div class="eyebrow" style="margin:0;">PRIVACY POLICY</div>
   </div>
 </header>
