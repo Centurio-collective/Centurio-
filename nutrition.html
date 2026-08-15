@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXEWKVER9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Centurio Nutrition Tools</title>
@@ -220,6 +228,11 @@ document.getElementById('carbTarget').textContent=round(carbs);
 document.getElementById('fatTarget').textContent=round(fat);
 document.getElementById('goalLabel').textContent=label;
 savedTargets={calories:round(calories),protein:round(protein),carbs:round(carbs),fat:round(fat)};
+// Fires only once a real result has been produced (past the age/height/
+// weight validation return above) -- goal is a public category setting
+// (loss/recomp/maintain/gain), not a personal number; no calorie,
+// weight, height or age value is ever passed as a parameter.
+gtag('event','nutrition_calculate',{goal:selectedGoal});
 
 const personalizedRateNote=document.getElementById('personalizedRateNote'),unsafeRateWarning=document.getElementById('unsafeRateWarning');
 if(personalizedRate){
