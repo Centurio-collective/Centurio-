@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXEWKVER9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Centurio for Gyms | Increase Your Retention</title>
@@ -597,6 +605,11 @@
         status.textContent = 'Application received. We will be in touch shortly with your affiliate code.';
         status.className = 'ok';
         form.reset();
+        // Only fires once Netlify has actually accepted the submission
+        // (res.ok), not on click -- "submitted successfully" per spec.
+        // No form field (gym name, contact, email, phone, etc.) is
+        // passed as a parameter.
+        gtag('event', 'affiliate_apply');
       })
       .catch(function(){
         status.textContent = 'Something went wrong sending your application. Please email hello@centuriocollective.com directly.';

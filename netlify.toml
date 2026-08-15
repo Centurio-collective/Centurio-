@@ -9,3 +9,15 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# /get-free-guide is a legacy URL with no matching page anywhere in this
+# repo's history (checked -- it predates this codebase entirely). It's
+# still indexed by Google and currently 404s, carrying obsolete
+# positioning. Redirecting it here (not a meta refresh) so Google's
+# crawler sees a real 301 and consolidates it into the homepage instead
+# of continuing to serve/index a dead page.
+[[redirects]]
+  from = "/get-free-guide"
+  to = "/"
+  status = 301
+  force = true

@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXEWKVER9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Centurio 1:1 — Personal Mental Fitness Coaching</title>
@@ -167,7 +175,7 @@
         <div class="plan-name">Single Session</div>
         <div class="plan-price">$200<span>/hour</span></div>
         <p class="plan-desc">One 1-hour session, focused on a single Core Capacity relevant to you right now. A good place to start if you're not ready to commit to the full framework.</p>
-        <a class="plan-cta" href="https://buy.stripe.com/fZubJ27v23UTfH6aeQ1kA02" target="_blank" rel="noopener noreferrer">Book a Session</a>
+        <a class="plan-cta" href="https://buy.stripe.com/fZubJ27v23UTfH6aeQ1kA02" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'coaching_enquiry', { type: 'single_session' })">Book a Session</a>
       </div>
       <div class="plan-card featured">
         <div class="plan-badge">Full Framework</div>
@@ -175,7 +183,7 @@
         <div class="plan-price">$2,000<span>total</span></div>
         <div class="plan-save">Save $400 vs. booking hourly</div>
         <p class="plan-desc">Discovery Session plus a dedicated deep-dive on all six Core Capacities — Lead, Align, Regulate, Connect, Grow and Perform. Your complete personal Mental Fitness framework.</p>
-        <a class="plan-cta" href="https://buy.stripe.com/bJe6oI4iQezx8eE4Uw1kA03" target="_blank" rel="noopener noreferrer">Book the Full Bundle</a>
+        <a class="plan-cta" href="https://buy.stripe.com/bJe6oI4iQezx8eE4Uw1kA03" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'coaching_enquiry', { type: 'full_bundle' })">Book the Full Bundle</a>
       </div>
     </div>
   </div>

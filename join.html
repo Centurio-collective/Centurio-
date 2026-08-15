@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXEWKVER9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Join Centurio — Evidence Based Mental Fitness Training</title>
@@ -163,7 +171,7 @@
         <div class="plan-name">Centurio Membership</div>
         <div class="plan-price" id="planPrice">$590<span>/year</span></div>
         <div class="plan-save show" id="planSave">Save $118 — that's 2 months free</div>
-        <a class="plan-cta" id="planCta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer">Join the Annual Plan</a>
+        <a class="plan-cta" id="planCta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan })">Join the Annual Plan</a>
         <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
     </div>
@@ -192,12 +200,21 @@
 </footer>
 
 <script>
+gtag('event', 'join_view');
+
 const plans = {
   monthly: { price: "$59", suffix: "/month", save: "", cta: "Join the Monthly Plan", url: "https://buy.stripe.com/3cI7sM3eM4YX1Qg0Eg1kA00" },
   annual:  { price: "$590", suffix: "/year", save: "Save $118 — that's 2 months free", cta: "Join the Annual Plan", url: "https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" }
 };
 
+// Tracks the toggle's current selection so the checkout_start click
+// handler on planCta (below) knows which plan the visitor was actually
+// looking at -- not PII, just which of two public price points was
+// clicked.
+let currentPlan = 'annual';
+
 function setPlan(which){
+  currentPlan = which;
   const p = plans[which];
   document.getElementById('planPrice').innerHTML = p.price + '<span>' + p.suffix + '</span>';
   const saveEl = document.getElementById('planSave');

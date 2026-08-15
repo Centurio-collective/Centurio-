@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXEWKVER9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Your Mental Fitness Score — Centurio</title>
@@ -289,6 +297,7 @@ const BAND_TEXT = {
 let currentQ = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
 let computedScores = null;
+let assessmentStarted = false;
 
 function startQuiz(){
   showScreen('screen-quiz');
@@ -321,12 +330,27 @@ function renderQuestion(){
 }
 
 function selectAnswer(value){
+  // assessment_start fires on this first real interaction, not on page
+  // load or on hitting "Start the Assessment" -- per spec, arriving at
+  // the quiz screen isn't the same as beginning to answer it.
+  if(!assessmentStarted){
+    gtag('event', 'assessment_start');
+    assessmentStarted = true;
+  }
+  gtag('event', 'assessment_question', { question_number: currentQ + 1 });
+
   answers[currentQ] = value;
   if(currentQ < QUESTIONS.length - 1){
     currentQ++;
     renderQuestion();
   } else {
     computeScores();
+    // assessment_complete = all 12 questions answered and scored, which
+    // happens here, before the email gate -- distinct from lead_capture
+    // (email given) and results_view (results actually shown), so the
+    // funnel can tell apart "finished the quiz" from "gave an email"
+    // from "saw their score."
+    gtag('event', 'assessment_complete');
     showScreen('screen-gate');
   }
 }
@@ -391,6 +415,13 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
 
   window._pendingName = name;
 
+  // Fired here, not after the fetch below resolves -- that fetch is
+  // deliberately fire-and-forget (see comment below), so there is no
+  // later "confirmed" moment to hang this on. This marks "visitor gave
+  // a valid email," not "email confirmed landed in Supabase." No email
+  // or name value itself is ever passed as a parameter.
+  gtag('event', 'lead_capture');
+
   // Submit to Netlify quietly in the background. Results below do not wait on this —
   // they're already fully computed client-side, so the visitor is never blocked
   // or navigated away, regardless of network conditions.
@@ -418,6 +449,9 @@ function renderResults(){
   showScreen('screen-results');
   document.getElementById('scoreValue').textContent = computedScores.overall;
   const overallBand = bandFor(computedScores.overall);
+  // Coarse band only (developing / building / strong) -- never the raw
+  // 0-100 score, per the no-raw-score constraint on this task.
+  gtag('event', 'results_view', { score_band: overallBand });
   document.getElementById('scoreBandLabel').textContent = bandLabel(overallBand);
   document.getElementById('scoreSub').textContent = 'Your baseline across all six Core Capacities. This is where you start — Tuesday Training is how it moves.';
 
@@ -578,6 +612,7 @@ function downloadPDF(){
   doc.text('centuriocollective.com/join.html', pageW / 2, cy + 26, { align: 'center' });
 
   doc.save('Centurio-Mental-Fitness-Score.pdf');
+  gtag('event', 'report_download');
 }
 </script>
 
