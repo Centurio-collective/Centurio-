@@ -12,10 +12,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Centurio — Evidence Based Mental Fitness Training</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%230d0f0e'/><text x='32' y='45' font-family='Arial, sans-serif' font-weight='700' font-size='38' fill='%23d8b56a' text-anchor='middle'>C</text></svg>" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:site_name" content="Centurio Collective">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://centuriocollective.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0d0f0e; --line:#2c312d; --text:#f4f1e8;
@@ -28,7 +36,7 @@
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation-duration:.01ms !important; transition-duration:.01ms !important} }
 
   body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
-  .display{ font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.01em; }
+  .display{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.01em; }
   a{color:inherit}
   :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
   .wrap{ max-width:1040px; margin:0 auto; padding:0 24px; }
@@ -62,7 +70,7 @@
   input:focus{ border-color:var(--accent); }
   button.cta{
     background:var(--accent); color:#17120b; border:0; border-radius:2px; padding:14px 26px;
-    font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; cursor:pointer; white-space:nowrap;
+    font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; cursor:pointer; white-space:nowrap;
   }
   button.cta:hover{ filter:brightness(1.08); }
   button.cta:disabled{ opacity:.6; cursor:default; }
@@ -105,7 +113,7 @@
   .ready-band .section-label{ display:flex; justify-content:center; }
   .ready-band h2{ font-size:clamp(24px,3.5vw,32px); margin-left:auto; margin-right:auto; }
   .ready-cta-row{ margin-top:28px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
-  .btn-secondary{ display:inline-block; border:1px solid var(--accent); color:var(--accent); background:transparent; border-radius:2px; padding:14px 28px; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; text-decoration:none; transition:all .15s ease; }
+  .btn-secondary{ display:inline-block; border:1px solid var(--accent); color:var(--accent); background:transparent; border-radius:2px; padding:14px 28px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; text-decoration:none; transition:all .15s ease; }
   .btn-secondary:hover{ background:var(--accent); color:#17120b; }
 
   footer{ border-top:1px solid var(--line); padding:32px 0; }
