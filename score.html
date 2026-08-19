@@ -145,7 +145,7 @@
     <div class="intro">
       <div class="eyebrow"><span>FREE ASSESSMENT</span></div>
       <h1 class="display">What's your Mental Fitness Score?</h1>
-      <p>12 questions, about 3 minutes. A real baseline across all six Core Capacities — Lead, Align, Regulate, Connect, Grow and Perform — plus a personalised breakdown of where to focus first.</p>
+      <p>12 questions, about 3 minutes. A real baseline across all six Core Capacities: Lead, Align, Regulate, Connect, Grow and Perform — plus a personalised breakdown of where to focus first.</p>
       <div class="cap-strip">
         <span class="cap-dot">Lead</span>
         <span class="cap-dot">Align</span>
@@ -219,7 +219,7 @@
 
     <div class="results-cta">
       <h2 class="display">This is your baseline.</h2>
-      <p>Mental Fitness is built one capacity at a time, every Tuesday. Your score today is where you start — not where you stay.</p>
+      <p>Mental Fitness is built one capacity at a time, every Tuesday. Your score today is where you start, not where you stay.</p>
       <div class="results-btn-row">
         <button class="btn" onclick="downloadPDF()">Download My PDF Report</button>
         <a class="btn-outline" href="/join.html">Start Training</a>
@@ -249,10 +249,10 @@ const CAPACITIES = [
 const QUESTIONS = [
   { cap: 'lead', text: 'I consistently follow through on the promises I make to myself, even when no one else would notice if I didn\'t.' },
   { cap: 'lead', text: 'I hold myself to the same standards I\'d expect from someone I genuinely respect.' },
-  { cap: 'align', text: 'My day-to-day actions generally reflect what I actually believe matters most.' },
+  { cap: 'align', text: 'My day to day actions generally reflect what I actually believe matters most.' },
   { cap: 'align', text: 'I make decisions intentionally, rather than simply reacting to whatever comes up.' },
   { cap: 'regulate', text: 'When I feel a strong emotional reaction, I can usually create space before I respond.' },
-  { cap: 'regulate', text: 'I can influence my own state — calm, focus, energy — rather than being controlled by it.' },
+  { cap: 'regulate', text: 'I can influence my own state (calm, focus, energy) rather than being controlled by it.' },
   { cap: 'connect', text: 'When I\'m with someone, I give them my full attention rather than being distracted.' },
   { cap: 'connect', text: 'People who spend time with me generally feel heard and understood.' },
   { cap: 'grow', text: 'I actively seek out feedback, even when it might be uncomfortable to hear.' },
@@ -271,9 +271,9 @@ const LIKERT = [
 
 const BAND_TEXT = {
   lead: {
-    developing: 'Right now, the promises you make to yourself don\'t always hold when no one\'s watching. That\'s common, and it\'s the exact starting point Lead is built for — leadership begins in a room with no one else in it.',
-    building: 'You keep many of the promises you make to yourself, but not always consistently. Training Lead sharpens that consistency until self-trust becomes automatic, not effortful.',
-    strong: 'You already lead yourself with real consistency. The work now is refining the standard further, and using that self-trust to influence the people around you.'
+    developing: 'Right now, the promises you make to yourself don\'t always hold when no one\'s watching. That\'s common, and it\'s the exact starting point Lead is built for. Leadership begins in a room with no one else in it.',
+    building: 'You keep many of the promises you make to yourself, but not always consistently. Training Lead sharpens that consistency until self trust becomes automatic, not effortful.',
+    strong: 'You already lead yourself with real consistency. The work now is refining the standard further, and using that self trust to influence the people around you.'
   },
   align: {
     developing: 'There\'s likely a real gap right now between what you say matters and where your time and energy actually go. Align is built to close exactly that gap.',
@@ -287,7 +287,7 @@ const BAND_TEXT = {
   },
   connect: {
     developing: 'Right now, the people around you may not consistently feel fully seen or heard. Connect trains presence and attention as a deliberate practice, not a personality trait.',
-    building: 'You connect well in some moments, less so in others — often depending on how distracted or stretched you are. Training builds that presence into a habit.',
+    building: 'You connect well in some moments, less so in others, often depending on how distracted or stretched you are. Training builds that presence into a habit.',
     strong: 'People who spend time with you generally feel genuinely valued. The work now is bringing that same presence to the relationships that are hardest to show up for.'
   },
   grow: {
@@ -461,7 +461,7 @@ function renderResults(){
   // 0-100 score, per the no-raw-score constraint on this task.
   gtag('event', 'results_view', { score_band: overallBand });
   document.getElementById('scoreBandLabel').textContent = bandLabel(overallBand);
-  document.getElementById('scoreSub').textContent = 'Your baseline across all six Core Capacities. This is where you start — Tuesday Training is how it moves.';
+  document.getElementById('scoreSub').textContent = 'Your baseline across all six Core Capacities. This is where you start. Tuesday Training is how it moves.';
 
   // Only the single lowest-scoring capacity is ever shown to the visitor.
   // All six scores are still captured and submitted, just never displayed.
