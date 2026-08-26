@@ -99,6 +99,9 @@
   input:focus{ border-color:var(--accent); }
   .gate-msg{ margin-top:12px; font-size:13px; min-height:18px; }
   .gate-msg.err{ color:#e39a92; }
+  .consent{ display:flex; gap:10px; align-items:flex-start; margin-top:16px; text-align:left;
+            font-size:13px; line-height:1.5; color:var(--muted); cursor:pointer; }
+  .consent input{ flex:none; width:16px; height:16px; margin-top:2px; accent-color:var(--accent); }
 
   /* Results screen */
   .score-hero{ text-align:center; padding-bottom:36px; border-bottom:1px solid var(--line); margin-bottom:36px; }
@@ -199,6 +202,11 @@
           <input type="text" name="name" id="gName" placeholder="First name" autocomplete="given-name" required />
           <input type="email" name="email" id="gEmail" placeholder="Email address" autocomplete="email" required />
         </div>
+        <input type="hidden" name="consent_version" value="v1" />
+        <label class="consent">
+          <input type="checkbox" name="marketing_consent" id="gConsent" value="yes" />
+          <span>Send me the Centurio email. Ideas on training the six capacities, roughly weekly. Unsubscribe any time.</span>
+        </label>
         <button type="submit" class="btn" style="width:100%; margin-top:14px;" id="gateSubmitBtn">See My Results</button>
         <p class="gate-msg" id="gateMsg"></p>
       </form>
@@ -440,6 +448,8 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
       "form-name": "mental-fitness-score",
       name,
       email,
+      marketing_consent: document.getElementById('gConsent').checked ? "yes" : "",
+      consent_version: "v1",
       score: String(computedScores.overall),
       lead_score: String(computedScores.byCapacity.lead),
       align_score: String(computedScores.byCapacity.align),
