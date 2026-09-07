@@ -450,6 +450,12 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
       email,
       marketing_consent: document.getElementById('gConsent').checked ? "yes" : "",
       consent_version: "v1",
+      // The twelve answers already exist in full at this point and were
+      // simply never sent, so every submission before today lost them
+      // permanently. Keyed by question index rather than sent as a bare
+      // array, so a later reorder cannot silently reattach an answer to
+      // the wrong question.
+      responses: JSON.stringify(answers.reduce(function(acc, v, i){ acc[String(i)] = v; return acc; }, {})),
       score: String(computedScores.overall),
       lead_score: String(computedScores.byCapacity.lead),
       align_score: String(computedScores.byCapacity.align),

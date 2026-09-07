@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Unlisted. robots.txt disallows the path, it is absent from the
+     sitemap, and this tag is what actually keeps it out of an index if
+     the URL is ever shared: robots.txt only asks a crawler not to fetch
+     a page, it does not stop the URL being indexed without fetching. -->
+<meta name="robots" content="noindex, nofollow" />
+<title>Mental Fitness Assessment</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#0d0f0e; --line:#2c312d; --text:#f4f1e8; --muted:#9aa39c; --accent:#d8b56a; }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .display{ font-family:'League Gothic',"Arial Narrow",Impact,sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.01em; }
+  a{ color:var(--accent); }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 20px; }
+  header{ padding:22px 0; border-bottom:1px solid var(--line); }
+  .wordmark{ font-family:'League Gothic',"Arial Narrow",Impact,sans-serif; font-size:28px; line-height:.85; }
+  main{ padding:44px 0 90px; }
+  h1{ font-size:clamp(30px,6vw,46px); line-height:1.05; }
+  .lede{ color:var(--muted); margin-top:14px; font-size:15px; }
+  .eyebrow{ font-size:11px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; margin-bottom:12px; }
+
+  .field{ display:flex; flex-direction:column; gap:8px; margin-top:20px; }
+  .field label{ font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .field input{ background:transparent; border:1px solid var(--line); border-radius:4px; padding:14px 16px; color:var(--text); font-family:'Inter',sans-serif; font-size:16px; }
+  .field input:focus{ border-color:var(--accent); outline:none; }
+
+  .btn{ display:inline-block; margin-top:30px; background:var(--accent); color:#17120b; border:0; border-radius:2px; padding:16px 34px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; cursor:pointer; }
+  .btn:hover{ filter:brightness(1.08); }
+  .btn:disabled{ opacity:.4; cursor:default; }
+
+  .progress-wrap{ position:sticky; top:0; background:var(--bg); padding:14px 0 12px; border-bottom:1px solid var(--line); z-index:5; }
+  .progress-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .progress-label{ font-size:11px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; }
+  .progress-bar{ height:2px; background:var(--line); border-radius:2px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0; background:var(--accent); transition:width .3s ease; }
+
+  .cap-head{ margin:44px 0 4px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .q{ margin-top:30px; }
+  .q-text{ font-size:16px; line-height:1.55; }
+  .q-num{ color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase; display:block; margin-bottom:8px; }
+  .likert{ margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .likert-option{ display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:4px; padding:13px 16px; cursor:pointer; transition:border-color .15s ease, background .15s ease; }
+  .likert-option:hover{ border-color:var(--accent); }
+  .likert-option.selected{ border-color:var(--accent); background:rgba(216,181,106,.08); }
+  .likert-radio{ width:17px; height:17px; border-radius:50%; border:1px solid var(--muted); flex-shrink:0; position:relative; }
+  .likert-option.selected .likert-radio{ border-color:var(--accent); }
+  .likert-option.selected .likert-radio::after{ content:""; position:absolute; inset:3px; border-radius:50%; background:var(--accent); }
+  .likert-label{ font-size:14.5px; }
+
+  .msg{ margin-top:16px; font-size:14px; min-height:20px; }
+  .msg.err{ color:#e39a92; }
+
+  .score-hero{ margin-top:8px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  .score-value{ font-family:'League Gothic',"Arial Narrow",Impact,sans-serif; font-size:clamp(58px,16vw,86px); line-height:.9; }
+  .score-of{ color:var(--muted); font-size:14px; }
+  .taken{ color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase; margin-top:10px; }
+
+  .compare{ margin-top:26px; border:1px solid var(--accent); border-radius:4px; padding:20px 22px; background:rgba(216,181,106,.05); }
+  .compare-row{ display:flex; justify-content:space-between; gap:16px; font-size:15px; }
+  .compare-row + .compare-row{ margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
+  .compare-move{ font-weight:600; }
+
+  .caps{ margin-top:34px; border-top:1px solid var(--line); }
+  .cap-row{ display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:14px 0; border-bottom:1px solid var(--line); }
+  .cap-row .name{ font-size:15px; }
+  .cap-row .prev{ color:var(--muted); font-size:12.5px; }
+  .cap-row .val{ font-family:'League Gothic',"Arial Narrow",Impact,sans-serif; font-size:26px; line-height:1; }
+  .focus-box{ margin-top:30px; border:1px solid var(--line); border-radius:4px; padding:20px 22px; }
+  .focus-box .eyebrow{ margin-bottom:6px; }
+  .focus-name{ font-family:'League Gothic',"Arial Narrow",Impact,sans-serif; font-size:30px; line-height:1; }
+  .closing{ margin-top:34px; color:var(--muted); font-size:15px; }
+
+  .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+
+<header><div class="wrap"><div class="wordmark">CENTURIO</div></div></header>
+
+<main class="wrap">
+
+  <!-- 1. Intro -->
+  <section id="screen-intro">
+    <div class="eyebrow">Centurio 1:1</div>
+    <h1 class="display">Mental Fitness Assessment</h1>
+    <p class="lede">Thirty six questions across the six Core Capacities. It takes about ten minutes. Answer honestly rather than generously, because the number is only useful if it is true.</p>
+    <div class="field">
+      <label for="fName">First name</label>
+      <input type="text" id="fName" autocomplete="given-name" required />
+    </div>
+    <div class="field">
+      <label for="fEmail">Email address</label>
+      <input type="email" id="fEmail" autocomplete="email" required />
+    </div>
+    <div class="hp" aria-hidden="true">
+      <label for="fCompany">Company</label>
+      <input type="text" id="fCompany" tabindex="-1" autocomplete="off" />
+    </div>
+    <button class="btn" id="startBtn">Begin</button>
+    <p class="msg" id="introMsg"></p>
+  </section>
+
+  <!-- 2. Questions -->
+  <section id="screen-questions" hidden>
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span class="progress-label" id="progressLabel">0 of 36 answered</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div id="questionList"></div>
+    <button class="btn" id="submitBtn" disabled>See my results</button>
+    <p class="msg" id="submitMsg"></p>
+  </section>
+
+  <!-- 3. Results -->
+  <section id="screen-results" hidden>
+    <div class="eyebrow">Your result</div>
+    <div class="score-hero">
+      <span class="score-value display" id="rScore">0</span>
+      <span class="score-of">out of 100</span>
+    </div>
+    <div class="taken" id="rTaken"></div>
+
+    <div class="compare" id="rCompare" hidden>
+      <div class="compare-row"><span id="rPrevLabel">Previous</span><span id="rPrevScore"></span></div>
+      <div class="compare-row"><span>Now</span><span id="rNowScore"></span></div>
+      <div class="compare-row"><span>Movement</span><span class="compare-move" id="rMove"></span></div>
+    </div>
+
+    <div class="caps" id="rCaps"></div>
+
+    <div class="focus-box">
+      <div class="eyebrow">Worth training first</div>
+      <div class="focus-name display" id="rFocus"></div>
+    </div>
+
+    <p class="closing">I will be in touch with the full picture.</p>
+  </section>
+
+  <!-- 4. Could not load -->
+  <section id="screen-error" hidden>
+    <div class="eyebrow">Centurio 1:1</div>
+    <h1 class="display">Not available right now</h1>
+    <p class="lede">The assessment could not load. This is temporary rather than anything you have done. Please try again in a few minutes, and if it keeps happening, reply to my last email and I will sort it out.</p>
+  </section>
+
+</main>
+
+<script>
+// The API base is the portal. This page holds NO questions and NO
+// scoring: it fetches the bank and posts raw answers back, so that
+// lib/benchmark/benchmark.ts stays the single implementation shared with
+// the member assessment. A second copy here would drift silently and the
+// two instruments would stop being comparable.
+var API = 'https://members.centuriocollective.com';
+
+var questions = [], capacities = [], likert = [];
+var answers = {};
+var person = { name: '', email: '' };
+
+function show(id){
+  ['screen-intro','screen-questions','screen-results','screen-error'].forEach(function(s){
+    document.getElementById(s).hidden = (s !== id);
+  });
+  window.scrollTo(0, 0);
+}
+
+function capName(key){
+  for (var i = 0; i < capacities.length; i++) if (capacities[i].key === key) return capacities[i].name;
+  return key;
+}
+
+function renderQuestions(){
+  var host = document.getElementById('questionList');
+  host.innerHTML = '';
+  var lastCap = null;
+
+  questions.forEach(function(q){
+    if (q.cap !== lastCap){
+      var h = document.createElement('div');
+      h.className = 'cap-head';
+      h.textContent = capName(q.cap);
+      host.appendChild(h);
+      lastCap = q.cap;
+    }
+
+    var wrap = document.createElement('div');
+    wrap.className = 'q';
+
+    var num = document.createElement('span');
+    num.className = 'q-num';
+    num.textContent = 'Question ' + (q.index + 1) + ' of ' + questions.length;
+    wrap.appendChild(num);
+
+    var text = document.createElement('div');
+    text.className = 'q-text';
+    text.textContent = q.text;
+    wrap.appendChild(text);
+
+    var list = document.createElement('div');
+    list.className = 'likert';
+
+    likert.forEach(function(opt){
+      var row = document.createElement('div');
+      row.className = 'likert-option';
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      row.innerHTML = '<span class="likert-radio"></span><span class="likert-label"></span>';
+      row.querySelector('.likert-label').textContent = opt.label;
+
+      function choose(){
+        answers[q.index] = opt.v;
+        Array.prototype.forEach.call(list.children, function(c){ c.classList.remove('selected'); });
+        row.classList.add('selected');
+        updateProgress();
+      }
+      row.addEventListener('click', choose);
+      row.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(); }
+      });
+
+      list.appendChild(row);
+    });
+
+    wrap.appendChild(list);
+    host.appendChild(wrap);
+  });
+}
+
+function updateProgress(){
+  var done = Object.keys(answers).length;
+  document.getElementById('progressLabel').textContent = done + ' of ' + questions.length + ' answered';
+  document.getElementById('progressFill').style.width = ((done / questions.length) * 100) + '%';
+  document.getElementById('submitBtn').disabled = done < questions.length;
+}
+
+document.getElementById('startBtn').addEventListener('click', function(){
+  var name = document.getElementById('fName').value.trim();
+  var email = document.getElementById('fEmail').value.trim();
+  var msg = document.getElementById('introMsg');
+
+  if (!name){ msg.textContent = 'Please add your first name.'; msg.className = 'msg err'; return; }
+  if (!email || email.indexOf('@') === -1){ msg.textContent = 'Please add a valid email address.'; msg.className = 'msg err'; return; }
+
+  person.name = name;
+  person.email = email;
+  msg.textContent = 'Loading the questions...';
+  msg.className = 'msg';
+
+  fetch(API + '/api/coaching-assessment/questions')
+    .then(function(r){ if (!r.ok) throw new Error('bad status ' + r.status); return r.json(); })
+    .then(function(data){
+      if (!data.questions || !data.questions.length) throw new Error('empty question bank');
+      questions = data.questions;
+      capacities = data.capacities || [];
+      likert = data.likert || [];
+      renderQuestions();
+      updateProgress();
+      msg.textContent = '';
+      show('screen-questions');
+    })
+    .catch(function(){
+      // A blank page reads as broken. These are paying clients, so say
+      // plainly that it is temporary rather than leaving them guessing.
+      show('screen-error');
+    });
+});
+
+document.getElementById('submitBtn').addEventListener('click', function(){
+  var btn = this;
+  var msg = document.getElementById('submitMsg');
+  btn.disabled = true;
+  msg.textContent = 'Scoring...';
+  msg.className = 'msg';
+
+  fetch(API + '/api/coaching-assessment/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: person.name,
+      email: person.email,
+      company: document.getElementById('fCompany').value,
+      answers: answers
+    })
+  })
+    .then(function(r){ return r.json().then(function(b){ return { ok: r.ok, body: b }; }); })
+    .then(function(res){
+      if (!res.ok) throw new Error(res.body && res.body.error ? res.body.error : 'submit failed');
+      renderResults(res.body);
+      show('screen-results');
+    })
+    .catch(function(err){
+      msg.textContent = 'That did not save. Please try once more in a moment.';
+      msg.className = 'msg err';
+      btn.disabled = false;
+      if (window.console) console.error(err);
+    });
+});
+
+function fmtDate(iso){
+  try {
+    return new Intl.DateTimeFormat('en-AU', {
+      day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Australia/Brisbane'
+    }).format(new Date(iso));
+  } catch (e) { return ''; }
+}
+
+function renderResults(r){
+  document.getElementById('rScore').textContent = r.overall;
+  document.getElementById('rTaken').textContent = 'Taken ' + fmtDate(r.takenAt);
+  document.getElementById('rFocus').textContent = r.focusLabel;
+
+  // The comparison is the whole promise of retaking it, so it sits
+  // above the capacity breakdown rather than below.
+  if (r.previous){
+    var delta = r.overall - r.previous.overall;
+    document.getElementById('rPrevLabel').textContent = 'Previous, ' + fmtDate(r.previous.takenAt);
+    document.getElementById('rPrevScore').textContent = r.previous.overall + ' out of 100';
+    document.getElementById('rNowScore').textContent = r.overall + ' out of 100';
+    document.getElementById('rMove').textContent =
+      delta === 0 ? 'Unchanged' : (delta > 0 ? 'Up ' + delta : 'Down ' + Math.abs(delta));
+    document.getElementById('rCompare').hidden = false;
+  }
+
+  var host = document.getElementById('rCaps');
+  host.innerHTML = '';
+  var order = ['lead','align','regulate','connect','grow','perform'];
+  order.forEach(function(key){
+    var row = document.createElement('div');
+    row.className = 'cap-row';
+
+    var left = document.createElement('div');
+    var nm = document.createElement('div');
+    nm.className = 'name';
+    nm.textContent = capNameStatic(key);
+    left.appendChild(nm);
+
+    if (r.previous){
+      var prev = document.createElement('div');
+      prev.className = 'prev';
+      var d = r.byCapacity[key] - r.previous.byCapacity[key];
+      prev.textContent = 'Was ' + r.previous.byCapacity[key] +
+        (d === 0 ? ', unchanged' : (d > 0 ? ', up ' + d : ', down ' + Math.abs(d)));
+      left.appendChild(prev);
+    }
+
+    var val = document.createElement('div');
+    val.className = 'val display';
+    val.textContent = r.byCapacity[key];
+
+    row.appendChild(left);
+    row.appendChild(val);
+    host.appendChild(row);
+  });
+}
+
+// The results come back after the question bank, so capacities is
+// populated by then; this stays defensive in case a result is ever
+// rendered without having loaded them.
+function capNameStatic(key){
+  var found = capName(key);
+  if (found !== key) return found;
+  return key.charAt(0).toUpperCase() + key.slice(1);
+}
+</script>
+
+</body>
+</html>

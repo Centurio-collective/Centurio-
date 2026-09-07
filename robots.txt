@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# Unlisted, sent by direct link to 1:1 coaching clients only.
+Disallow: /assessment-36.html
+
 Sitemap: https://centuriocollective.com/sitemap.xml
