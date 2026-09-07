@@ -101,6 +101,7 @@ const FORM_HANDLERS = {
         connect_score: num(data.connect_score),
         grow_score: num(data.grow_score),
         perform_score: num(data.perform_score),
+        responses: jsonObject(data.responses),
         marketing_consent: consented,
         marketing_consent_at: consented ? new Date().toISOString() : null,
         marketing_consent_text: consented ? text : null,
@@ -146,6 +147,21 @@ function bool(v) {
   if (v === undefined || v === null) return false;
   const s = String(v).trim().toLowerCase();
   return s === 'yes' || s === 'on' || s === 'true' || s === '1';
+}
+
+// Netlify form fields are strings, so the responses object arrives JSON
+// encoded. Parsed defensively: a malformed value must cost the responses
+// and nothing else, because losing a submission entirely would be worse
+// than losing the detail this column exists to add.
+function jsonObject(v) {
+  if (v === undefined || v === null || v === '') return null;
+  try {
+    const parsed = typeof v === 'object' ? v : JSON.parse(String(v));
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : null;
+  } catch (err) {
+    console.error('form-webhook: could not parse responses as JSON', err.message);
+    return null;
+  }
 }
 
 // Netlify's outgoing webhook body is JSON. The submission payload has
