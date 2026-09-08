@@ -196,7 +196,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="plan-name">Centurio Membership</div>
         <div class="plan-price" id="planPrice">$590<span>/year</span></div>
         <div class="plan-save show" id="planSave">Save $118 — that's 2 months free</div>
-        <a class="plan-cta" id="planCta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan })">Join the Annual Plan</a>
+        <a class="plan-cta" id="planCta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
         <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
     </div>
@@ -226,10 +226,11 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <script>
 gtag('event', 'join_view');
+if (window.fbq) fbq('track', 'ViewContent', { content_name: 'Membership' });
 
 const plans = {
-  monthly: { price: "$59", suffix: "/month", save: "", cta: "Join the Monthly Plan", url: "https://buy.stripe.com/3cI7sM3eM4YX1Qg0Eg1kA00" },
-  annual:  { price: "$590", suffix: "/year", save: "Save $118 — that's 2 months free", cta: "Join the Annual Plan", url: "https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" }
+  monthly: { price: "$59", value: 59, suffix: "/month", save: "", cta: "Join the Monthly Plan", url: "https://buy.stripe.com/3cI7sM3eM4YX1Qg0Eg1kA00" },
+  annual:  { price: "$590", value: 590, suffix: "/year", save: "Save $118 — that's 2 months free", cta: "Join the Annual Plan", url: "https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" }
 };
 
 // Tracks the toggle's current selection so the checkout_start click

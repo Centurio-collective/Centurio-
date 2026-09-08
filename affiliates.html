@@ -636,6 +636,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         // No form field (gym name, contact, email, phone, etc.) is
         // passed as a parameter.
         gtag('event', 'affiliate_apply');
+        if (window.fbq) fbq('track', 'SubmitApplication');
       })
       .catch(function(){
         status.textContent = 'Something went wrong sending your application. Please email hello@centuriocollective.com directly.';

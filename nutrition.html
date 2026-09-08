@@ -258,6 +258,7 @@ savedTargets={calories:round(calories),protein:round(protein),carbs:round(carbs)
 // (loss/recomp/maintain/gain), not a personal number; no calorie,
 // weight, height or age value is ever passed as a parameter.
 gtag('event','nutrition_calculate',{goal:selectedGoal});
+if (window.fbq) fbq('trackCustom','NutritionCalculate');
 
 const personalizedRateNote=document.getElementById('personalizedRateNote'),unsafeRateWarning=document.getElementById('unsafeRateWarning');
 if(personalizedRate){

@@ -368,6 +368,7 @@ function selectAnswer(value){
   // the quiz screen isn't the same as beginning to answer it.
   if(!assessmentStarted){
     gtag('event', 'assessment_start');
+    if (window.fbq) fbq('trackCustom', 'AssessmentStart');
     assessmentStarted = true;
   }
   gtag('event', 'assessment_question', { question_number: currentQ + 1 });
@@ -384,6 +385,7 @@ function selectAnswer(value){
     // funnel can tell apart "finished the quiz" from "gave an email"
     // from "saw their score."
     gtag('event', 'assessment_complete');
+    if (window.fbq) fbq('trackCustom', 'AssessmentComplete');
     showScreen('screen-gate');
   }
 }
@@ -454,6 +456,8 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
   // a valid email," not "email confirmed landed in Supabase." No email
   // or name value itself is ever passed as a parameter.
   gtag('event', 'lead_capture');
+  // The campaign optimisation event. Fires once, on email capture.
+  if (window.fbq) fbq('track', 'Lead', { content_name: 'Mental Fitness Score' });
 
   // Submit to Netlify quietly in the background. Results below do not wait on this —
   // they're already fully computed client-side, so the visitor is never blocked
@@ -493,6 +497,10 @@ function renderResults(){
   // Coarse band only (developing / building / strong) -- never the raw
   // 0-100 score, per the no-raw-score constraint on this task.
   gtag('event', 'results_view', { score_band: overallBand });
+  // No score_band, and no score, band or capacity in any Meta event.
+  // Health related data may not be sent to Meta and enforcement is at
+  // account level. GA4 keeps the band; Meta gets the page view only.
+  if (window.fbq) fbq('track', 'ViewContent', { content_name: 'Assessment results' });
   document.getElementById('scoreBandLabel').textContent = bandLabel(overallBand);
   document.getElementById('scoreSub').textContent = 'Your baseline across all six Core Capacities. This is where you start. Tuesday Training is how it moves.';
 
@@ -654,6 +662,7 @@ function downloadPDF(){
 
   doc.save('Centurio-Mental-Fitness-Score.pdf');
   gtag('event', 'report_download');
+  if (window.fbq) fbq('trackCustom', 'ReportDownload');
 }
 </script>
 
