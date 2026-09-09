@@ -102,6 +102,10 @@ const FORM_HANDLERS = {
         grow_score: num(data.grow_score),
         perform_score: num(data.perform_score),
         responses: jsonObject(data.responses),
+        // Attribution. Every field null safe through str(), because an
+        // organic visitor carries none of them and that is the normal
+        // case, not an error. Nothing here may ever fail a submission.
+        ...attribution(data),
         marketing_consent: consented,
         marketing_consent_at: consented ? new Date().toISOString() : null,
         marketing_consent_text: consented ? text : null,
@@ -124,6 +128,27 @@ const FORM_HANDLERS = {
     required: ['gym_name', 'contact_name', 'email'],
   },
 };
+
+// The nine attribution fields, mapped in one place so the assessment
+// and anything added later cannot drift apart on which of them exist
+// or how an absent one is recorded. str() turns an empty string into
+// null, which is what a column with no attribution should hold: null
+// means no attribution, not an empty attribution.
+//
+// fbclid and gclid are click identifiers the person's own click
+// carried. fbclid in particular is the only value that joins a row
+// back to a specific Meta ad click, and is what the Conversions API
+// needs to construct its fbc parameter.
+const ATTRIBUTION_FIELDS = [
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+  'fbclid', 'gclid', 'referrer', 'landing_url',
+];
+
+function attribution(data) {
+  const out = {};
+  for (const field of ATTRIBUTION_FIELDS) out[field] = str(data[field]);
+  return out;
+}
 
 function str(v) {
   if (v === undefined || v === null) return null;
