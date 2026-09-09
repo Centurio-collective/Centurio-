@@ -166,6 +166,118 @@
 </main>
 
 <script>
+/* ------------------------------------------------------------------
+   ATTRIBUTION CAPTURE. Byte identical on score.html and
+   assessment-36.html. If you change one, change the other. The two
+   pages submit through completely different transports, Netlify Forms
+   and a JSON API, and this block is the only thing keeping what they
+   record comparable.
+
+   KNOWN LIMITATION, NOT A DEFECT. Meta ads open inside the Instagram
+   and Facebook in-app browsers. Anyone who taps "open in Safari" lands
+   in a fresh context with empty sessionStorage and their submission
+   arrives with null attribution even though an ad produced it. The same
+   is true of someone who sees an ad, does not click, and arrives later
+   by search or through the profile. No client side mechanism can
+   recover either case, so the count of ad-driven submissions here will
+   read lower than the ad platform claims. Expect that gap and measure
+   it rather than treating it as a bug.
+   ------------------------------------------------------------------ */
+
+var ATTRIBUTION_FIELDS = [
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+  'fbclid', 'gclid', 'referrer', 'landing_url'
+];
+
+/* The parameters a click carries. Separate from the two entry point
+   fields below because they follow a different persistence rule. */
+var ATTRIBUTION_CLICK_FIELDS = [
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+  'fbclid', 'gclid'
+];
+
+var ATTRIBUTION_KEY = 'centurio_attribution';
+
+/* A referrer or landing url can be arbitrarily long. Capped so a
+   pathological one cannot bloat the submission or the row. */
+var ATTRIBUTION_MAX = 500;
+
+function attributionRead() {
+  try {
+    var raw = sessionStorage.getItem(ATTRIBUTION_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    /* Private mode, disabled storage, corrupt value. Attribution is
+       never worth failing a submission over. */
+    return {};
+  }
+}
+
+function attributionWrite(value) {
+  try {
+    sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(value));
+  } catch (err) {
+    /* See above. */
+  }
+}
+
+function attributionClip(value) {
+  return String(value == null ? '' : value).slice(0, ATTRIBUTION_MAX);
+}
+
+(function attributionCapture() {
+  var params;
+  try {
+    params = new URLSearchParams(window.location.search);
+  } catch (err) {
+    return;
+  }
+
+  var stored = attributionRead();
+
+  /* ENTRY POINT: written once, on the first pageview of the session,
+     and never overwritten. This is where the visit began, tagged or
+     not, which stays true even if a tagged click arrives later. */
+  if (!stored.landing_url) {
+    stored.landing_url = attributionClip(window.location.href);
+    stored.referrer = attributionClip(document.referrer);
+  }
+
+  /* CLICK PARAMETERS: written on the first pageview that actually
+     carries one, and never overwritten after that.
+
+     Not simply "first touch wins". Applied literally that rule stores
+     an empty bundle on an untagged first pageview and then locks out a
+     genuine ad click later in the same session, which is the common
+     case for anyone who browses the site before clicking an ad. */
+  var carriesClick = ATTRIBUTION_CLICK_FIELDS.some(function (field) {
+    return params.get(field);
+  });
+  var alreadyStored = ATTRIBUTION_CLICK_FIELDS.some(function (field) {
+    return stored[field];
+  });
+
+  if (carriesClick && !alreadyStored) {
+    ATTRIBUTION_CLICK_FIELDS.forEach(function (field) {
+      stored[field] = attributionClip(params.get(field));
+    });
+  }
+
+  attributionWrite(stored);
+})();
+
+/* Every field, always present, empty string when absent. A fixed shape
+   means the submission body never varies, so a missing value can never
+   be confused with a missing field. */
+function attributionValues() {
+  var stored = attributionRead();
+  var out = {};
+  ATTRIBUTION_FIELDS.forEach(function (field) {
+    out[field] = stored[field] || '';
+  });
+  return out;
+}
+
 // The API base is the portal. This page holds NO questions and NO
 // scoring: it fetches the bank and posts raw answers back, so that
 // lib/benchmark/benchmark.ts stays the single implementation shared with
@@ -299,6 +411,9 @@ document.getElementById('submitBtn').addEventListener('click', function(){
       name: person.name,
       email: person.email,
       company: document.getElementById('fCompany').value,
+      // Nested rather than flattened, so the API can tell an absent
+      // attribution object from a present one full of empty strings.
+      attribution: attributionValues(),
       answers: answers
     })
   })

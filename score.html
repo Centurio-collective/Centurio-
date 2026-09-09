@@ -221,6 +221,21 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
              without this input, so every submission since arrived with
              responses null and nothing logged an error. -->
         <input type="hidden" name="responses" id="hiddenResponses" />
+        <!-- Attribution. Same rule as responses above: Netlify builds
+             this form's field list from this markup at deploy time and
+             discards anything posted that is not declared here. The ids
+             are hidden_ plus the field name so the population loop can
+             derive them from ATTRIBUTION_FIELDS and the two cannot
+             drift apart. -->
+        <input type="hidden" name="utm_source" id="hidden_utm_source" />
+        <input type="hidden" name="utm_medium" id="hidden_utm_medium" />
+        <input type="hidden" name="utm_campaign" id="hidden_utm_campaign" />
+        <input type="hidden" name="utm_content" id="hidden_utm_content" />
+        <input type="hidden" name="utm_term" id="hidden_utm_term" />
+        <input type="hidden" name="fbclid" id="hidden_fbclid" />
+        <input type="hidden" name="gclid" id="hidden_gclid" />
+        <input type="hidden" name="referrer" id="hidden_referrer" />
+        <input type="hidden" name="landing_url" id="hidden_landing_url" />
         <div class="gate-row">
           <input type="text" name="name" id="gName" placeholder="First name" autocomplete="given-name" required />
           <input type="email" name="email" id="gEmail" placeholder="Email address" autocomplete="email" required />
@@ -268,6 +283,118 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </footer>
 
 <script>
+/* ------------------------------------------------------------------
+   ATTRIBUTION CAPTURE. Byte identical on score.html and
+   assessment-36.html. If you change one, change the other. The two
+   pages submit through completely different transports, Netlify Forms
+   and a JSON API, and this block is the only thing keeping what they
+   record comparable.
+
+   KNOWN LIMITATION, NOT A DEFECT. Meta ads open inside the Instagram
+   and Facebook in-app browsers. Anyone who taps "open in Safari" lands
+   in a fresh context with empty sessionStorage and their submission
+   arrives with null attribution even though an ad produced it. The same
+   is true of someone who sees an ad, does not click, and arrives later
+   by search or through the profile. No client side mechanism can
+   recover either case, so the count of ad-driven submissions here will
+   read lower than the ad platform claims. Expect that gap and measure
+   it rather than treating it as a bug.
+   ------------------------------------------------------------------ */
+
+var ATTRIBUTION_FIELDS = [
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+  'fbclid', 'gclid', 'referrer', 'landing_url'
+];
+
+/* The parameters a click carries. Separate from the two entry point
+   fields below because they follow a different persistence rule. */
+var ATTRIBUTION_CLICK_FIELDS = [
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+  'fbclid', 'gclid'
+];
+
+var ATTRIBUTION_KEY = 'centurio_attribution';
+
+/* A referrer or landing url can be arbitrarily long. Capped so a
+   pathological one cannot bloat the submission or the row. */
+var ATTRIBUTION_MAX = 500;
+
+function attributionRead() {
+  try {
+    var raw = sessionStorage.getItem(ATTRIBUTION_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    /* Private mode, disabled storage, corrupt value. Attribution is
+       never worth failing a submission over. */
+    return {};
+  }
+}
+
+function attributionWrite(value) {
+  try {
+    sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(value));
+  } catch (err) {
+    /* See above. */
+  }
+}
+
+function attributionClip(value) {
+  return String(value == null ? '' : value).slice(0, ATTRIBUTION_MAX);
+}
+
+(function attributionCapture() {
+  var params;
+  try {
+    params = new URLSearchParams(window.location.search);
+  } catch (err) {
+    return;
+  }
+
+  var stored = attributionRead();
+
+  /* ENTRY POINT: written once, on the first pageview of the session,
+     and never overwritten. This is where the visit began, tagged or
+     not, which stays true even if a tagged click arrives later. */
+  if (!stored.landing_url) {
+    stored.landing_url = attributionClip(window.location.href);
+    stored.referrer = attributionClip(document.referrer);
+  }
+
+  /* CLICK PARAMETERS: written on the first pageview that actually
+     carries one, and never overwritten after that.
+
+     Not simply "first touch wins". Applied literally that rule stores
+     an empty bundle on an untagged first pageview and then locks out a
+     genuine ad click later in the same session, which is the common
+     case for anyone who browses the site before clicking an ad. */
+  var carriesClick = ATTRIBUTION_CLICK_FIELDS.some(function (field) {
+    return params.get(field);
+  });
+  var alreadyStored = ATTRIBUTION_CLICK_FIELDS.some(function (field) {
+    return stored[field];
+  });
+
+  if (carriesClick && !alreadyStored) {
+    ATTRIBUTION_CLICK_FIELDS.forEach(function (field) {
+      stored[field] = attributionClip(params.get(field));
+    });
+  }
+
+  attributionWrite(stored);
+})();
+
+/* Every field, always present, empty string when absent. A fixed shape
+   means the submission body never varies, so a missing value can never
+   be confused with a missing field. */
+function attributionValues() {
+  var stored = attributionRead();
+  var out = {};
+  ATTRIBUTION_FIELDS.forEach(function (field) {
+    out[field] = stored[field] || '';
+  });
+  return out;
+}
+
 const CAPACITIES = [
   { key: 'lead', name: 'Lead', tag: 'Trust Yourself', color: 'var(--c-lead)' },
   { key: 'align', name: 'Align', tag: 'Know Your Direction', color: 'var(--c-align)' },
@@ -425,6 +552,11 @@ function computeScores(){
   document.getElementById('hiddenConnect').value = capScores.connect;
   document.getElementById('hiddenGrow').value = capScores.grow;
   document.getElementById('hiddenPerform').value = capScores.perform;
+  var attribution = attributionValues();
+  ATTRIBUTION_FIELDS.forEach(function(field){
+    var el = document.getElementById('hidden_' + field);
+    if (el) el.value = attribution[field];
+  });
   document.getElementById('hiddenResponses').value = JSON.stringify(
     answers.reduce(function(acc, v, i){ acc[String(i)] = v; return acc; }, {}));
 }
@@ -437,6 +569,35 @@ function bandFor(score){
 function bandLabel(band){
   return { developing: 'Developing', building: 'Building', strong: 'Strong' }[band];
 }
+
+// Merges the captured attribution into the submission body from the
+// SAME array that declares the hidden inputs and populates them. A
+// field name has to appear in three places to survive Netlify, and
+// driving two of them from one array leaves only the static markup to
+// keep in step, which is what the assertion below checks.
+function withAttribution(payload){
+  var attribution = attributionValues();
+  ATTRIBUTION_FIELDS.forEach(function(field){ payload[field] = attribution[field]; });
+  return payload;
+}
+
+// THE CHECK THAT WOULD HAVE CAUGHT THE RESPONSES DEFECT.
+// Netlify builds this form's field list by parsing the static markup
+// at deploy time and silently discards anything posted that is not in
+// it. There is no error and no log: the only symptom is a null column,
+// which is how responses stayed broken in production for two days.
+// A static page with no build step can only assert this at runtime, so
+// it asserts loudly and includes responses itself.
+(function assertPostedFieldsAreDeclared(){
+  var form = document.getElementById('gateForm');
+  if (!form) return;
+  var missing = ATTRIBUTION_FIELDS.concat(['responses']).filter(function(field){
+    return !form.querySelector('input[name="' + field + '"]');
+  });
+  if (missing.length && window.console) {
+    console.error('score.html: posted but not declared in the form markup, Netlify will discard: ' + missing.join(", "));
+  }
+})();
 
 function encodeFormData(data){
   return Object.keys(data).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k])).join("&");
@@ -473,7 +634,7 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
   fetch("/", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: encodeFormData({
+    body: encodeFormData(withAttribution({
       "form-name": "mental-fitness-score",
       name,
       email,
@@ -492,7 +653,7 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
       connect_score: String(computedScores.byCapacity.connect),
       grow_score: String(computedScores.byCapacity.grow),
       perform_score: String(computedScores.byCapacity.perform)
-    })
+    }))
   }).catch(err => console.error("Background form submission failed:", err));
 
   renderResults();
