@@ -215,6 +215,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <input type="hidden" name="connect_score" id="hiddenConnect" />
         <input type="hidden" name="grow_score" id="hiddenGrow" />
         <input type="hidden" name="perform_score" id="hiddenPerform" />
+        <!-- Netlify registers a form's fields from this markup at deploy
+             time and silently discards any posted field it has not seen
+             here. responses was added to the POST body on 7 September
+             without this input, so every submission since arrived with
+             responses null and nothing logged an error. -->
+        <input type="hidden" name="responses" id="hiddenResponses" />
         <div class="gate-row">
           <input type="text" name="name" id="gName" placeholder="First name" autocomplete="given-name" required />
           <input type="email" name="email" id="gEmail" placeholder="Email address" autocomplete="email" required />
@@ -419,6 +425,8 @@ function computeScores(){
   document.getElementById('hiddenConnect').value = capScores.connect;
   document.getElementById('hiddenGrow').value = capScores.grow;
   document.getElementById('hiddenPerform').value = capScores.perform;
+  document.getElementById('hiddenResponses').value = JSON.stringify(
+    answers.reduce(function(acc, v, i){ acc[String(i)] = v; return acc; }, {}));
 }
 
 function bandFor(score){
