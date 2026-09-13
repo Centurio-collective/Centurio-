@@ -58,6 +58,17 @@ const NOTIFY_URL =
 // the wording can be read back from either side.
 const CONSENT_TEXT = {
   v1: 'Send me the Centurio email. Ideas on training the six capacities, roughly weekly. Unsubscribe any time.',
+  // v2, 2026-09-13. v1 promised a weekly ongoing email. What actually
+  // gets sent is four emails over twelve days and then nothing, so v1
+  // described a newsletter that does not exist. Under the Spam Act the
+  // consent text IS the record of what the person agreed to, which makes
+  // an inaccurate one a compliance problem rather than only a marketing
+  // one. v2 describes what actually happens.
+  //
+  // The same wording is used by this checkbox and by the consent link in
+  // the result email, so there is one thing being agreed to and one
+  // version recording it.
+  v2: 'Send me the follow up. A few short emails over the next couple of weeks, one idea each, on the capacity you scored lowest on. Unsubscribe any time.',
 };
 
 const FORM_HANDLERS = {
@@ -109,6 +120,13 @@ const FORM_HANDLERS = {
         marketing_consent: consented,
         marketing_consent_at: consented ? new Date().toISOString() : null,
         marketing_consent_text: consented ? text : null,
+        // Which wording, and where it was given. Consent can now also be
+        // given by a link in the result email, and the two are counted
+        // separately: roughly two thirds of completers do not tick this
+        // box, and whether asking again in the email recovers them is the
+        // entire question this records the answer to.
+        marketing_consent_version: consented ? version : null,
+        marketing_consent_source: consented ? 'results_page' : null,
       };
     },
     required: ['name', 'email'],
