@@ -69,6 +69,12 @@ const CONSENT_TEXT = {
   // the result email, so there is one thing being agreed to and one
   // version recording it.
   v2: 'Send me the follow up. A few short emails over the next couple of weeks, one idea each, on the capacity you scored lowest on. Unsubscribe any time.',
+  // v3, 2026-09-18. Shorter, and consistently in the visitor's own
+  // first person voice throughout rather than switching between "me"
+  // and "you" mid sentence. The general unsubscribe assurance stays on
+  // the page itself (the line under the submit button), not repeated
+  // inside every version of this checkbox text.
+  v3: 'Send me the complimentary follow up to strengthen the capacity I scored lowest on.',
 };
 
 const FORM_HANDLERS = {
