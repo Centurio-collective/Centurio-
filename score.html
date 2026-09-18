@@ -240,10 +240,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
           <input type="text" name="name" id="gName" placeholder="First name" autocomplete="given-name" required />
           <input type="email" name="email" id="gEmail" placeholder="Email address" autocomplete="email" required />
         </div>
-        <input type="hidden" name="consent_version" value="v2" />
+        <input type="hidden" name="consent_version" value="v3" />
         <label class="consent">
           <input type="checkbox" name="marketing_consent" id="gConsent" value="yes" />
-          <span>Send me the follow up. A few short emails over the next couple of weeks, one idea each, on the capacity you scored lowest on. Unsubscribe any time.</span>
+          <span>Send me the complimentary follow up to strengthen the capacity I scored lowest on.</span>
         </label>
         <button type="submit" class="btn" style="width:100%; margin-top:14px;" id="gateSubmitBtn">See My Results</button>
         <p class="gate-msg" id="gateMsg"></p>
@@ -639,7 +639,7 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
       name,
       email,
       marketing_consent: document.getElementById('gConsent').checked ? "yes" : "",
-      consent_version: "v2",
+      consent_version: "v3",
       // The twelve answers already exist in full at this point and were
       // simply never sent, so every submission before today lost them
       // permanently. Keyed by question index rather than sent as a bare
