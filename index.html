@@ -154,9 +154,28 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .note{ margin-top:30px; border-left:2px solid var(--accent); padding:4px 0 4px 20px; font-size:16px; color:var(--muted); max-width:660px; }
   .note strong{ color:var(--text); font-weight:600; }
 
+  /* Centurio 1:1, given real weight high on the page */
+  .spotlight{ border-top:1px solid var(--line); padding:72px 0; }
+  .spot-inner{ border:1px solid var(--accent); border-radius:4px; background:rgba(216,181,106,.05);
+    padding:40px 36px; display:flex; gap:34px; align-items:flex-start; }
+  .spot-photo{ flex-shrink:0; width:150px; height:150px; border-radius:50%; overflow:hidden; border:1px solid var(--line); }
+  .spot-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .spot-text{ flex:1; min-width:260px; }
+  .spot-text h2{ font-size:clamp(26px,3.6vw,40px); }
+  .spot-lede{ margin-top:14px; font-size:16.5px; color:var(--muted); max-width:620px; }
+  .spot-lede strong{ color:var(--text); font-weight:600; }
+  .spot-facts{ margin-top:22px; display:flex; gap:24px; flex-wrap:wrap; font-size:12px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .spot-facts span{ display:flex; align-items:center; gap:8px; }
+  .spot-facts span::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); }
+  .spot-cta{ margin-top:28px; display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+  .spot-price{ font-size:13px; color:var(--muted); }
+
   @media (max-width:760px){
     .pain-inner{ padding-left:20px; }
     .pain-body p{ font-size:17px; }
+    .spot-inner{ flex-direction:column; align-items:flex-start; padding:32px 24px; gap:24px; }
+    .spot-photo{ width:110px; height:110px; }
   }
   .final-cta .signup{ margin-left:auto; margin-right:auto; }
   .final-cta .signup-row{ justify-content:center; }
@@ -279,9 +298,48 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
+<section class="spotlight">
+  <div class="wrap">
+    <div class="spot-inner">
+      <div class="spot-photo">
+        <img src="/assets/img/affiliates/founder-headshot.jpg" width="150" height="150" loading="lazy" alt="Sterling Cincotta, Founder of Centurio" />
+      </div>
+      <div class="spot-text">
+        <div class="section-label">WAITING IS OPTIONAL</div>
+        <h2 class="display">Start now, one on one with Sterling.</h2>
+        <p class="spot-lede">The waitlist is for Tuesday Training, which starts soon. <strong>Centurio 1:1 is running today.</strong></p>
+        <p class="spot-lede">Twelve hours with the founder, built around what your assessment says needs the work. All six capacities, weighted to your scores, taken at your pace across six months.</p>
+        <div class="spot-facts">
+          <span>12 hours</span>
+          <span>All six capacities</span>
+          <span>Measured before and after</span>
+        </div>
+        <div class="spot-cta">
+          <a class="cta" href="/1on1.html" onclick="gtag('event','cta_click',{location:'home_1on1_spotlight'})">See Centurio 1:1</a>
+          <span class="spot-price">From $200 an hour. Full framework $2,000.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pain">
+  <div class="wrap">
+    <div class="pain-inner">
+      <div class="section-label">THE SECOND PROBLEM</div>
+      <h2 class="display">You have already tried doing this on your own.</h2>
+      <div class="pain-body">
+        <p>You read the book. You were different for nine days. Then a hard week turned up and you went back to being exactly who you were before it.</p>
+        <p>Willpower on your own is a coin toss.</p>
+        <p><strong>Discipline in a room where everyone else showed up on Tuesday is just Tuesday.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
-    <div class="section-label">THE MODEL</div>
+    <div class="section-label">THE TRAINING</div>
     <h2>Six permanent capacities. Trained every week, for life.</h2>
     <p class="lede">One capacity, one Tuesday. The cycle repeats, the practice never finishes.</p>
 
@@ -322,7 +380,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <section>
   <div class="wrap">
-    <div class="section-label">WHAT CHANGES</div>
+    <div class="section-label">THE OUTCOME</div>
     <h2>What it looks like when the mind gets trained too.</h2>
     <p class="lede">Progress is personal, so this is not a promise. It is what the training is built to produce.</p>
     <div class="outs">
@@ -337,12 +395,26 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
+<section class="pain">
+  <div class="wrap">
+    <div class="pain-inner">
+      <div class="section-label">THE THIRD PROBLEM</div>
+      <h2 class="display">You cannot train what you never measure.</h2>
+      <div class="pain-body">
+        <p>You know your weight. You know your best lift. You know your resting heart rate, because something on your wrist tells you every morning.</p>
+        <p>Now ask what your mind scored this week. There is no number. No trend. No way to say whether last month was better or worse than this one.</p>
+        <p><strong>So you guess, and you call the guess a feeling.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section style="border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
   <div class="wrap">
     <div style="max-width:640px; margin:0 auto; text-align:center; border:1px solid var(--accent); border-radius:4px; padding:44px 32px; background:rgba(216,181,106,.05);">
       <div class="section-label" style="display:flex; justify-content:center;">FREE ASSESSMENT</div>
       <h2 class="display" style="font-size:clamp(26px,4vw,36px); margin:0 auto;">What's your Mental Fitness Score?</h2>
-      <p class="lede" style="margin:14px auto 0;">Not ready for the list? Start here instead. 12 questions, about 3 minutes, and you get a real baseline across all six Core Capacities plus a personalised PDF report.</p>
+      <p class="lede" style="margin:14px auto 0;">Twelve questions, about three minutes, and you walk out with a number. A real baseline across all six Core Capacities, plus a personalised PDF report.</p>
       <a class="cta" href="/score.html" style="display:inline-block; margin-top:26px;">Take the Free Assessment</a>
     </div>
   </div>
