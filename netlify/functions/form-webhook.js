@@ -84,6 +84,11 @@ const FORM_HANDLERS = {
     map: (data) => ({
       first_name: str(data.name),
       email: str(data.email),
+      // Attribution, added 2026-09-22. The waitlist campaign was driving
+      // signups with no record of which ad produced them. Same nine
+      // fields as the assessment, mapped through the same helper, so the
+      // two tables stay directly comparable.
+      ...attribution(data),
     }),
     required: ['first_name', 'email'],
   },
