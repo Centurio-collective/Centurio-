@@ -64,6 +64,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   header{ padding:28px 0 24px; border-bottom:1px solid var(--line); }
   .header-row{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
   .member-login-btn{display:inline-block;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  .header-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .affiliate-btn{display:inline-block;background:transparent;color:var(--accent);border:1px solid rgba(216,181,106,.45);border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  .affiliate-btn:hover{border-color:var(--accent);background:rgba(216,181,106,.12);}
   .member-login-btn:hover{background:var(--accent);color:#17120b;}
   .wordmark{ font-family:"League Gothic","Arial Narrow",Impact,sans-serif; font-size:34px; font-weight:400; letter-spacing:.5px; line-height:.85; }
   .wordmark a{ text-decoration:none; }
@@ -199,7 +202,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <header>
   <div class="wrap header-row">
     <div class="wordmark"><a href="/">CENTURIO</a></div>
-    <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
+    <div class="header-actions">
+      <a href="/affiliates.html" class="affiliate-btn">Gym Partners</a>
+      <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
+    </div>
     <div class="eyebrow">EVIDENCE BASED MENTAL FITNESS TRAINING</div>
   </div>
 </header>

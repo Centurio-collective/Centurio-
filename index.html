@@ -61,6 +61,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   header{ padding:28px 0 24px; border-bottom:1px solid var(--line); position:relative; z-index:5; }
   .header-row{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
   .member-login-btn{display:inline-block;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  .header-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .affiliate-btn{display:inline-block;background:transparent;color:var(--accent);border:1px solid rgba(216,181,106,.45);border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  .affiliate-btn:hover{border-color:var(--accent);background:rgba(216,181,106,.12);}
   .member-login-btn:hover{background:var(--accent);color:#17120b;}
   .wordmark{ font-family:"League Gothic","Arial Narrow",Impact,sans-serif; font-size:34px; font-weight:400; letter-spacing:.5px; line-height:.85; }
   .eyebrow{ font-size:11px; letter-spacing:.14em; color:var(--muted); }
@@ -217,7 +220,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <header>
   <div class="wrap header-row">
     <div class="wordmark">CENTURIO</div>
-    <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
+    <div class="header-actions">
+      <a href="/affiliates.html" class="affiliate-btn">Gym Partners</a>
+      <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
+    </div>
     <div class="eyebrow">EVIDENCE BASED MENTAL FITNESS TRAINING</div>
   </div>
 </header>
@@ -470,6 +476,19 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <p class="lede" style="margin-top:14px;">A four hour, six capacity mental fitness program for teams. Delivered face to face by Sterling, with a measured baseline for every participant.</p>
       </div>
       <a class="btn-secondary" href="/corporate.html" style="flex-shrink:0;">Corporate Programs</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div style="border:1px solid var(--line); border-radius:4px; padding:40px 34px; display:flex; gap:36px; align-items:center; flex-wrap:wrap;">
+      <div style="flex:1; min-width:280px;">
+        <div class="section-label">FOR GYMS</div>
+        <h2 class="display" style="font-size:clamp(26px,3.6vw,38px);">Retention is the whole game.</h2>
+        <p class="lede" style="margin-top:14px;">Mental Fitness training for the members you already have. They get 10% off for the life of their membership. You earn 10% recurring for as long as they stay.</p>
+      </div>
+      <a class="btn-secondary" href="/affiliates.html" style="flex-shrink:0;" onclick="gtag('event','cta_click',{location:'home_gym_band'})">Gym Partners</a>
     </div>
   </div>
 </section>
