@@ -5,8 +5,9 @@
 //
 // Configure this as the target for the outgoing webhooks in Netlify
 // (Site settings -> Forms -> Form notifications -> Outgoing webhook), one
-// per form ("waitlist", "mental-fitness-score", "affiliate-application").
-// All point at this same function URL; the function branches on form_name.
+// per form ("waitlist", "mental-fitness-score", "affiliate-application",
+// "corporate-enquiry"). All point at this same function URL; the function
+// branches on form_name.
 //
 // Required environment variables (set in Netlify: Site settings ->
 // Environment variables):
@@ -136,6 +137,22 @@ const FORM_HANDLERS = {
       };
     },
     required: ['name', 'email'],
+  },
+  'corporate-enquiry': {
+    table: 'corporate_enquiries',
+    map: (data) => ({
+      company_name: str(data.company_name),
+      contact_name: str(data.contact_name),
+      email: str(data.email),
+      role: str(data.role),
+      phone: str(data.phone),
+      team_size: str(data.team_size),
+      location: str(data.location),
+      timing: str(data.timing),
+      follow_through: str(data.follow_through),
+      notes: str(data.notes),
+    }),
+    required: ['company_name', 'contact_name', 'email'],
   },
   'affiliate-application': {
     table: 'affiliate_applications',
