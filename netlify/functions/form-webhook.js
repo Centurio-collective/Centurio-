@@ -16,6 +16,11 @@
 //   ASSESSMENT_NOTIFY_SECRET  shared secret, must match the portal's value
 //                             exactly, or the assessment nurture sequence's
 //                             first email never fires
+//   WAITLIST_NOTIFY_SECRET    the same, for the waitlist nurture sequence.
+//                             A SEPARATE secret by design: every trust
+//                             boundary in this system has its own, none are
+//                             shared. Must match the portal's value exactly
+//                             or the waitlist welcome email never fires
 //
 // The service role key is required (not the anon key) because both target
 // tables have Row Level Security enabled and no insert policy for
@@ -35,6 +40,16 @@ const ASSESSMENT_NOTIFY_SECRET = process.env.ASSESSMENT_NOTIFY_SECRET;
 const NOTIFY_URL =
   process.env.ASSESSMENT_NOTIFY_URL ||
   'https://members.centuriocollective.com/api/nurture/notify';
+
+const WAITLIST_NOTIFY_SECRET = process.env.WAITLIST_NOTIFY_SECRET;
+
+// The portal endpoint that sends the waitlist welcome immediately, rather
+// than waiting for the next daily cron pass. A welcome email that arrives
+// up to a day late is a welcome email nobody reads, which is the whole
+// reason this trigger exists rather than leaving it to the cron.
+const WAITLIST_NOTIFY_URL =
+  process.env.WAITLIST_NOTIFY_URL ||
+  'https://members.centuriocollective.com/api/nurture/waitlist-notify';
 
 // ---------------------------------------------------------------------
 // Marketing consent
@@ -298,6 +313,38 @@ async function triggerResultEmail(submissionId) {
   }
 }
 
+// Same contract as triggerResultEmail above, and for the same reason:
+// takes only the new row id, never an email address, because an endpoint
+// that emails whatever address it is handed is an open relay for
+// Centurio-branded mail. Failures logged and swallowed identically.
+async function triggerWaitlistWelcome(signupId) {
+  if (!WAITLIST_NOTIFY_SECRET) {
+    console.error('form-webhook: WAITLIST_NOTIFY_SECRET is not set, cannot trigger the waitlist welcome');
+    return;
+  }
+
+  try {
+    const res = await fetch(WAITLIST_NOTIFY_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${WAITLIST_NOTIFY_SECRET}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ signupId }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`form-webhook: waitlist notify returned ${res.status}: ${body}`);
+      return;
+    }
+
+    console.log(`form-webhook: triggered the waitlist welcome for signup ${signupId}`);
+  } catch (err) {
+    console.error('form-webhook: waitlist notify call failed:', err.message);
+  }
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -373,6 +420,14 @@ exports.handler = async (event) => {
   // self-heals within a day and a duplicate row would not.
   if (formName === 'mental-fitness-score' && inserted && inserted.id) {
     await triggerResultEmail(inserted.id);
+  }
+
+  // Same split failure handling as above. The portal's daily cron carries
+  // a safety net for any signup older than ten minutes with no welcome
+  // recorded, so a lost trigger self heals within a day. A duplicate row
+  // would not, which is why this must never return a non-2xx.
+  if (formName === 'waitlist' && inserted && inserted.id) {
+    await triggerWaitlistWelcome(inserted.id);
   }
 
   return { statusCode: 200, body: 'OK' };
