@@ -210,6 +210,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .founder{ flex-direction:column; align-items:flex-start; }
   }
 </style>
+<script src="/assets/js/attribution.js"></script>
 </head>
 <body>
 
@@ -227,9 +228,22 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <h1 class="display">Train the mind<br>that builds the life.</h1>
     <p class="hero-sub">We believe people should train their minds with the same consistency, intention and discipline that society has normalised for physical fitness. <strong>Centurio exists to make that possible.</strong></p>
 
-    <form class="signup" id="signupForm" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <form data-attribution class="signup" id="signupForm" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
       <input type="hidden" name="form-name" value="waitlist" />
       <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <!-- Attribution. Populated by /assets/js/attribution.js on load and
+           again on submit. Field ids are hidden_ plus the field name so the
+           populate loop derives them from ATTRIBUTION_FIELDS and the two
+           cannot drift apart. -->
+      <input type="hidden" name="utm_source" id="hidden_utm_source" />
+      <input type="hidden" name="utm_medium" id="hidden_utm_medium" />
+      <input type="hidden" name="utm_campaign" id="hidden_utm_campaign" />
+      <input type="hidden" name="utm_content" id="hidden_utm_content" />
+      <input type="hidden" name="utm_term" id="hidden_utm_term" />
+      <input type="hidden" name="fbclid" id="hidden_fbclid" />
+      <input type="hidden" name="gclid" id="hidden_gclid" />
+      <input type="hidden" name="referrer" id="hidden_referrer" />
+      <input type="hidden" name="landing_url" id="hidden_landing_url" />
       <div class="signup-row">
         <input type="text" name="name" id="fName" placeholder="First name" autocomplete="given-name" required />
         <input type="email" name="email" id="fEmail" placeholder="Email address" autocomplete="email" required />
@@ -285,9 +299,22 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <p class="pitch">An online gym for your mind. Track your Mental Fitness Score and measure the results.</p>
     <p class="pitch"><strong>Tuesday Training is live, once a week, trained together.</strong> Six Core Capacities, one at a time, building mental strength you can actually feel and measure week to week.</p>
     <p class="urgency">The waitlist is open now. Get on it before the room fills.</p>
-    <form class="signup" id="signupForm2" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <form data-attribution class="signup" id="signupForm2" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
       <input type="hidden" name="form-name" value="waitlist" />
       <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <!-- Attribution. Populated by /assets/js/attribution.js on load and
+           again on submit. Field ids are hidden_ plus the field name so the
+           populate loop derives them from ATTRIBUTION_FIELDS and the two
+           cannot drift apart. -->
+      <input type="hidden" name="utm_source" id="hidden_utm_source_2" />
+      <input type="hidden" name="utm_medium" id="hidden_utm_medium_2" />
+      <input type="hidden" name="utm_campaign" id="hidden_utm_campaign_2" />
+      <input type="hidden" name="utm_content" id="hidden_utm_content_2" />
+      <input type="hidden" name="utm_term" id="hidden_utm_term_2" />
+      <input type="hidden" name="fbclid" id="hidden_fbclid_2" />
+      <input type="hidden" name="gclid" id="hidden_gclid_2" />
+      <input type="hidden" name="referrer" id="hidden_referrer_2" />
+      <input type="hidden" name="landing_url" id="hidden_landing_url_2" />
       <div class="signup-row">
         <input type="text" name="name" id="fName2" placeholder="First name" autocomplete="given-name" required />
         <input type="email" name="email" id="fEmail2" placeholder="Email address" autocomplete="email" required />
@@ -452,9 +479,22 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="section-label" style="justify-content:center; display:flex;">LAST THING</div>
     <h2 class="display">The room is filling. Get your name on the list.</h2>
     <p class="pitch">Join now and train live, every Tuesday, from the first session.</p>
-    <form class="signup" id="signupForm3" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <form data-attribution class="signup" id="signupForm3" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
       <input type="hidden" name="form-name" value="waitlist" />
       <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <!-- Attribution. Populated by /assets/js/attribution.js on load and
+           again on submit. Field ids are hidden_ plus the field name so the
+           populate loop derives them from ATTRIBUTION_FIELDS and the two
+           cannot drift apart. -->
+      <input type="hidden" name="utm_source" id="hidden_utm_source_3" />
+      <input type="hidden" name="utm_medium" id="hidden_utm_medium_3" />
+      <input type="hidden" name="utm_campaign" id="hidden_utm_campaign_3" />
+      <input type="hidden" name="utm_content" id="hidden_utm_content_3" />
+      <input type="hidden" name="utm_term" id="hidden_utm_term_3" />
+      <input type="hidden" name="fbclid" id="hidden_fbclid_3" />
+      <input type="hidden" name="gclid" id="hidden_gclid_3" />
+      <input type="hidden" name="referrer" id="hidden_referrer_3" />
+      <input type="hidden" name="landing_url" id="hidden_landing_url_3" />
       <div class="signup-row">
         <input type="text" name="name" id="fName3" placeholder="First name" autocomplete="given-name" required />
         <input type="email" name="email" id="fEmail3" placeholder="Email address" autocomplete="email" required />
