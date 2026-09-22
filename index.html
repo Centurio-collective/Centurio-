@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8" />
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -26,9 +27,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   gtag('js', new Date());
   gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
 </script>
-<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Centurio — Evidence Based Mental Fitness Training</title>
+<title>Centurio. Evidence Based Mental Fitness Training</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -85,12 +85,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   }
   input::placeholder{ color:#c7cbc3; }
   input:focus{ border-color:var(--accent); }
-  button.cta{
+  .cta{
     background:var(--accent); color:#17120b; border:0; border-radius:2px; padding:14px 26px;
     font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; cursor:pointer; white-space:nowrap;
-  }
-  button.cta:hover{ filter:brightness(1.08); }
-  button.cta:disabled{ opacity:.6; cursor:default; }
+   text-decoration:none; }
+  .cta:hover{ filter:brightness(1.08); }
+  .cta:disabled{ opacity:.6; cursor:default; }
   .signup-note{ margin-top:12px; font-size:13px; color:#c7cbc3; }
   .signup-msg{ margin-top:14px; font-size:14px; min-height:20px; }
   .signup-msg.ok{ color:var(--accent); }
@@ -121,6 +121,43 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
   .final-cta{ text-align:center; padding:88px 0; }
   .final-cta h2{ margin:0 auto; }
+  .final-cta .lede{ margin-left:auto; margin-right:auto; }
+  .final-cta .pitch{ margin:22px auto 0; font-size:17px; color:var(--muted); max-width:620px; }
+  .final-cta .pitch strong{ color:var(--text); font-weight:600; }
+  .final-cta .urgency{ margin-top:18px; font-size:15px; color:var(--accent); font-weight:600; }
+
+  /* The gap: names the problem before the definition answers it */
+  .pain{ background:rgba(216,181,106,.035); border-top:1px solid var(--line); padding:74px 0; }
+  .pain-inner{ max-width:740px; border-left:2px solid var(--accent); padding-left:32px; }
+  .pain h2{ font-size:clamp(26px,4vw,40px); }
+  .pain-body{ margin-top:24px; }
+  .pain-body p{ font-size:18px; color:#c3c8c1; line-height:1.6; }
+  .pain-body p + p{ margin-top:14px; }
+  .pain-body strong{ color:var(--text); font-weight:600; }
+
+  /* Waitlist pitch, mid page, directly under the definition */
+  .pitch-band{ text-align:center; border-top:1px solid var(--line); background:rgba(216,181,106,.05); padding:80px 0; }
+  .pitch-band h2{ margin:0 auto; }
+  .pitch-band .pitch{ margin:22px auto 0; font-size:17px; color:var(--muted); max-width:620px; }
+  .pitch-band .pitch strong{ color:var(--text); font-weight:600; }
+  .pitch-band .urgency{ margin-top:18px; font-size:15px; color:var(--accent); font-weight:600; }
+  .pitch-band .signup{ margin-left:auto; margin-right:auto; }
+  .pitch-band .signup-row{ justify-content:center; }
+  .pitch-band input[type=text], .pitch-band input[type=email]{ background:rgba(13,15,14,.4); border:1px solid var(--line); }
+
+  /* Outcomes */
+  .outs{ margin-top:32px; max-width:760px; }
+  .outrow{ display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--line); }
+  .outrow:last-child{ border-bottom:0; }
+  .outmark{ flex-shrink:0; width:8px; height:8px; border-radius:50%; background:var(--accent); margin-top:10px; }
+  .outrow p{ font-size:16.5px; line-height:1.55; }
+  .note{ margin-top:30px; border-left:2px solid var(--accent); padding:4px 0 4px 20px; font-size:16px; color:var(--muted); max-width:660px; }
+  .note strong{ color:var(--text); font-weight:600; }
+
+  @media (max-width:760px){
+    .pain-inner{ padding-left:20px; }
+    .pain-body p{ font-size:17px; }
+  }
   .final-cta .signup{ margin-left:auto; margin-right:auto; }
   .final-cta .signup-row{ justify-content:center; }
   .final-cta input[type=text], .final-cta input[type=email]{ background:transparent; border:1px solid var(--line); }
@@ -150,7 +187,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   @media (max-width:520px){
     .cap-grid{ grid-template-columns:1fr; }
     .signup-row{ flex-direction:column; }
-    button.cta{ width:100%; }
+    .cta{ width:100%; }
     .founder{ flex-direction:column; align-items:flex-start; }
   }
 </style>
@@ -185,23 +222,16 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section class="ready-band" style="border-top:0; padding-top:36px;">
+<section class="pain">
   <div class="wrap">
-    <div class="section-label">NOT READY TO WAIT?</div>
-    <div class="ready-cta-row">
-      <a class="btn-secondary" href="/join.html">Join the Membership</a>
-      <a class="btn-secondary" href="/1on1.html">Book 1:1 with Sterling</a>
-    </div>
-  </div>
-</section>
-
-<section style="border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
-  <div class="wrap">
-    <div style="max-width:640px; margin:0 auto; text-align:center; border:1px solid var(--accent); border-radius:4px; padding:44px 32px; background:rgba(216,181,106,.05);">
-      <div class="section-label" style="display:flex; justify-content:center;">FREE ASSESSMENT</div>
-      <h2 class="display" style="font-size:clamp(26px,4vw,36px); margin:0 auto;">What's your Mental Fitness Score?</h2>
-      <p class="lede" style="margin:14px auto 0;">12 questions, about 3 minutes. Get a real baseline across all six Core Capacities, plus a personalised PDF report.</p>
-      <a class="cta" href="/score.html" style="display:inline-block; margin-top:26px;">Take the Free Assessment</a>
+    <div class="pain-inner">
+      <div class="section-label">THE GAP</div>
+      <h2 class="display">You have a program for your body. You have nothing for your mind.</h2>
+      <div class="pain-body">
+        <p>You know your sets. You know your reps. You know roughly what you ate this week and you can tell a good week from a bad one without checking.</p>
+        <p>Now answer the same questions about your mind. What are you training. How would you know if it was working. What does a good week even look like.</p>
+        <p><strong>Nobody ever handed you that program.</strong></p>
+      </div>
     </div>
   </div>
 </section>
@@ -226,6 +256,26 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     </div>
     <div class="section-label">DEFINITION</div>
     <h2>Mental Fitness is the lifelong practice of strengthening the six Core Capacities that help us continually become all that we are capable of becoming.</h2>
+  </div>
+</section>
+
+<section class="pitch-band">
+  <div class="wrap">
+    <div class="section-label">BE FIRST THROUGH THE DOOR</div>
+    <h2 class="display">Join a community where your desired behaviour is already the normal behaviour.</h2>
+    <p class="pitch">An online gym for your mind. Track your Mental Fitness Score and measure the results.</p>
+    <p class="pitch"><strong>Tuesday Training is live, once a week, trained together.</strong> Six Core Capacities, one at a time, building mental strength you can actually feel and measure week to week.</p>
+    <p class="urgency">The waitlist is open now. Get on it before the room fills.</p>
+    <form class="signup" id="signupForm2" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="waitlist" />
+      <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <div class="signup-row">
+        <input type="text" name="name" id="fName2" placeholder="First name" autocomplete="given-name" required />
+        <input type="email" name="email" id="fEmail2" placeholder="Email address" autocomplete="email" required />
+        <button type="submit" class="cta" id="submitBtn2">Join the waitlist</button>
+      </div>
+      <p class="signup-msg" id="signupMsg2" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </section>
 
@@ -271,6 +321,34 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </section>
 
 <section>
+  <div class="wrap">
+    <div class="section-label">WHAT CHANGES</div>
+    <h2>What it looks like when the mind gets trained too.</h2>
+    <p class="lede">Progress is personal, so this is not a promise. It is what the training is built to produce.</p>
+    <div class="outs">
+      <div class="outrow"><div class="outmark"></div><p>You decide faster, because you know what you are aiming at.</p></div>
+      <div class="outrow"><div class="outmark"></div><p>You come back from a bad moment in minutes instead of days.</p></div>
+      <div class="outrow"><div class="outmark"></div><p>You keep the promises you make to yourself, and you notice that you keep them.</p></div>
+      <div class="outrow"><div class="outmark"></div><p>Hard conversations happen earlier, and take less out of you.</p></div>
+      <div class="outrow"><div class="outmark"></div><p>Pressure still arrives. It stops running the room.</p></div>
+      <div class="outrow"><div class="outmark"></div><p>You have a number for all of it, and you watch it move week to week.</p></div>
+    </div>
+    <p class="note"><strong>One honest note.</strong> None of this finishes. Mental Fitness is a practice, the same way physical fitness is a practice. Success belongs to you, and the point is the direction it moves.</p>
+  </div>
+</section>
+
+<section style="border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div style="max-width:640px; margin:0 auto; text-align:center; border:1px solid var(--accent); border-radius:4px; padding:44px 32px; background:rgba(216,181,106,.05);">
+      <div class="section-label" style="display:flex; justify-content:center;">FREE ASSESSMENT</div>
+      <h2 class="display" style="font-size:clamp(26px,4vw,36px); margin:0 auto;">What's your Mental Fitness Score?</h2>
+      <p class="lede" style="margin:14px auto 0;">Not ready for the list? Start here instead. 12 questions, about 3 minutes, and you get a real baseline across all six Core Capacities plus a personalised PDF report.</p>
+      <a class="cta" href="/score.html" style="display:inline-block; margin-top:26px;">Take the Free Assessment</a>
+    </div>
+  </div>
+</section>
+
+<section>
   <div class="wrap founder">
     <div class="founder-photo">
       <img src="/assets/img/affiliates/founder-headshot.jpg" alt="Sterling Cincotta, Founder of Centurio" />
@@ -278,7 +356,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="founder-text">
       <div class="section-label">FROM THE FOUNDER</div>
       <blockquote>"I believe we have a responsibility to become all that we are capable of becoming."
-        <cite>— Sterling Cincotta, Founder, Centurio</cite>
+        <cite>Sterling Cincotta, Founder, Centurio</cite>
       </blockquote>
     </div>
   </div>
@@ -299,17 +377,18 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <section class="final-cta">
   <div class="wrap">
-    <div class="section-label" style="justify-content:center; display:flex;">BE FIRST THROUGH THE DOOR</div>
-    <h2 class="display">Tuesday Training starts soon.</h2>
-    <form class="signup" id="signupForm2" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <div class="section-label" style="justify-content:center; display:flex;">LAST THING</div>
+    <h2 class="display">The room is filling. Get your name on the list.</h2>
+    <p class="pitch">Join now and train live, every Tuesday, from the first session.</p>
+    <form class="signup" id="signupForm3" name="waitlist" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
       <input type="hidden" name="form-name" value="waitlist" />
       <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
       <div class="signup-row">
-        <input type="text" name="name" id="fName2" placeholder="First name" autocomplete="given-name" required />
-        <input type="email" name="email" id="fEmail2" placeholder="Email address" autocomplete="email" required />
-        <button type="submit" class="cta" id="submitBtn2">Join the waitlist</button>
+        <input type="text" name="name" id="fName3" placeholder="First name" autocomplete="given-name" required />
+        <input type="email" name="email" id="fEmail3" placeholder="Email address" autocomplete="email" required />
+        <button type="submit" class="cta" id="submitBtn3">Join the waitlist</button>
       </div>
-      <p class="signup-msg" id="signupMsg2" role="status" aria-live="polite"></p>
+      <p class="signup-msg" id="signupMsg3" role="status" aria-live="polite"></p>
     </form>
   </div>
 </section>
@@ -380,6 +459,12 @@ document.getElementById('signupForm2').addEventListener('submit', (e)=>{
   if(!ok){ e.preventDefault(); return; }
   document.getElementById('submitBtn2').disabled = true;
   document.getElementById('submitBtn2').textContent = "Joining...";
+});
+document.getElementById('signupForm3').addEventListener('submit', (e)=>{
+  const ok = validateBeforeSubmit(document.getElementById('fName3'), document.getElementById('fEmail3'), document.getElementById('signupMsg3'));
+  if(!ok){ e.preventDefault(); return; }
+  document.getElementById('submitBtn3').disabled = true;
+  document.getElementById('submitBtn3').textContent = "Joining...";
 });
 </script>
 
