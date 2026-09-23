@@ -6,8 +6,8 @@
 // Configure this as the target for the outgoing webhooks in Netlify
 // (Site settings -> Forms -> Form notifications -> Outgoing webhook), one
 // per form ("waitlist", "mental-fitness-score", "affiliate-application",
-// "corporate-enquiry", "snapshot-request"). All point at this same function
-// URL; the function branches on form_name.
+// "corporate-enquiry", "snapshot-request", "brand-partner"). All point at the
+// same function URL; the function branches on form_name.
 //
 // Required environment variables (set in Netlify: Site settings ->
 // Environment variables):
@@ -194,6 +194,26 @@ const FORM_HANDLERS = {
       ...attribution(data),
     }),
     required: ['company_name', 'contact_name', 'email'],
+  },
+  // Consumer brand partners (supplements, activewear, ready to eat meals).
+  // Same 10 and 10 commercial model as the gym affiliates, kept in its own
+  // table because the audience, the assets and the sales conversation differ,
+  // and folding them together would make either one impossible to measure.
+  'brand-partner': {
+    table: 'brand_partners',
+    map: (data) => ({
+      brand_name: str(data.brand_name),
+      contact_name: str(data.contact_name),
+      email: str(data.email),
+      role: str(data.role),
+      phone: str(data.phone),
+      category: str(data.category),
+      audience_size: str(data.audience_size),
+      website: str(data.website),
+      notes: str(data.notes),
+      ...attribution(data),
+    }),
+    required: ['brand_name', 'contact_name', 'email'],
   },
   'affiliate-application': {
     table: 'affiliate_applications',
