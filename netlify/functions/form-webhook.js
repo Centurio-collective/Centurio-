@@ -6,8 +6,8 @@
 // Configure this as the target for the outgoing webhooks in Netlify
 // (Site settings -> Forms -> Form notifications -> Outgoing webhook), one
 // per form ("waitlist", "mental-fitness-score", "affiliate-application",
-// "corporate-enquiry"). All point at this same function URL; the function
-// branches on form_name.
+// "corporate-enquiry", "snapshot-request"). All point at this same function
+// URL; the function branches on form_name.
 //
 // Required environment variables (set in Netlify: Site settings ->
 // Environment variables):
@@ -171,6 +171,27 @@ const FORM_HANDLERS = {
       timing: str(data.timing),
       follow_through: str(data.follow_through),
       notes: str(data.notes),
+    }),
+    required: ['company_name', 'contact_name', 'email'],
+  },
+  // The October 2026 campaign. Free team snapshot, offered for one month
+  // against Mental Health Month and National Safe Work Month. Kept in its
+  // own table rather than folded into corporate_enquiries because the
+  // whole point of the campaign is measuring whether a free instrument
+  // out-converts a direct program enquiry, and that comparison is only
+  // possible while the two stay separate.
+  'snapshot-request': {
+    table: 'snapshot_requests',
+    map: (data) => ({
+      company_name: str(data.company_name),
+      contact_name: str(data.contact_name),
+      email: str(data.email),
+      role: str(data.role),
+      phone: str(data.phone),
+      team_size: str(data.team_size),
+      location: str(data.location),
+      notes: str(data.notes),
+      ...attribution(data),
     }),
     required: ['company_name', 'contact_name', 'email'],
   },
