@@ -63,6 +63,11 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .member-login-btn{display:inline-block;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
   .header-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
   .affiliate-btn{display:inline-block;background:transparent;color:var(--accent);border:1px solid rgba(216,181,106,.45);border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  /* The two partner buttons stack on a phone and push the hero and the
+     waitlist form below the fold. Partner traffic is business to business and
+     arrives by direct link or on desktop, so on a narrow screen they come out
+     of the header and are carried by the bands further down and the footer. */
+  @media (max-width:620px){ .header-actions .affiliate-btn{display:none;} }
   .affiliate-btn:hover{border-color:var(--accent);background:rgba(216,181,106,.12);}
   .member-login-btn:hover{background:var(--accent);color:#17120b;}
   .wordmark{ font-family:"League Gothic","Arial Narrow",Impact,sans-serif; font-size:34px; font-weight:400; letter-spacing:.5px; line-height:.85; }
@@ -222,6 +227,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="wordmark">CENTURIO</div>
     <div class="header-actions">
       <a href="/affiliates.html" class="affiliate-btn">Gym Partners</a>
+      <a href="/partners.html" class="affiliate-btn">Brand Partners</a>
       <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
     </div>
     <div class="eyebrow">EVIDENCE BASED MENTAL FITNESS TRAINING</div>
@@ -496,6 +502,19 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
+<section>
+  <div class="wrap">
+    <div style="border:1px solid var(--line); border-radius:4px; padding:40px 34px; display:flex; gap:36px; align-items:center; flex-wrap:wrap;">
+      <div style="flex:1; min-width:280px;">
+        <div class="section-label">FOR BRANDS</div>
+        <h2 class="display" style="font-size:clamp(26px,3.6vw,38px);">Your customer stops training. Then they stop buying.</h2>
+        <p class="lede" style="margin-top:14px;">Supplements, activewear, meals. Every reorder depends on somebody still training. Offer Mental Fitness under your own code, keep them going, and earn 10% recurring for as long as they stay.</p>
+      </div>
+      <a class="btn-secondary" href="/partners.html" style="flex-shrink:0;" onclick="gtag('event','cta_click',{location:'home_brand_band'})">Brand Partners</a>
+    </div>
+  </div>
+</section>
+
 <section class="final-cta">
   <div class="wrap">
     <div class="section-label" style="justify-content:center; display:flex;">LAST THING</div>
@@ -558,6 +577,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
  <a href="/corporate.html" style="color:var(--muted); text-decoration:underline;">Corporate</a>
     &middot;
  <a href="/affiliates.html" style="color:var(--muted); text-decoration:underline;">Gym Partners</a>
+    &middot;
+    <a href="/partners.html" style="color:var(--muted); text-decoration:underline;">Brand Partners</a>
     &middot;
     <a href="/terms.html" style="color:var(--muted); text-decoration:underline;">Terms of Service</a>
     &middot;
