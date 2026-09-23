@@ -411,6 +411,21 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <input type="hidden" name="form-name" value="snapshot-request" />
       <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
 
+      <!-- Attribution. attribution.js fills these on DOMContentLoaded and
+           again on submit; it only populates inputs that already exist and
+           never creates them, so data-attribution on the form does nothing
+           without this block. They must also be present in the markup at
+           build time for Netlify to register the fields on the form. -->
+      <input type="hidden" name="utm_source" id="hidden_utm_source" />
+      <input type="hidden" name="utm_medium" id="hidden_utm_medium" />
+      <input type="hidden" name="utm_campaign" id="hidden_utm_campaign" />
+      <input type="hidden" name="utm_content" id="hidden_utm_content" />
+      <input type="hidden" name="utm_term" id="hidden_utm_term" />
+      <input type="hidden" name="fbclid" id="hidden_fbclid" />
+      <input type="hidden" name="gclid" id="hidden_gclid" />
+      <input type="hidden" name="referrer" id="hidden_referrer" />
+      <input type="hidden" name="landing_url" id="hidden_landing_url" />
+
       <div class="field full">
         <label for="company_name">Company name *</label>
         <input type="text" id="company_name" name="company_name" required>
