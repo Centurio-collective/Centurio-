@@ -104,6 +104,14 @@ const FORM_HANDLERS = {
       // fields as the assessment, mapped through the same helper, so the
       // two tables stay directly comparable.
       ...attribution(data),
+      // Which entry point, added 2026-09-25 when the score results page
+      // became the second one. "home" or "score". Everything before this
+      // date is null and was the home page.
+      source: str(data.source),
+      // Set when the person reached the score through a partner's
+      // co-branded link, so a seat held is credited the same way a
+      // membership is.
+      partner_code: str(data.partner_code),
     }),
     required: ['first_name', 'email'],
   },
@@ -445,6 +453,20 @@ exports.handler = async (event) => {
     .insert(row)
     .select('id')
     .single();
+
+  // ALREADY ON THE LIST IS NOT AN ERROR. waitlist_signups carries a
+  // unique index on lower(email) as of 25 September, because the score
+  // results page became a second entry point and the same person can
+  // now reach the list twice. Returning 500 here would make Netlify
+  // retry forever, and the person would either get a second welcome
+  // email or none at all. 200, no insert, no welcome: they already had
+  // one the first time.
+  if (error && error.code === '23505') {
+    console.log(
+      `form-webhook: "${formName}" submission is already on the list, nothing to do`
+    );
+    return { statusCode: 200, body: 'Already subscribed' };
+  }
 
   if (error) {
     console.error(
