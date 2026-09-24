@@ -949,7 +949,7 @@ function downloadPDF(){
   y += 7;
   setFace('helv', 8.5); ink(MUTED);
   const nextLines = doc.splitTextToSize(
-    'Every Tuesday, Centurio trains one of six Core Capacities, live. Your score today is a baseline. It moves the way anyone’s does: one week, one principle, one small commitment at a time. Take it again in six months and watch the number.',
+    'Every Tuesday from 10 November, Centurio trains one of six Core Capacities, live. Your score today is a baseline. It moves the way anyone’s does: one week, one principle, one small commitment at a time. Take it again in six months and watch the number.',
     contentW);
   doc.text(nextLines, margin, y);
 
@@ -972,8 +972,8 @@ function downloadPDF(){
   setFace('helv', 8.5); ink(MUTED);
   doc.text(
     partner && partner.code
-      ? 'Join Tuesday Training. Your ' + partner.name + ' discount applies at checkout.'
-      : 'Join Tuesday Training. Live, every week.',
+      ? 'Tuesday Training starts 10 November. Your ' + partner.name + ' discount applies at checkout.'
+      : 'Tuesday Training starts 10 November. Live, every week.',
     pageW / 2, bandY + 32, { align: 'center' });
 
   // Clickable, and carrying the code, so a referred reader never has to type
