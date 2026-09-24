@@ -144,6 +144,12 @@ const FORM_HANDLERS = {
         // organic visitor carries none of them and that is the normal
         // case, not an error. Nothing here may ever fail a submission.
         ...attribution(data),
+        // Which partner's co-branded link this person came through, and
+        // which discount their report carried. partner_code joins to
+        // brand_partners.partner_code; both are null for an organic
+        // completer, which is the normal case.
+        partner_code: str(data.partner_code),
+        partner_discount_code: str(data.partner_discount_code),
         marketing_consent: consented,
         marketing_consent_at: consented ? new Date().toISOString() : null,
         marketing_consent_text: consented ? text : null,
