@@ -785,15 +785,33 @@ function downloadPDF(){
   // Partner lockup. Renders only when a partner is set, so the default report
   // is unchanged. Text lockup works today; a logo drops in when we have one.
   if (partner && partner.name) {
-    setFace('helv', 6.5);
+    const pname  = partner.name.toUpperCase();
+    const kicker = 'IN PARTNERSHIP WITH';
+    // Set the name to a target lockup width rather than a fixed point size, so
+    // a short brand (LSKD) and a long one (MUSCLE NATION) both occupy the same
+    // block. Sizing the kicker to the name alone cannot work: at four letters
+    // the kicker hits its minimum letterspacing and still overhangs.
+    const LOCKUP_W = 38;
+    let nameSize = 20;
+    if (!partner.logo) {
+      setFace('lg', 20);
+      nameSize = Math.min(Math.max(20 * (LOCKUP_W / doc.getTextWidth(pname)), 13), 34);
+    }
+    setFace('lg', nameSize);
+    const nameW = partner.logo ? 34 : doc.getTextWidth(pname);
+    setFace('helv', 5.6);
+    // Letterspace the kicker so it sets to the exact width of the name or logo
+    // beneath it. That is what makes the two read as one lockup rather than as
+    // a long grey line overhanging a short brand name.
+    const cs = Math.min(Math.max((nameW - doc.getTextWidth(kicker)) / (kicker.length - 1), 0.12), 2.4);
     ink(MUTED);
-    textSpaced('IN PARTNERSHIP WITH', pageW - margin, 17, 0.9, 'right');
+    textSpaced(kicker, pageW - margin, 17, cs, 'right');
     if (partner.logo) {
       doc.addImage(partner.logo, 'PNG', pageW - margin - 34, 20, 34, 34 / (partner.ratio || 3));
     } else {
-      setFace('lg', 20);
+      setFace('lg', nameSize);
       ink(CREAM);
-      doc.text(partner.name.toUpperCase(), pageW - margin, 29, { align: 'right' });
+      doc.text(pname, pageW - margin, 29, { align: 'right' });
     }
   }
 
@@ -806,7 +824,7 @@ function downloadPDF(){
   setFace('helv', 8.5); ink(MUTED);
   const intro = doc.splitTextToSize(
     'Your Mental Fitness baseline across all six Core Capacities. This is where you start, not where you stay.',
-    contentW - 46);
+    contentW);
   doc.text(intro, margin, y);
 
   const overall  = computedScores.overall;
