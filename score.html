@@ -143,6 +143,16 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .results-cta p{ margin-top:12px; font-size:15px; color:var(--muted); max-width:480px; margin-left:auto; margin-right:auto; }
   .results-btn-row{ margin-top:24px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 
+  /* Seat band. The warmest moment on the site is the second after
+     someone reads their lowest capacity, and until now the only thing
+     offered there was a paid membership starting 10 November. */
+  .seat-band{ text-align:center; margin-top:40px; padding:32px 24px; border:1px solid var(--accent); border-radius:3px; background:rgba(216,181,106,.05); }
+  .seat-band h2{ font-size:clamp(20px,3.4vw,27px); font-weight:700; }
+  .seat-band p{ margin-top:12px; font-size:15px; color:var(--muted); max-width:460px; margin-left:auto; margin-right:auto; }
+  .seat-band .btn{ margin-top:22px; }
+  .seat-msg{ margin-top:14px; font-size:13px; min-height:18px; color:var(--accent); }
+  .seat-msg.err{ color:#e39a92; }
+
   footer{ border-top:1px solid var(--line); padding:28px 0; text-align:center; font-size:12px; color:var(--muted); }
 
   @media (max-width:520px){
@@ -287,6 +297,19 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <button class="btn" onclick="downloadPDF()">Download My PDF Report</button>
         <a class="btn-outline" href="/join.html">Start Training</a>
       </div>
+    </div>
+
+    <!-- Holding a seat is its own express action, deliberately not folded
+         into the marketing consent checkbox on the gate. ACMA prohibits
+         bundled consent, and the two are different things: one is
+         permission to email, this is a request to be told when training
+         starts. On 26 October this band's button becomes Join Now. -->
+    <div class="seat-band">
+      <div class="section-label" style="justify-content:center; display:flex;">SESSION ONE</div>
+      <h2 class="display">Tuesday 10 November, 7:30pm.</h2>
+      <p>Your score is the baseline. Tuesday Training is how it moves. Hold your seat for the first live session and we will email you before it.</p>
+      <button class="btn" id="seatBtn" onclick="holdSeat()">Hold My Seat</button>
+      <p class="seat-msg" id="seatMsg" role="status" aria-live="polite"></p>
     </div>
   </section>
 
@@ -687,6 +710,65 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
 
   renderResults();
 });
+
+// HOLD MY SEAT. Puts the person on the waitlist from the results page,
+// which is where the warm traffic actually is: the three home page
+// waitlist forms produced four signups in five weeks while this
+// assessment produced fifty one in a fortnight, and only two people
+// were ever on both lists.
+//
+// This posts form-name=waitlist, a form declared on index.html and not
+// on this page. Netlify resolves a form by the posted name across the
+// whole site, but it still discards any field that form's markup does
+// not declare, which is why source and partner_code are declared as
+// hidden inputs on all three home page forms. Change one, change the
+// other, or these two arrive null and nothing says so.
+function holdSeat(){
+  var btn = document.getElementById('seatBtn');
+  var msg = document.getElementById('seatMsg');
+  var nameEl = document.getElementById('gName');
+  var emailEl = document.getElementById('gEmail');
+  var name = (window._pendingName || (nameEl && nameEl.value) || '').trim();
+  var email = ((emailEl && emailEl.value) || '').trim();
+
+  // Unreachable in the normal flow, because this band only renders after
+  // the gate has been passed with both values.
+  if (!name || !email) {
+    msg.className = 'seat-msg err';
+    msg.textContent = 'Something went wrong. Refresh the page and take the assessment again.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Holding your seat';
+
+  var partner = window._partnerBrand || null;
+
+  fetch("/", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: encodeFormData(withAttribution({
+      "form-name": "waitlist",
+      name: name,
+      email: email,
+      source: "score",
+      partner_code: (partner && partner.slug) || ""
+    }))
+  }).then(function(){
+    btn.style.display = 'none';
+    msg.className = 'seat-msg';
+    msg.textContent = 'Your seat is held. We will email you before 10 November.';
+  }).catch(function(err){
+    console.error("Hold seat failed:", err);
+    btn.disabled = false;
+    btn.textContent = 'Hold My Seat';
+    msg.className = 'seat-msg err';
+    msg.textContent = 'That did not go through. Try once more, or join from the membership page.';
+  });
+
+  gtag('event', 'waitlist_signup', { method: 'score_results' });
+  if (window.fbq) fbq('trackCustom', 'WaitlistFromScore');
+}
 
 function renderResults(){
   showScreen('screen-results');

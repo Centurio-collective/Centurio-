@@ -256,6 +256,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <input type="hidden" name="gclid" id="hidden_gclid" />
       <input type="hidden" name="referrer" id="hidden_referrer" />
       <input type="hidden" name="landing_url" id="hidden_landing_url" />
+        <!-- Entry point, so a signup from here can be told apart from one
+             held on the score results page. partner_code is declared but
+             empty here: only the score page ever carries one. Netlify
+             builds the field list from this markup, so both have to be
+             declared or they are discarded on arrival. -->
+        <input type="hidden" name="source" value="home" />
+        <input type="hidden" name="partner_code" />
       <div class="signup-row">
         <input type="text" name="name" id="fName" placeholder="First name" autocomplete="given-name" required />
         <input type="email" name="email" id="fEmail" placeholder="Email address" autocomplete="email" required />
@@ -327,6 +334,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <input type="hidden" name="gclid" id="hidden_gclid_2" />
       <input type="hidden" name="referrer" id="hidden_referrer_2" />
       <input type="hidden" name="landing_url" id="hidden_landing_url_2" />
+        <!-- Entry point, so a signup from here can be told apart from one
+             held on the score results page. partner_code is declared but
+             empty here: only the score page ever carries one. Netlify
+             builds the field list from this markup, so both have to be
+             declared or they are discarded on arrival. -->
+        <input type="hidden" name="source" value="home" />
+        <input type="hidden" name="partner_code" />
       <div class="signup-row">
         <input type="text" name="name" id="fName2" placeholder="First name" autocomplete="given-name" required />
         <input type="email" name="email" id="fEmail2" placeholder="Email address" autocomplete="email" required />
@@ -536,6 +550,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <input type="hidden" name="gclid" id="hidden_gclid_3" />
       <input type="hidden" name="referrer" id="hidden_referrer_3" />
       <input type="hidden" name="landing_url" id="hidden_landing_url_3" />
+        <!-- Entry point, so a signup from here can be told apart from one
+             held on the score results page. partner_code is declared but
+             empty here: only the score page ever carries one. Netlify
+             builds the field list from this markup, so both have to be
+             declared or they are discarded on arrival. -->
+        <input type="hidden" name="source" value="home" />
+        <input type="hidden" name="partner_code" />
       <div class="signup-row">
         <input type="text" name="name" id="fName3" placeholder="First name" autocomplete="given-name" required />
         <input type="email" name="email" id="fEmail3" placeholder="Email address" autocomplete="email" required />
