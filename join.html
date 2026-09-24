@@ -28,7 +28,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Join Centurio — Evidence Based Mental Fitness Training</title>
+<title>Join Centurio. Evidence Based Mental Fitness Training</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -83,7 +83,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .lede{ margin-top:14px; font-size:16px; color:var(--muted); max-width:560px; margin-left:auto; margin-right:auto; text-align:center; }
 
   /* Benefits */
-  .benefits{ margin-top:40px; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .benefits{ margin-top:40px; display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
   .benefit{ background:var(--bg); padding:24px 20px; }
   .benefit-title{ font-size:16px; font-weight:600; margin-bottom:8px; }
   .benefit-desc{ font-size:14px; color:var(--muted); line-height:1.55; }
@@ -118,6 +118,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .social-links a:hover{ color:var(--accent); }
   .social-links svg{ width:20px; height:20px; }
 
+  /* Four across only holds on a wide screen; two, then one. */
+  @media (max-width:1000px){
+    .benefits{ grid-template-columns:repeat(2,1fr); }
+  }
   @media (max-width:760px){
     .benefits{ grid-template-columns:1fr; }
     .cap-grid{ grid-template-columns:repeat(3,1fr); }
@@ -144,8 +148,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <section class="hero" style="border-top:0;">
   <div class="wrap">
     <div class="eyebrow">JOIN NOW</div>
-    <h1 class="display">Start training before we launch.</h1>
-    <p class="hero-sub">Join now and get every live Tuesday Training from day one — no waiting for launch day.</p>
+    <h1 class="display">Tuesday Training starts in November.</h1>
+    <p class="hero-sub">Join now and your place is held for the first session. Every Tuesday, 7:30pm, live.</p>
   </div>
 </section>
 
@@ -156,7 +160,11 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="benefits">
       <div class="benefit">
         <div class="benefit-title">Tuesday Training™</div>
-        <div class="benefit-desc">A live 35-minute session every week, training one principle from one Core Capacity.</div>
+        <div class="benefit-desc">A live 35 minute session every week, 7:30pm, training one principle from one Core Capacity.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-title">The Weekly Check In</div>
+        <div class="benefit-desc">Two minutes every week. Your Mental Fitness Score updates and you see which capacity moved.</div>
       </div>
       <div class="benefit">
         <div class="benefit-title">The Dashboard™</div>
@@ -164,7 +172,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       </div>
       <div class="benefit">
         <div class="benefit-title">The Weekly Brief™</div>
-        <div class="benefit-desc">A short Thursday follow-up that reinforces the week's principle and carries it forward.</div>
+        <div class="benefit-desc">A short Thursday note that reinforces the week's principle and carries it forward.</div>
       </div>
     </div>
   </div>
@@ -189,7 +197,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="section-label">MEMBERSHIP</div>
     <h2>Choose how you train.</h2>
-    <p class="lede">Cancel anytime. Pause when you need to. Backed by a 14-day satisfaction guarantee.</p>
+    <p class="lede">Cancel anytime. Pause when you need to. Backed by a 14 day satisfaction guarantee.</p>
 
     <div class="pricing">
       <div class="toggle">
@@ -202,7 +210,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <div class="plan-card">
         <div class="plan-name">Centurio Membership</div>
         <div class="plan-price" id="planPrice">$590<span>/year</span></div>
-        <div class="plan-save show" id="planSave">Save $118 — that's 2 months free</div>
+        <div class="plan-save show" id="planSave">Save $118, that's 2 months free</div>
         <a class="plan-cta" id="planCta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
         <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
@@ -237,7 +245,7 @@ if (window.fbq) fbq('track', 'ViewContent', { content_name: 'Membership' });
 
 const plans = {
   monthly: { price: "$59", value: 59, suffix: "/month", save: "", cta: "Join the Monthly Plan", url: "https://buy.stripe.com/3cI7sM3eM4YX1Qg0Eg1kA00" },
-  annual:  { price: "$590", value: 590, suffix: "/year", save: "Save $118 — that's 2 months free", cta: "Join the Annual Plan", url: "https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" }
+  annual:  { price: "$590", value: 590, suffix: "/year", save: "Save $118, that's 2 months free", cta: "Join the Annual Plan", url: "https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" }
 };
 
 // Tracks the toggle's current selection so the checkout_start click
@@ -245,6 +253,31 @@ const plans = {
 // looking at -- not PII, just which of two public price points was
 // clicked.
 let currentPlan = 'annual';
+
+// The default href is baked into the markup, so apply the code to it on load
+// for anyone who arrives and clicks without touching the toggle.
+document.addEventListener('DOMContentLoaded', function(){
+  var cta = document.getElementById('planCta');
+  if (cta && PARTNER_CODE) cta.href = checkoutUrl(plans[currentPlan].url);
+});
+
+// A partner link carries ?code=<PROMO>. Stripe applies it automatically on
+// the payment link via prefilled_promo_code, so a referred member never has to
+// remember or type anything. Requires "allow promotion codes" on both links.
+// Restricted to a plain code shape so nothing arbitrary is appended to a
+// checkout URL from the query string.
+const PARTNER_CODE = (function(){
+  try {
+    var c = new URLSearchParams(window.location.search).get('code');
+    return c && /^[A-Za-z0-9_-]{3,32}$/.test(c) ? c.toUpperCase() : null;
+  } catch (err) { return null; }
+})();
+
+function checkoutUrl(base){
+  if (!PARTNER_CODE) return base;
+  return base + (base.indexOf('?') === -1 ? '?' : '&') +
+         'prefilled_promo_code=' + encodeURIComponent(PARTNER_CODE);
+}
 
 function setPlan(which){
   currentPlan = which;
@@ -254,7 +287,7 @@ function setPlan(which){
   if(p.save){ saveEl.textContent = p.save; saveEl.classList.add('show'); }
   else { saveEl.classList.remove('show'); }
   document.getElementById('planCta').textContent = p.cta;
-  document.getElementById('planCta').href = p.url;
+  document.getElementById('planCta').href = checkoutUrl(p.url);
   document.getElementById('btnMonthly').classList.toggle('active', which === 'monthly');
   document.getElementById('btnAnnual').classList.toggle('active', which === 'annual');
 }

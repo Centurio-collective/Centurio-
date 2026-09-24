@@ -28,7 +28,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Your Mental Fitness Score — Centurio</title>
+<title>Your Mental Fitness Score. Centurio</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -171,7 +171,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="intro">
       <div class="eyebrow"><span>FREE ASSESSMENT</span></div>
       <h1 class="display">What's your Mental Fitness Score?</h1>
-      <p>12 questions, about 3 minutes. A real baseline across all six Core Capacities: Lead, Align, Regulate, Connect, Grow and Perform — plus a personalised breakdown of where to focus first.</p>
+      <p>12 questions, about 3 minutes. A real baseline across all six Core Capacities: Lead, Align, Regulate, Connect, Grow and Perform, plus a personalised breakdown of where to focus first.</p>
       <div class="cap-strip">
         <span class="cap-dot">Lead</span>
         <span class="cap-dot">Align</span>
@@ -242,6 +242,17 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <input type="hidden" name="gclid" id="hidden_gclid" />
         <input type="hidden" name="referrer" id="hidden_referrer" />
         <input type="hidden" name="landing_url" id="hidden_landing_url" />
+        <!-- Partner referral. A co-branded link carries ?partner=<code>.
+             These two record which partner sent this person and which
+             discount their report offered them, against the email address
+             itself. utm_source is not enough on its own: it is a marketing
+             field that any later click can overwrite, and we need the
+             partner attached to the person permanently to pay commission
+             and to answer "who did this member come from" in a year.
+             Declared here because Netlify builds this form's field list
+             from the markup at deploy time. -->
+        <input type="hidden" name="partner_code" id="hidden_partner_code" />
+        <input type="hidden" name="partner_discount_code" id="hidden_partner_discount_code" />
         <div class="gate-row">
           <input type="text" name="name" id="gName" placeholder="First name" autocomplete="given-name" required />
           <input type="email" name="email" id="gEmail" placeholder="Email address" autocomplete="email" required />
@@ -263,7 +274,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="score-hero">
       <div class="eyebrow" style="justify-content:center; display:flex; margin-bottom:14px;">YOUR MENTAL FITNESS SCORE</div>
       <div class="score-number"><span id="scoreValue">0</span><span>/100</span></div>
-      <div class="score-band" id="scoreBandLabel">—</div>
+      <div class="score-band" id="scoreBandLabel"></div>
       <p class="score-sub" id="scoreSub"></p>
     </div>
 
@@ -563,6 +574,13 @@ function computeScores(){
     var el = document.getElementById('hidden_' + field);
     if (el) el.value = attribution[field];
   });
+  // Partner referral, written at the same moment as attribution so the
+  // partner travels with the email address and not just with the UTMs.
+  var pb = window._partnerBrand || null;
+  var pcEl = document.getElementById('hidden_partner_code');
+  var pdEl = document.getElementById('hidden_partner_discount_code');
+  if (pcEl) pcEl.value = pb && pb.slug ? pb.slug : '';
+  if (pdEl) pdEl.value = pb && pb.code ? pb.code : '';
   document.getElementById('hiddenResponses').value = JSON.stringify(
     answers.reduce(function(acc, v, i){ acc[String(i)] = v; return acc; }, {}));
 }
@@ -597,7 +615,7 @@ function withAttribution(payload){
 (function assertPostedFieldsAreDeclared(){
   var form = document.getElementById('gateForm');
   if (!form) return;
-  var missing = ATTRIBUTION_FIELDS.concat(['responses']).filter(function(field){
+  var missing = ATTRIBUTION_FIELDS.concat(['responses', 'partner_code', 'partner_discount_code']).filter(function(field){
     return !form.querySelector('input[name="' + field + '"]');
   });
   if (missing.length && window.console) {
@@ -658,7 +676,12 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
       regulate_score: String(computedScores.byCapacity.regulate),
       connect_score: String(computedScores.byCapacity.connect),
       grow_score: String(computedScores.byCapacity.grow),
-      perform_score: String(computedScores.byCapacity.perform)
+      perform_score: String(computedScores.byCapacity.perform),
+      // Partner referral. The body of this POST is built by hand rather
+      // than from the form, so a hidden input alone would never be sent:
+      // that is exactly how responses was lost. Both places, every time.
+      partner_code: (window._partnerBrand && window._partnerBrand.slug) || "",
+      partner_discount_code: (window._partnerBrand && window._partnerBrand.code) || ""
     }))
   }).catch(err => console.error("Background form submission failed:", err));
 
@@ -690,7 +713,7 @@ function renderResults(){
   list.innerHTML = `
     <div class="cap-result" style="--cap-color:${focusCap.color};">
       <div class="cap-result-head">
-        <div class="cap-result-name display">Your Biggest Opportunity: ${focusCap.name} <span style="font-size:11px; color:var(--muted); text-transform:none; font-family:'Inter',sans-serif; font-weight:400;">— ${focusCap.tag}</span></div>
+        <div class="cap-result-name display">Your Biggest Opportunity: ${focusCap.name} <span style="font-size:11px; color:var(--muted); text-transform:none; font-family:'Inter',sans-serif; font-weight:400;">· ${focusCap.tag}</span></div>
       </div>
       <div class="cap-result-text">${BAND_TEXT[focusCap.key][focusBand]}</div>
     </div>
@@ -702,17 +725,20 @@ function renderResults(){
 // by editing the URL. Display name only for now; a logo drops into the same
 // slot once we hold artwork. Nothing renders when the parameter is absent.
 const PARTNER_BRANDS = {
-  // code            display name
-  // 'musclenation': 'Muscle Nation',
-  // 'lskd':         'LSKD',
+  // link code       what goes on the report, and the Stripe promotion code
+  // 'musclenation': { name: 'Muscle Nation', code: 'MUSCLENATION10' },
+  // 'lskd':         { name: 'LSKD',          code: 'LSKD10' },
 };
 
 (function resolvePartner(){
   try {
-    var code = new URLSearchParams(window.location.search).get('partner');
-    if (!code) return;
-    var brand = PARTNER_BRANDS[code.toLowerCase().trim()];
-    if (brand) window._partnerBrand = { name: brand };
+    var raw = new URLSearchParams(window.location.search).get('partner');
+    if (!raw) return;
+    var slug = raw.toLowerCase().trim();
+    var brand = PARTNER_BRANDS[slug];
+    // slug is kept alongside the brand because it, not the display name,
+    // is what brand_partners.partner_code joins on.
+    if (brand) window._partnerBrand = Object.assign({ slug: slug }, brand);
   } catch (err) { /* never block the assessment over a lockup */ }
 })();
 
@@ -792,13 +818,14 @@ function downloadPDF(){
     // block. Sizing the kicker to the name alone cannot work: at four letters
     // the kicker hits its minimum letterspacing and still overhangs.
     const LOCKUP_W = 38;
+    const LOGO_W   = 46;   // wordmarks run wide; a logo gets more room than text
     let nameSize = 20;
     if (!partner.logo) {
       setFace('lg', 20);
       nameSize = Math.min(Math.max(20 * (LOCKUP_W / doc.getTextWidth(pname)), 13), 34);
     }
     setFace('lg', nameSize);
-    const nameW = partner.logo ? 34 : doc.getTextWidth(pname);
+    const nameW = partner.logo ? LOGO_W : doc.getTextWidth(pname);
     setFace('helv', 5.6);
     // Letterspace the kicker so it sets to the exact width of the name or logo
     // beneath it. That is what makes the two read as one lockup rather than as
@@ -807,7 +834,12 @@ function downloadPDF(){
     ink(MUTED);
     textSpaced(kicker, pageW - margin, 17, cs, 'right');
     if (partner.logo) {
-      doc.addImage(partner.logo, 'PNG', pageW - margin - 34, 20, 34, 34 / (partner.ratio || 3));
+      // Format is read off the data URI. A logo supplied as PNG with alpha
+      // would be expanded by jsPDF into a raw bitmap, so partner artwork is
+      // flattened onto the header colour and shipped as JPEG, same as ours.
+      const fmt = /^data:image\/png/i.test(partner.logo) ? 'PNG' : 'JPEG';
+      const logoH = LOGO_W / (partner.ratio || 3);
+      doc.addImage(partner.logo, fmt, pageW - margin - LOGO_W, 29 - logoH, LOGO_W, logoH);
     } else {
       setFace('lg', nameSize);
       ink(CREAM);
@@ -932,10 +964,23 @@ function downloadPDF(){
   doc.text('TRAIN THE MIND', pageW / 2, bandY + 15, { align: 'center' });
   doc.text('THAT BUILDS THE LIFE.', pageW / 2, bandY + 24.5, { align: 'center' });
 
+  const joinBase = 'https://centuriocollective.com/join.html';
+  const joinUrl  = partner && partner.code
+    ? joinBase + '?code=' + encodeURIComponent(partner.code)
+    : joinBase;
+
   setFace('helv', 8.5); ink(MUTED);
-  doc.text('Join Tuesday Training. Live, every week.', pageW / 2, bandY + 32, { align: 'center' });
+  doc.text(
+    partner && partner.code
+      ? 'Join Tuesday Training. Your ' + partner.name + ' discount applies at checkout.'
+      : 'Join Tuesday Training. Live, every week.',
+    pageW / 2, bandY + 32, { align: 'center' });
+
+  // Clickable, and carrying the code, so a referred reader never has to type
+  // it. The displayed text stays short; the href does the work.
   setFace('helv', 9); ink(GOLD);
-  doc.text('centuriocollective.com/join.html', pageW / 2, bandY + 39.5, { align: 'center' });
+  const shown = 'centuriocollective.com/join';
+  doc.textWithLink(shown, pageW / 2 - doc.getTextWidth(shown) / 2, bandY + 39.5, { url: joinUrl });
 
   doc.save('Centurio-Mental-Fitness-Score.pdf');
   gtag('event', 'report_download');
