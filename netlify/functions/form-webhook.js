@@ -240,8 +240,30 @@ const FORM_HANDLERS = {
       member_count: str(data.member_count),
       website: str(data.website),
       notes: str(data.notes),
+      ...attribution(data),
     }),
     required: ['gym_name', 'contact_name', 'email'],
+  },
+  // Personal trainers, coaches and studio owners. Separate from the gym
+  // affiliates because the commercial model is different (30 percent of the
+  // membership rather than the 10 and 10), the person applying is usually a
+  // sole operator rather than a business, and the number that matters about
+  // them is a client count, not a member count.
+  'trainer-application': {
+    table: 'trainer_applications',
+    map: (data) => ({
+      trainer_name: str(data.trainer_name),
+      email: str(data.email),
+      phone: str(data.phone),
+      business_name: str(data.business_name),
+      suburb: str(data.suburb),
+      client_count: str(data.client_count),
+      instagram: str(data.instagram),
+      website: str(data.website),
+      notes: str(data.notes),
+      ...attribution(data),
+    }),
+    required: ['trainer_name', 'email'],
   },
 };
 
