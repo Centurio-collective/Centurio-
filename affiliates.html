@@ -122,8 +122,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     text-transform:uppercase;
   }
   .nav-tag{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
+  .nav-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .member-login-btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
   .member-login-btn:hover{background:var(--gold);color:#0b0b0a;}
+  /* Solid, so a trainer who lands on the gym page sees the way across
+     without having to read for it. The text link that sat under the hero
+     did not survive its own background. */
+  .nav-trainer-btn{display:inline-block;border:1px solid var(--gold);background:var(--gold);color:#0b0b0a;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  .nav-trainer-btn:hover{background:transparent;color:var(--gold);}
 
   /* HERO */
   .hero{
@@ -166,10 +172,6 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .chip .num{font-family:'League Gothic',sans-serif;font-size:38px;color:var(--gold);line-height:1;}
   .chip .label{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-top:4px;}
   .offer-note{font-size:13px;color:var(--muted);margin-top:16px;}
-
-  .hero-switch{margin:26px 0 0;font-size:15px;color:var(--muted);}
-  .hero-switch a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(216,181,106,0.4);}
-  .hero-switch a:hover{border-bottom-color:var(--gold);}
 
   /* CROSS LINK to the personal trainer program */
   .switch{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 0;background:var(--bg-card);}
@@ -346,6 +348,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     form#affiliate-form{grid-template-columns:1fr;}
     .proof-inner{flex-direction:column;}
     .offer .wrap{flex-direction:column;align-items:flex-start;}
+    .switch .wrap{flex-direction:column;align-items:flex-start;}
+  }
+  /* Two buttons in the nav would otherwise stack on a phone and push the
+     page down by a whole row each. Trimmed so they hold one line. */
+  @media (max-width:520px){
+    .nav-actions{gap:8px;}
+    .nav-trainer-btn,.member-login-btn{padding:8px 12px;letter-spacing:.04em;font-size:11px;}
   }
   @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
 </style>
@@ -356,7 +365,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <header class="site-nav">
   <div class="wrap">
     <a href="/" class="wordmark">Centurio</a>
-    <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
+    <div class="nav-actions">
+      <a href="/trainers.html" class="nav-trainer-btn">Personal Trainer</a>
+      <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
+    </div>
     <span class="nav-tag">Gym Partner Program</span>
   </div>
 </header>
@@ -370,7 +382,6 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <a href="#apply" class="btn btn-solid">Apply For Your Affiliate Code</a>
       <a href="#research" class="btn btn-outline">See The Research</a>
     </div>
-    <p class="hero-switch">Coaching clients one to one? <a href="/trainers.html">The personal trainer program is here.</a></p>
   </div>
 </section>
 
