@@ -167,6 +167,18 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .chip .label{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-top:4px;}
   .offer-note{font-size:13px;color:var(--muted);margin-top:16px;}
 
+  .hero-switch{margin:26px 0 0;font-size:15px;color:var(--muted);}
+  .hero-switch a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(216,181,106,0.4);}
+  .hero-switch a:hover{border-bottom-color:var(--gold);}
+
+  /* CROSS LINK to the personal trainer program */
+  .switch{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 0;background:var(--bg-card);}
+  .switch .wrap{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+  .switch .switch-copy{max-width:60ch;}
+  .switch .switch-copy .eyebrow{margin-bottom:10px;}
+  .switch .switch-copy h2{font-size:clamp(26px,3.2vw,36px);margin:0;}
+  .switch .switch-copy p{font-size:16px;color:var(--body-text);margin:12px 0 0;}
+
   section{padding:100px 0;}
   section.tight{padding-top:0;}
   .section-head{max-width:70ch;margin-bottom:48px;}
@@ -358,6 +370,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <a href="#apply" class="btn btn-solid">Apply For Your Affiliate Code</a>
       <a href="#research" class="btn btn-outline">See The Research</a>
     </div>
+    <p class="hero-switch">Coaching clients one to one? <a href="/trainers.html">The personal trainer program is here.</a></p>
   </div>
 </section>
 
@@ -491,6 +504,17 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
+<section class="switch">
+  <div class="wrap">
+    <div class="switch-copy">
+      <div class="eyebrow">Not A Gym</div>
+      <h2 class="display-h">You train people one to one.</h2>
+      <p>The trainer program runs on different numbers. 30% commission, and 10% off their first month for your clients. Built for coaches, not for floors.</p>
+    </div>
+    <a href="/trainers.html" class="btn btn-solid">See The Trainer Program</a>
+  </div>
+</section>
+
 <section class="apply" id="apply">
   <div class="wrap">
     <div class="section-head" style="margin-bottom:0;">
@@ -499,9 +523,23 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <p class="lead-copy" style="margin-top:16px;">Tell us about your gym. We will set up your code and send everything you need to start referring members.</p>
     </div>
 
-    <form id="affiliate-form" name="affiliate-application" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field">
+    <form id="affiliate-form" name="affiliate-application" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field" data-attribution>
       <input type="hidden" name="form-name" value="affiliate-application" />
       <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <!-- Attribution. attribution.js fills these on DOMContentLoaded and
+           again on submit; it only populates inputs that already exist and
+           never creates them, so the markup has to carry all nine. The
+           payload below is hand built, so each one also has to be named
+           there or the value is filled in and then thrown away. -->
+      <input type="hidden" name="utm_source" id="hidden_utm_source" />
+      <input type="hidden" name="utm_medium" id="hidden_utm_medium" />
+      <input type="hidden" name="utm_campaign" id="hidden_utm_campaign" />
+      <input type="hidden" name="utm_content" id="hidden_utm_content" />
+      <input type="hidden" name="utm_term" id="hidden_utm_term" />
+      <input type="hidden" name="fbclid" id="hidden_fbclid" />
+      <input type="hidden" name="gclid" id="hidden_gclid" />
+      <input type="hidden" name="referrer" id="hidden_referrer" />
+      <input type="hidden" name="landing_url" id="hidden_landing_url" />
       <div class="field full">
         <label for="gym_name">Gym name *</label>
         <input type="text" id="gym_name" name="gym_name" required>
@@ -529,7 +567,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <div class="field full">
         <label for="website">Gym website</label>
         <input type="text" id="website" name="website" placeholder="www.yourgym.com.au">
-        <small class="hint">No need for https:// -- www.yourgym.com is fine.</small>
+        <small class="hint">No need for https:// www.yourgym.com is fine.</small>
       </div>
       <div class="field full">
         <label for="notes">Anything else we should know</label>
@@ -612,6 +650,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         website: normalizeWebsite(form.website.value),
         notes: form.notes.value.trim()
       };
+
+      // The body is built by hand rather than read off the form, so a hidden
+      // input that is not named here is filled in by attribution.js and then
+      // silently dropped. Driven off one array for that reason.
+      ATTRIBUTION_FIELDS.forEach(function(field){
+        var el = document.getElementById('hidden_' + field);
+        payload[field] = el ? el.value : '';
+      });
 
       // AJAX submit to Netlify Forms -- same pattern already established in
       // score.html's #gateForm (urlencoded body, posted to "/", form-name
