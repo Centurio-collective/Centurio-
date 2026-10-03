@@ -135,6 +135,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .chip .label{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-top:4px;}
   .offer-note{font-size:13px;color:var(--muted);margin-top:16px;}
 
+  .mid-cta{margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    border:1px solid var(--border);background:var(--bg-card);padding:28px 32px;}
+  .mid-cta p{margin:0;font-size:16px;color:var(--body-text);max-width:52ch;}
+
   section{padding:100px 0;}
   section.tight{padding-top:0;}
   .section-head{max-width:70ch;margin-bottom:48px;}
@@ -451,6 +455,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <p class="calc-disclaimer">Illustrative only. Commission is 30% of the $59 monthly membership, recurring for as long as each client stays. The second figure is two clients training twice a week with you for thirteen more weeks.</p>
       </div>
     </div>
+    <div class="mid-cta">
+      <p>Codes are being issued now. The first live session is Tuesday 10&nbsp;November.</p>
+      <a href="#apply" class="btn btn-solid" data-cta="mid">Apply For Your Trainer Code</a>
+    </div>
   </div>
 </section>
 
@@ -729,6 +737,45 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         btn.textContent = 'Apply For Your Trainer Code';
       });
     });
+  })();
+</script>
+
+
+<script>
+  /* Where do people stop? Zero applications off 75 landing page views has
+     two opposite explanations: they read the page and declined, or they
+     never reached the form. These fire once each, so the GA4 funnel
+     separates the two before anyone rewrites copy on a guess. */
+  (function(){
+    var seen = {};
+    function once(name){
+      if (seen[name]) return;
+      seen[name] = true;
+      if (window.gtag) gtag('event', name);
+    }
+    var marks = [
+      ['#what',    'reached_what_centurio_is'],
+      ['#numbers', 'reached_calculator'],
+      ['#apply',   'reached_apply_form']
+    ];
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var m = marks.filter(function(x){ return document.querySelector(x[0]) === e.target; })[0];
+        if (m) { once(m[1]); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.25 });
+    marks.forEach(function(m){
+      var el = document.querySelector(m[0]);
+      if (el) io.observe(el);
+    });
+    /* Started filling it in but never submitted. The gap between this and
+       trainer_apply is the form abandoning rate. */
+    var form = document.getElementById('trainer-form');
+    if (form) {
+      form.addEventListener('input', function(){ once('trainer_form_start'); }, { once: true });
+    }
   })();
 </script>
 
