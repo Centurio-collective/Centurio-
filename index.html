@@ -217,6 +217,17 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .cta{ width:100%; }
     .founder{ flex-direction:column; align-items:flex-start; }
   }
+
+/* Feature sections with a product shot beside the copy. Stacks on a phone,
+   image first so the thing being described is seen before it is read about. */
+.feature-split{ display:flex; gap:56px; align-items:center; }
+.feature-copy{ flex:1 1 56%; min-width:0; }
+.feature-media{ flex:0 0 38%; max-width:400px; }
+.feature-media img{ width:100%; height:auto; display:block; border-radius:6px; }
+@media (max-width:900px){
+  .feature-split{ flex-direction:column-reverse; gap:34px; align-items:stretch; }
+  .feature-media{ flex:none; max-width:300px; margin:0 auto; }
+}
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -445,6 +456,40 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
+<section class="pain">
+<div class="wrap"><div class="pain-inner">
+<div class="section-label">THE FOURTH PROBLEM</div>
+<h2 class="display">Tuesday comes once a week. Everything else comes daily.</h2>
+<div class="pain-body">
+<p>Tuesday night you are clear. You know what you are training and you know why it matters.</p>
+<p>Then Thursday arrives. The meeting runs long. The message lands wrong. Someone says the thing that gets under your skin at four in the afternoon, on a day you were already tired.</p>
+<p>The training was six days ago. The notes are somewhere.</p>
+<p><strong>By the time you remember what you were working on, the moment has gone.</strong></p>
+</div></div></div></section>
+<section>
+<div class="wrap">
+<div class="feature-split">
+<div class="feature-copy">
+<div class="section-label">INCLUDED WITH MEMBERSHIP</div>
+<h2>Ask Centurio. A coach in your pocket, ready when you are.</h2>
+<p style="margin:14px 0 0; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);">Trained on the whole framework.</p>
+<p class="lede" style="margin-top:22px;">Open in your portal every day, whenever you need it. It knows the six Core Capacities, the principles underneath them and the protocols that make them usable, and it knows where you are in the program.</p>
+<div class="outs">
+<div class="outrow"><div class="outmark"></div><p>Prepare for the conversation you have been avoiding, ten minutes before you walk in.</p></div>
+<div class="outrow"><div class="outmark"></div><p>Work through the decision you keep circling.</p></div>
+<div class="outrow"><div class="outmark"></div><p>Debrief the week that got away from you.</p></div>
+<div class="outrow"><div class="outmark"></div><p>Turn a vague intention into a commitment, and get asked about it later.</p></div>
+</div>
+<p class="note"><strong>The Daily Mentor message.</strong> Every morning, one capacity and one principle, written for the week you are actually training and the commitment you actually made. A few lines, read in under a minute, waiting when you open your phone.</p>
+<p class="note"><strong>It keeps the week pointed the same way.</strong> Tuesday sets the direction. The message holds it Wednesday through Monday, so you arrive at the next session having trained rather than having waited.</p>
+<p class="note">It speaks in the Centurio framework and nothing else. No diagnosis, no therapy, no advice it was never built to give. When something belongs with a human being, it says so.</p>
+<p class="display" style="margin-top:30px; font-size:30px; color:var(--accent);">That's the other six days.</p>
+</div>
+<div class="feature-media">
+<img src="/assets/img/ask-centurio-phone.png" alt="Ask Centurio and the Daily Mentor message in the Centurio member portal" loading="lazy" />
+</div>
+</div>
+</div></section>
 <section>
   <div class="wrap founder">
     <div class="founder-photo">
@@ -459,47 +504,43 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
+<section class="pain">
+<div class="wrap"><div class="pain-inner">
+<div class="section-label">THE FIFTH PROBLEM</div>
+<h2 class="display">You train the mind. You train the body. Then you eat on a guess.</h2>
+<div class="pain-body">
+<p>You know your program. You know your lifts. You know what Tuesday night is for.</p>
+<p>Then lunch happens. A guess at the chicken. A guess at the rice. A handful of something at four o'clock that never gets counted at all.</p>
+<p><strong>Weeks of training, settled by arithmetic nobody is doing.</strong></p>
+</div></div></div></section>
 <section>
-  <div class="wrap">
-    <div style="border:1px solid var(--accent); border-radius:4px; padding:40px 34px; background:rgba(216,181,106,.05); display:flex; gap:36px; align-items:center; flex-wrap:wrap;">
-      <div style="flex:1; min-width:280px;">
-        <div class="section-label">FOR BUSINESS &middot; OCTOBER 2026 ONLY</div>
-        <h2 class="display" style="font-size:clamp(26px,3.6vw,38px);">Measure your team for free this October.</h2>
-        <p class="lede" style="margin-top:14px;">Twelve questions per person, three minutes each, taken privately. You get one page back showing where your team sits across the six Core Capacities and which one is costing you most. No cost and no obligation.</p>
-      </div>
-      <div style="flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
-        <a class="btn-solid" href="/october.html">The October Offer</a>
-        <a class="btn-secondary" href="/corporate.html" style="text-align:center;">Corporate Programs</a>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="wrap">
+<div class="feature-split">
+<div class="feature-copy">
+<div class="section-label">INCLUDED WITH MEMBERSHIP</div>
+<h2>Nutrition. The numbers, and somewhere to put them.</h2>
+<p style="margin:14px 0 0; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);">Fuel the training.</p>
+<p class="lede" style="margin-top:22px;">Work out what you actually need. Calories, protein, carbs and fat, calculated from your weight, your training and what you are trying to do, whether that is losing fat, holding steady or building.</p>
+<div class="outs">
+<div class="outrow"><div class="outmark"></div><p>You stop guessing at dinner, because breakfast and lunch are already counted.</p></div>
+<div class="outrow"><div class="outmark"></div><p>You see the week, so one bad meal stays one bad meal.</p></div>
+<div class="outrow"><div class="outmark"></div><p>You find out on the day, while you can still do something about it.</p></div>
+</div>
+<p class="note"><strong>Then track it daily, inside the portal.</strong> Log what you ate as you go, watch the day fill against your target, and know where you landed before the day is over rather than a week later.</p>
+<p class="note"><strong>Your targets follow your training.</strong> Change what you are training for and the numbers move with it, so the plan never belongs to the person you were two months ago.</p>
+<p class="display" style="margin-top:30px; font-size:30px; color:var(--accent);">That's training the body too.</p>
+<a class="cta" href="/nutrition.html" style="display:inline-block; margin-top:26px;" onclick="gtag('event','cta_click',{location:'home_nutrition'})">Work out your macros</a>
+</div>
+<div class="feature-media">
+<img src="/assets/img/nutrition-macros.jpg" alt="The Centurio nutrition calculator and daily macro tracking" loading="lazy" />
+</div>
+</div>
+</div></section>
 
-<section>
-  <div class="wrap">
-    <div style="border:1px solid var(--line); border-radius:4px; padding:40px 34px; display:flex; gap:36px; align-items:center; flex-wrap:wrap;">
-      <div style="flex:1; min-width:280px;">
-        <div class="section-label">FOR GYMS</div>
-        <h2 class="display" style="font-size:clamp(26px,3.6vw,38px);">Retention is the whole game.</h2>
-        <p class="lede" style="margin-top:14px;">Mental Fitness training for the members you already have. They get 10% off for the life of their membership. You earn 10% recurring for as long as they stay.</p>
-      </div>
-      <a class="btn-secondary" href="/affiliates.html" style="flex-shrink:0;" onclick="gtag('event','cta_click',{location:'home_gym_band'})">Gym Partners</a>
-    </div>
-  </div>
-</section>
 
-<section>
-  <div class="wrap">
-    <div style="border:1px solid var(--line); border-radius:4px; padding:40px 34px; display:flex; gap:36px; align-items:center; flex-wrap:wrap;">
-      <div style="flex:1; min-width:280px;">
-        <div class="section-label">FOR BRANDS</div>
-        <h2 class="display" style="font-size:clamp(26px,3.6vw,38px);">Your customer stops training. Then they stop buying.</h2>
-        <p class="lede" style="margin-top:14px;">Supplements, activewear, meals. Every reorder depends on somebody still training. Offer Mental Fitness under your own code, keep them going, and earn 10% recurring for as long as they stay.</p>
-      </div>
-      <a class="btn-secondary" href="/partners.html" style="flex-shrink:0;" onclick="gtag('event','cta_click',{location:'home_brand_band'})">Brand Partners</a>
-    </div>
-  </div>
-</section>
+
+
+
 
 <section class="final-cta">
   <div class="wrap">
