@@ -85,6 +85,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .btn-outline{ display:inline-block; border:1px solid var(--accent); color:var(--accent); background:transparent; border-radius:2px; padding:14px 28px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:13px; cursor:pointer; text-decoration:none; }
   .btn-outline:hover{ background:var(--accent); color:#17120b; }
   .meta-note{ margin-top:16px; font-size:12px; color:var(--muted); }
+  .accept-note{ margin-top:14px; font-size:12px; line-height:1.6; color:var(--muted); }
+  .accept-note a{ color:var(--muted); text-decoration:underline; }
+  .accept-note a:hover{ color:var(--accent); }
 
   /* Quiz screen */
   .progress-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
@@ -167,7 +170,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="header-row">
     <div class="wordmark"><a href="/">CENTURIO</a></div>
     <div class="header-actions">
-      <a href="/affiliates.html" class="affiliate-btn">Gym Partners</a>
+      <a class='affiliate-btn' href='/affiliates'>Gym Partners</a>
       <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
     </div>
     <div class="eyebrow">MENTAL FITNESS SCORE</div>
@@ -221,7 +224,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <h1 class="display">Your score is ready.</h1>
       <p style="margin-top:14px; color:var(--muted); font-size:16px;">Enter your details to see your full Mental Fitness Score, your biggest opportunity for growth, and get your personalised PDF report.</p>
 
-      <form class="gate-form" id="gateForm" name="mental-fitness-score" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field">
+      <form class='gate-form' id='gateForm' method='POST' name='mental-fitness-score'>
         <input type="hidden" name="form-name" value="mental-fitness-score" />
         <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
         <input type="hidden" name="score" id="hiddenScore" />
@@ -274,8 +277,22 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         </label>
         <button type="submit" class="btn" style="width:100%; margin-top:14px;" id="gateSubmitBtn">See My Results</button>
         <p class="gate-msg" id="gateMsg"></p>
+        <!-- Acceptance is carried by the button itself, so there is no extra
+             box to tick. The two links open in a new tab deliberately: this
+             page holds the entire assessment in memory on a single screen, so
+             navigating away mid flow loses every answer and the person has to
+             start the whole thing again.
+
+             This is acceptance of the Terms and the Privacy Policy ONLY. It is
+             not permission to send marketing email and must never be written
+             to marketing_consent. The Spam Act requires that permission to be
+             its own express act, which is what the checkbox above is for.
+             Bundling the two would invalidate consent for every submission. -->
+        <p class="accept-note">By tapping See My Results you agree to our
+          <a href="/terms" target="_blank" rel="noopener">Terms and Conditions</a>
+          and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
+          We will never share your email. Unsubscribe anytime.</p>
       </form>
-      <p class="meta-note">We'll never share your email. Unsubscribe anytime.</p>
     </div>
   </section>
 
@@ -295,7 +312,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <p>Mental Fitness is built one capacity at a time, every Tuesday. Your score today is where you start, not where you stay.</p>
       <div class="results-btn-row">
         <button class="btn" onclick="downloadPDF()">Download My PDF Report</button>
-        <a class="btn-outline" href="/join.html">Start Training</a>
+        <a class='btn-outline' href='/join'>Start Training</a>
       </div>
     </div>
 
@@ -317,9 +334,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <footer style="text-align:center;">
   &copy; 2026 Centurio Collective. Mental Fitness for life.<br>
-  <a href="/terms.html" style="color:var(--muted); text-decoration:underline; font-size:11px;">Terms of Service</a>
+  <a href='/terms' style='color:var(--muted); text-decoration:underline; font-size:11px;'>Terms of Service</a>
   &middot;
-  <a href="/privacy.html" style="color:var(--muted); text-decoration:underline; font-size:11px;">Privacy Policy</a>
+  <a href='/privacy' style='color:var(--muted); text-decoration:underline; font-size:11px;'>Privacy Policy</a>
 </footer>
 
 <script>
