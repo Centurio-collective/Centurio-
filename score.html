@@ -307,7 +307,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <p class="accept-note">By tapping See My Results you agree to our
           <a href="/terms" target="_blank" rel="noopener">Terms and Conditions</a>
           and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
-          We will never share your email. Unsubscribe anytime.</p>
+          We will never share your email.</p>
       </form>
     </div>
   </section>
@@ -668,10 +668,24 @@ function withAttribution(payload){
 // which is how responses stayed broken in production for two days.
 // A static page with no build step can only assert this at runtime, so
 // it asserts loudly and includes responses itself.
+// Mirror the on screen consent sentence into its hidden field, so the markup
+// field carries the same value the fetch posts even if the page is ever
+// submitted natively. Single source of truth is the paragraph itself.
+(function mirrorConsentText(){
+  var p = document.getElementById('consentStatement');
+  var f = document.getElementById('hiddenConsentText');
+  if (p && f) f.value = (p.textContent || '').trim();
+})();
+
 (function assertPostedFieldsAreDeclared(){
   var form = document.getElementById('gateForm');
   if (!form) return;
-  var missing = ATTRIBUTION_FIELDS.concat(['responses', 'partner_code', 'partner_discount_code']).filter(function(field){
+  var missing = ATTRIBUTION_FIELDS.concat(['responses', 'partner_code', 'partner_discount_code',
+    // Added 2 November 2026 with the consent change. marketing_consent is no
+    // longer a checkbox and marketing_consent_text is new, so both are exactly
+    // the kind of field that goes missing from the markup during a later edit
+    // and silently stops being recorded.
+    'marketing_consent', 'marketing_consent_text', 'consent_version']).filter(function(field){
     return !form.querySelector('input[name="' + field + '"]');
   });
   if (missing.length && window.console) {
