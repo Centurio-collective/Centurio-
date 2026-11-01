@@ -222,7 +222,16 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d8b56a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <h1 class="display">Your score is ready.</h1>
-      <p style="margin-top:14px; color:var(--muted); font-size:16px;">Enter your details to see your full Mental Fitness Score, your biggest opportunity for growth, and get your personalised PDF report.</p>
+      <!-- THIS PARAGRAPH IS THE CONSENT. It replaced the opt in checkbox on
+           2 November 2026. Express consent under the Spam Act can be given by
+           filling in a form, provided the person knows at that moment what
+           they are agreeing to receive, so this sentence has to stay visible,
+           in readable type, directly above the fields. It must never be moved
+           into the terms, the privacy policy or fine print, and it must name
+           the sender, the cadence and the way out. If this wording changes,
+           bump consent_version below and change the marketing_consent_text
+           hidden field to match, or the record stops matching what was shown. -->
+      <p style="margin-top:14px; color:var(--muted); font-size:16px;" id="consentStatement">Enter your details to see your full Mental Fitness Score and get your personalised PDF report. Centurio will also email you one practice a week for the capacity you scored lowest on. Unsubscribe any time.</p>
 
       <form class='gate-form' id='gateForm' method='POST' name='mental-fitness-score'>
         <input type="hidden" name="form-name" value="mental-fitness-score" />
@@ -270,11 +279,18 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
           <input type="text" name="name" id="gName" placeholder="First name" autocomplete="given-name" required />
           <input type="email" name="email" id="gEmail" placeholder="Email address" autocomplete="email" required />
         </div>
-        <input type="hidden" name="consent_version" value="v3" />
-        <label class="consent">
-          <input type="checkbox" name="marketing_consent" id="gConsent" value="yes" />
-          <span>Send me the complimentary follow up to strengthen the capacity I scored lowest on.</span>
-        </label>
+        <input type="hidden" name="consent_version" value="v4" />
+        <!-- Still declared, deliberately. Netlify builds this form's field
+             list from the markup at deploy time and discards any posted field
+             it has not seen here, so deleting this input along with the
+             checkbox would have written null consent on every submission
+             without erroring. Same failure mode as responses in September. -->
+        <input type="hidden" name="marketing_consent" id="gConsent" value="yes" />
+        <!-- The exact sentence the person was shown, stored against their own
+             record. ACMA puts the burden of proving consent on the sender, and
+             this is what makes it provable per person instead of having to
+             reconstruct what the page said on a given date. -->
+        <input type="hidden" name="marketing_consent_text" id="hiddenConsentText" />
         <button type="submit" class="btn" style="width:100%; margin-top:14px;" id="gateSubmitBtn">See My Results</button>
         <p class="gate-msg" id="gateMsg"></p>
         <!-- Acceptance is carried by the button itself, so there is no extra
@@ -702,8 +718,15 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
       "form-name": "mental-fitness-score",
       name,
       email,
-      marketing_consent: document.getElementById('gConsent').checked ? "yes" : "",
-      consent_version: "v3",
+      // Always yes. Submitting this form IS the consent now, because the
+      // statement above the fields says plainly what will be sent. Read from
+      // the DOM rather than hardcoded so the value posted can never drift
+      // from the value declared in the markup.
+      marketing_consent: document.getElementById('gConsent').value,
+      consent_version: "v4",
+      // Captured from the live DOM, not retyped, so the stored text is
+      // literally what this person read.
+      marketing_consent_text: (document.getElementById('consentStatement').textContent || '').trim(),
       // The twelve answers already exist in full at this point and were
       // simply never sent, so every submission before today lost them
       // permanently. Keyed by question index rather than sent as a bare
