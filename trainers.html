@@ -251,6 +251,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   footer a{text-decoration:underline;}
 
   @media (max-width:900px){
+    /* 100px top and bottom reads as considered on a desktop and as dead space
+       on a phone, where it is most of a screen height per section. Added
+       2 November 2026 with the certification rebuild, which took the page from
+       thirteen sections to seven and made the gaps obvious. section.tight is
+       the more specific selector so it keeps its zero top padding. */
+    section{padding:64px 0;}
+    .section-head{margin-bottom:32px;}
     .grid-3,.grid-4,.steps,.nots{grid-template-columns:1fr;}
     .grid-3 .cell,.grid-4 .cell,.step{border-right:none;border-bottom:1px solid var(--border);}
     .not{border-right:none;}
@@ -294,9 +301,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section id="why">
+<section id="why" class="tight">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head" style="margin-bottom:0;">
       <div class="eyebrow">Why This Exists</div>
       <h2 class="display-h">Nobody quits in the session.</h2>
       <p class="lead-copy" style="margin-top:16px;">You get one hour. They get the other 167. They quit somewhere in that week, and nothing in a fitness certification covers the part that decides whether they come back.</p>
@@ -305,7 +312,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section id="receive">
+<section id="receive" class="tight">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">What You Receive</div>
@@ -348,7 +355,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section id="support">
+<section id="support" class="tight">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">The Support</div>
@@ -376,7 +383,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section id="pays">
+<section id="pays" class="tight">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">What It Pays</div>
@@ -412,7 +419,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section id="how">
+<section id="how" class="tight">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">How It Runs</div>
