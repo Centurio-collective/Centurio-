@@ -129,6 +129,41 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   @media (max-width:520px){
     .cap-grid{ grid-template-columns:repeat(2,1fr); }
   }
+
+  /* Ported from index.html on 3 November 2026 with the three product sections
+     below. The phone mockups are inline SVG, so they carry no image requests,
+     scale to any width and cannot break if an asset path moves. Variables
+     (--accent, --muted, --line, --text) already match this page. */
+  .cta{ background:var(--accent); color:#17120b; border:0; border-radius:2px; padding:14px 26px;
+    font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600;
+    font-size:14px; cursor:pointer; white-space:nowrap; text-decoration:none; }
+  .cta:hover{ filter:brightness(1.08); }
+  .outs{ margin-top:32px; max-width:760px; }
+  .outrow{ display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--line); }
+  .outrow:last-child{ border-bottom:0; }
+  .outmark{ flex-shrink:0; width:8px; height:8px; border-radius:50%; background:var(--accent); margin-top:10px; }
+  .outrow p{ font-size:16.5px; line-height:1.55; }
+  .note{ margin-top:30px; border-left:2px solid var(--accent); padding:4px 0 4px 20px;
+    font-size:16px; color:var(--muted); max-width:660px; }
+  .note strong{ color:var(--text); font-weight:600; }
+  .feature-split{ display:flex; gap:56px; align-items:center; }
+  /* This page centres its section copy, the homepage does not. These sections
+     came from the homepage and are written left aligned, with a rule down the
+     left of every .note, so they are pinned left here rather than inheriting. */
+  .feature-split, .feature-split h2, .feature-split p, .feature-split .section-label{ text-align:left; }
+  .feature-copy{ flex:1 1 56%; min-width:0; }
+  .feature-media{ flex:0 0 38%; max-width:400px; }
+  .feature-media img{ width:100%; height:auto; display:block; border-radius:6px; }
+  .feature-media svg{ display:block; width:100%; height:auto; }
+  @media (max-width:900px){
+    .feature-split{ flex-direction:column-reverse; gap:34px; align-items:stretch; }
+    .feature-media{ flex:none; max-width:300px; margin:0 auto; }
+  }
+  /* The trial line. Hidden by default on purpose: it is a promise about money,
+     so if the script below never runs the claim is simply absent rather than
+     wrong. Shown only until training starts. */
+  .plan-trial{ margin-top:16px; font-size:13.5px; line-height:1.5; color:var(--accent); font-weight:600; display:none; }
+  .plan-trial.show{ display:block; }
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -138,7 +173,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="wrap header-row">
     <div class="wordmark"><a href="/">CENTURIO</a></div>
     <div class="header-actions">
-      <a href="/affiliates.html" class="affiliate-btn">Gym Partners</a>
+      <a class='affiliate-btn' href='/affiliates'>Gym Partners</a>
       <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
     </div>
     <div class="eyebrow">EVIDENCE BASED MENTAL FITNESS TRAINING</div>
@@ -149,7 +184,37 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="eyebrow">JOIN NOW</div>
     <h1 class="display">Tuesday Training starts 10&nbsp;November.</h1>
-    <p class="hero-sub">Join now and your place is held for session one. Every Tuesday after that, 7:30pm, live.</p>
+    <p class="hero-sub">You have your baseline. Tuesday Training is how it moves. Join now and your place is held for session one, then every Tuesday after that, 7:30pm, live.</p>
+  </div>
+</section>
+
+<!-- Pricing, block one of two. Added 3 November 2026 so the price is
+     visible before the scroll for people arriving straight off the
+     assessment. The block at the foot of the page is identical and the
+     two toggles stay in sync, see setPlan. -->
+<section>
+  <div class="wrap">
+    <div class="section-label">MEMBERSHIP</div>
+    <h2>Start with session one.</h2>
+    <p class="lede">Everything below is included. Cancel anytime, pause when you need to, backed by a 14 day satisfaction guarantee.</p>
+
+    <div class="pricing">
+      <div class="toggle">
+        <div class="toggle-pill">
+          <button class="toggle-btn js-btn-monthly" onclick="setPlan('monthly')">Monthly</button>
+          <button class="toggle-btn active js-btn-annual" onclick="setPlan('annual')">Annual</button>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Centurio Membership</div>
+        <div class="plan-price js-plan-price">$590<span>/year</span></div>
+        <div class="plan-save show js-plan-save">Save $118, that's 2 months free</div>
+        <p class="plan-trial js-plan-trial">Free until Tuesday 10 November. Your first payment is taken the day training starts.</p>
+        <a class="plan-cta js-plan-cta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan, location: 'top' }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
+        <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -174,9 +239,123 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="benefit-title">The Weekly Brief™</div>
         <div class="benefit-desc">A short Thursday note that reinforces the week's principle and carries it forward.</div>
       </div>
+      <!-- Four more added 3 November 2026. The grid is four across and
+           collapses to two then one, so eight tiles sit as two clean rows at
+           every width. People arrive here straight off the assessment and the
+           page was showing them the Tuesday and little else. -->
+      <div class="benefit">
+        <div class="benefit-title">Ask Centurio</div>
+        <div class="benefit-desc">A mentor trained on the whole framework, there whenever you need it. Ask it anything about what you are training and it answers from the model.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-title">The Daily Mentor</div>
+        <div class="benefit-desc">One message a day on the capacity you are training, carrying a line from one of the thinkers behind it.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-title">Teemup</div>
+        <div class="benefit-desc">Find someone to train with. Post when you are training, see who else is, and match on the gym and the hours that suit you.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-title">Nutrition</div>
+        <div class="benefit-desc">Macro and meal calculators built on Australian food data. Train the mind, feed the body.</div>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- The three members only products, ported whole from the homepage on
+     3 November 2026 so the copy and the phone mockups stay identical in both
+     places. Each already reads INCLUDED WITH MEMBERSHIP, which is exactly
+     right here. -->
+<section>
+  <div class="wrap">
+<div class="feature-split">
+<div class="feature-copy">
+    <div class="section-label">INCLUDED WITH MEMBERSHIP</div>
+    <h2>Teemup. Like minded and like ability.</h2>
+    <p style="margin:14px 0 0; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);">Connecting active lifestyles.</p>
+    <p class="lede" style="margin-top:22px;">Teemup finds you someone to train with. It sits inside your membership and matches you with people at your own gym, on the weight you lift, the pace you run and the way you like to train.</p>
+
+    <p class="lede" style="margin-top:16px;">You tell it you are open on Tuesday morning. It shows you who else is.</p>
+
+    <p class="lede" style="margin-top:16px;">Four in ten people who join a gym on their own stop going inside a year.<br>Join with someone and it is one in sixteen.</p>
+
+    <div class="outs">
+      <div class="outrow"><div class="outmark"></div><p>You lift heavier because someone has the bar.</p></div>
+      <div class="outrow"><div class="outmark"></div><p>You hit the last set because they hit theirs.</p></div>
+      <div class="outrow"><div class="outmark"></div><p>You turn up Thursday because they are already warming up.</p></div>
+    </div>
+
+    <p class="note"><strong>Like ability.</strong> The weight on your bar. The pace you actually run. Your handicap, your UTR, your HYROX time. Teemup matches the number, so nobody spends the session stripping fifty kilos off the bar between sets.</p>
+
+    <p class="note"><strong>Like minded.</strong> Whether you talk the whole way through or get on with it. Why you train. And your Mental Fitness Score, so the person who needs pushing meets the person who pushes.</p>
+
+    <p class="note"><strong>Play, train, recover together.</strong> Weights, HYROX, functional, yoga, pilates, boxing and swimming at your own gym. Running, hiking, golf and tennis within twenty five kilometres of your suburb.</p>
+
+    <p class="note">You see how many people are open on a Tuesday morning before you see who any of them are. Your numbers stay yours. Nobody gets your contact details until you have both said yes.</p>
+
+    <p class="note">Human connection. Connection begins when another person feels genuinely seen, heard and understood. Some of it starts at six in the morning, with someone who noticed you were not there last week.</p>
+
+    <p class="display" style="margin-top:30px; font-size:30px; color:var(--accent);">That's Connect.</p>
+
+    <p style="margin-top:26px; font-size:13px; color:var(--muted); max-width:660px;">Twelve month study of adults who joined a fitness program with their spouse and without one. Wallace et al., Journal of Sports Medicine and Physical Fitness.</p>
+  </div>
+<div class="feature-media"><svg viewBox="0 0 380 800" width="100%" role="img" aria-label="Teemup in the Centurio member portal, matching training partners on ability and mindset" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="376" height="796" rx="46" fill="#1b1b1a" stroke="rgba(241,233,216,.12)"/><rect x="13" y="13" width="354" height="774" rx="36" fill="#0D0D0D"/><rect x="153" y="24" width="74" height="5" rx="2.5" fill="#2a2a28"/><text x="34" y="58" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">9:41</text><text x="346" y="58" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="end">Centurio</text><text x="34" y="88" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="19" font-weight="700" fill="#F1E9D8" text-anchor="start">Teemup</text><text x="34" y="106" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Find a training partner</text><line x1="13" y1="122" x2="367" y2="122" stroke="#26251f"/><rect x="28" y="140" width="324" height="92" rx="10" fill="#141412" stroke="#D8B56A" stroke-opacity=".45"/><text x="44" y="164" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#D8B56A" text-anchor="start">TUESDAY 6:00 AM · WEIGHTS</text><text x="44" y="198" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="30" font-weight="700" fill="#F1E9D8" text-anchor="start">7</text><text x="68" y="198" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#88837E" text-anchor="start">people open at your gym</text><text x="44" y="218" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#6b6760" text-anchor="start">You see the number before you see anyone.</text><text x="44" y="262" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#D8B56A" text-anchor="start">OPEN TO MATCHING</text><rect x="28" y="278" width="324" height="94" rx="10" fill="#141412" stroke="#2b2a24"/><clipPath id="ph0"><circle cx="64" cy="316" r="18"/></clipPath><image href="data:image/jpeg;base64,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" x="46" y="298" width="36" height="36" preserveAspectRatio="xMidYMid slice" clip-path="url(#ph0)"/><circle cx="64" cy="316" r="18" fill="none" stroke="#D8B56A" stroke-opacity=".5"/><text x="96" y="308" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13.5" font-weight="700" fill="#F1E9D8" text-anchor="start">Marcus</text><text x="336" y="308" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="600" fill="#D8B56A" text-anchor="end">92% match</text><text x="96" y="328" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Bench 100kg · Squat 140kg</text><text x="96" y="346" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Gets on with it</text><rect x="96" y="356" width="86" height="4" rx="2" fill="#2E2E2B"/><rect x="96" y="356" width="79" height="4" rx="2" fill="#D8B56A"/><rect x="28" y="382" width="324" height="94" rx="10" fill="#141412" stroke="#2b2a24"/><clipPath id="ph1"><circle cx="64" cy="420" r="18"/></clipPath><image href="data:image/jpeg;base64,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" x="46" y="402" width="36" height="36" preserveAspectRatio="xMidYMid slice" clip-path="url(#ph1)"/><circle cx="64" cy="420" r="18" fill="none" stroke="#D8B56A" stroke-opacity=".5"/><text x="96" y="412" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13.5" font-weight="700" fill="#F1E9D8" text-anchor="start">Maddy</text><text x="336" y="412" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="600" fill="#D8B56A" text-anchor="end">88% match</text><text x="96" y="432" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">5km in 24:30 · Tue and Thu</text><text x="96" y="450" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Talks the whole way</text><rect x="96" y="460" width="86" height="4" rx="2" fill="#2E2E2B"/><rect x="96" y="460" width="75" height="4" rx="2" fill="#D8B56A"/><rect x="28" y="486" width="324" height="94" rx="10" fill="#141412" stroke="#2b2a24"/><clipPath id="ph2"><circle cx="64" cy="524" r="18"/></clipPath><image href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/wAALCACWAJYBAREA/8QAHAAAAgMBAQEBAAAAAAAAAAAABAUDBgcCAQgA/8QANxAAAgEDAwMCAwcEAQQDAAAAAQIDAAQRBRIhBjFBE1EiYXEHFCMyQoGRFaGxwSQWM1LRYnLh/9oACAEBAAA/AOLP7SnsFCW8gZR4xXOr/affXlhLH6AYMO/asUmvpZtdknkADM2cVb4rxZYY1K+KkvNMSeHO3PFBaTYp94MeAvNG65bW2k24nuJ0jVuFye59hVA1XqKW5URRZhXPJByWFLEInPIZcec16GlVCY2XjsualhndJQs7Or44A8/Sj3eRoiwtshecnzTTRdWkgIS4j2RnsR4q0xOs8YkjcMp7EGuXzjJqkdYljL280BoFt68oz3zWgQQFdMYfKs01dcX0g+dWvStbb0QWTNNjrwe3ZdmMiqyu2XU9zdia0i0sbMaYsuBuVc5FBS61FHGY8c9qUf1UWpluSDtQFjjzVO6g1681p0lunCon/bQdlBpO7hgCoOfJrxJyG3efairC3adyqHYTUsStE8oaH1GT8x3dqKBuFZJMhRIMbQcc0yMM8CxkozRS8At+k+RU0Fzd6SvqK+Yu7xv/AKNWSxuVu4FkU5B7HNVPrAH1e3mgdAikMw2ds1oiAjSznvtrLdYH/Ok+tWPS0CW2dgNHCSH0mBXBxSSNTJf4Ud6vtjBNFYfFuIK1UtQ1RIbh0PcGlt/qRuLUwooIc8n5UnkIDs2QR3A96hLg7gBnnjivI4dzAgDmj3mNmIpI84zz8jUQumgmcrykhBz7jNfpL5x6MrZKxy5OKmi6hu2uCzNuXJOPHPmmcd3/AFGzkifkrtVP9j+wo/pW5eEvbkEEklU5IqDrBGaTIXAFDdLzIkwDe9aAdjaY7A44NZTqxxfy596t2hR7rXBGaNnsVaNiB4pFaoYtTAI7GtG3gaQ2O+2sn1eJ5L2Q4PeoI4SqYbOcGg5Ld5rgJt5IA+gp7F03F6KsSwcjvXem9OkXBDfF4GBwKeSdDSXUO6NTg/KlrfZ9qkj+nBbu+PajIPsr1lojvgIU+KFvvsz1GxBJQsAMnFIprd9Ol9ORjGVOdp4o3TNQc36SxtjB+mPrRPV9wZNrKpAcA8+KU6JnfnzmribuYacQM4xWf3rGS6kJ75rSOnNKuZrIMq+KOuLG4gjbch7VVQpOpY85rR4NLkbRfUyMFazjULPF5IMeaX30ZV0iUfFjPFDW8DSXsceDuGAMCrmlsIkiBB3djmmVrDCgyF5FW/SctbErIMgDAIyDVj0yzGd7W5yR3jOc00VoQSpIB9mXBpZr1vbSRfAPiAzmsh+0PQgJIrv0htkJRgo5x8qrNtpa2HphO8jDJPjFQdZMVlWMdhihemofVlUH3rRX02NNGLFeSKyfUIyl5LgcZrWultYNvp4AXIx7UZqWuJNavmNQcVnEeoF9YOB2atQttWddG9IjHw96okrCS7mkckog3Nt7n5Ur1KKW3v47grmFk4I/kZq1dBaPaS6bPqcy+pctLtQnwK91K9tEvWSWdfhO3aDTjSUsrxSIblA3tuq9dPWcaL+IFHGBx3puYPubj02ZSQCAp/1TGG2uCd52kEeR3pbfWe6Qgrtz7Vn/ANoNxb2sEPrJxuOBnnis+0SRtTv2mZcxJyPbd4pZ1kmbjNRdLjbMp7YNX3UNTjTStm4cCsxvp4ZZmIHmvqv7N+mtJm0CIvHGcoM7gKb690DokmmSuLeEZU8gV8vSafHb9RzRJyqSlQf3q8ajasNE/DODtqj6AjvdXdvOchtpz7Dca61+Vri2uFhjkZSy7Se3tgfxVntkl0fR7SwQYmMe5h7E0oTT1+9enHYC4duWaUnA/jvXcPTN5erLcQac9kYgS+2UgADyMgD+DmnHSvUF3bXSQS3csseAFR60iS7uBAt66OELAfsBSmT7XrXTphBeWdyqdt6jOKeaf11oGsxgrOyFuAXGMGsy+2g+mLB1c4d3UY8jjmlOiW0Wm6ZGGPxH43/eqv1TexXVx+GeQaG0qYx2zupIIoGfU72YMDISme2aGTMg7ZNfZn2a26J09CWP6BT/AKgkii0aU7v0mvkC41Hf1Tchefx2/wA1ohgnutIJ5xtqnaVZmLVZUJ5kG3BOM89qYCze2uUikCyQxzxsrD9Qz2NOdd2/10Z4DgNj2pvY6Xb3EYlBKvng+aJvUdbV0E4YfqBQc1UbW0WTWIWCrGNwACjAAzWsa5F996fis1VlxGXAHc1mX/Rs+pX8ckVwUkjG2RGJUn/5VYY9CnhuJNLvLUT2si7oLv0wjZHcNjsaE6h6PGsazommNmeCxge4mLHGVBHB+p/tSfqC2+8zIrJFEwiCssS4VeTgfxisy1+wFncEg5yaI0G0++RNEvc0Lq+kyaYvxdj2zSeOUx54r7B+z95n6fiAY/kHFP8AWrZpdEkDkj4TXy+dMjh1+V8DiY/5rRzcRQaKRkA4rMmuy2pOyNghsg1YLRHu5op2KgRuPh8tU17cC7vFkOcrxmrJorqyZ7+/Ne9R3Ahtj8eM8ADzSXQbd7zUoSoKneM5rXSDJew88Iqrj3FFzaNaLN6ghVtx7Y7H5GvbuCGCFnBwAO1UyKRhq8+qSSf8cWzIQO2AT/nkftWe6xqil5rhsAuS2P8AH9sVner3Yvpmb2NMekwEmDZ80x65SOS1R1P5RVJWBWjDe9bv9lnV2qvElrJE4RQAGxw1XT7Qer7vS9FbYh5X2r5ztOoJ7rUWZgdzuSa0Fba6u9LYliMr2FUZU9DUGWRwNp5JOKtdlcRfcRLHKpUFuRyPFBxTurZOApbC1ZNKvobWNWnkCDwPegOqeobc7HjfcUOQtTdAdSol36t1GjZYBTtO1v8A9rXLG+fXLqaWC0mjEX5ZGUBTjwOaOTVSYyWGCOCPnSXWtRLQsiOFZ/hHgc+arPW15HpmmR6PYSxySMo9Z09vOfmT/isZ15dRkZgM7arqJIobfwfanfTqSTfCnfPiiOqIriCzAmzyOxqpq7BAOa+melerejuldCjk1TULaKcKPwox6khP0XOP3qv9bfbL05rlk9paabeyDGBJIFUf5NZHZ6pDaXLTC0jILEjJqTWOrtU1BBbi5aCAcmOL4R/7pTbo95KFLMT3JJzgVcoJDp+mWsUZwqDLfuan9RJkjYPwrd8eaY3li11EZbc7iUHDHA+lLBAlyfTurO6R+xIG4ftirNY6Ppk0Fo9tqcdvHC+545FIbP7d6u2l6xPoULG3ljngIyGRsqT8/anMOrQ6tZTXG30nHD498ZzVL6v1aHTbOJZ3dEkcLuxnjz+1V8Xdvdj8CeOQ4zhWyf4oee2EiEMoOaovUdl90mOOATRPRtwIrkEjIBojrbU31GRYYoycewqoSRtH8LDBokS5T48kg4J81yWOMe9csScLUcnDcmm/T0QaO5kPcYAqwhd8ODyMdqAS6+6F4X/KxyjHtVq6YklkhCu4YE9vc1YWhuNLlNykSugOeeMGm+i9Q6XqrH75oitIx27tg5NPLvprR5dOmd7FFBG4AnkfTFJJdWgtLFbSIqFUZkB/sM/Ssx616k/rWo/d4GzbwxlY+OCx7kf4pEki2oURkrICArDuTmrFpXUzRXj2V+fUTGUkx8Q/90i6zljllV4nDI3II81D0mNku9uwp9LqmmmUpIi7xkZqna28bXRMYwK4C5DDjJqFGCybT2PaupBg/SomGcfOmugybYbhPLFcVaoYy0QIxQl7YepCwdQOcgiodP1aaxbY7hSg4rROnNTjvoJJbqTdgZwRn+1XLTrjT4rX7zHDCTjnC45pVr/UhuQbW3SR5XA9ONO5asu+0HU7+xb+ltKsZEatIIzyM+Cfeq/FtXbN2Cxj9zQ1sfvN6ZBysIz381xHKx1ITg5C+9HRTRl3jlRZYScgMM4ovTYoLeT8Ndit884pVq9tNb3hd/yOcqw7GlFwSxznNHkbTkYoSeLcMivwb1Iw3nsa8I4FG6Fk3bJ7jP8AFXyxiMkYGB2qW/sGjhDDBHypTJpEV8u1+MnAI7g030/pXV44h90vfhxja61ZItC6jijSGS8tEXgYDE/2x/unVlY2egQTXlxO01wUPqTvxtXuQo8CsL6p1JtY1We6PeeUsB7DwKD1C4MECQL3AyfrXcP/ABbIRDHqSfExrpEESHHcjBNeIhMkcCfnc5J9hRkc3qT7Yz+HGcA+596cKkV7btBOAysP4+dKV0qwtneG6YFl7H3HvQJTjtionjyCMUGAY5WjPG7kV0yYUV3Y3H3O+im/TnDfStG0yVQUIYFTyCPNO7hFktc449qWwWJYkj65HmrT0/qbx2hgeA+sGwrEcYp5DlsvM3xfOqh9pOuC10lraM/iXB2D/wCvk/6/esfTEt8qnsvehbib1r3d3G6jt+6Tfwcjiuw3IGfFdRPtinnX88hEMZ9vc1NbL6ahQBTO2crjxntXWqaQ2sQRGKRElQ9z7UmC8kHxXhTGaV3fwzgjxRITdCG45odo+6kD3p50/rDKotnPxx8gE9xWjaO4v7JmU5wPHihDqX3OXakiqwOCrDg080m/M7ZDRgn/AMBXXUXUtvoNqWdt8h/LGp5JrJtV1a51e/a5uWBkccKOyAdgKVW2Q88vsMD96DjQtc4HmjxgNgdhX5n2xs/HsKkTMaRRn9Kbj9TzRMLYK8c+1GQvmRYxjnkn5U1t7gKpJ5B+dISmGGB3FeBQWweKVXiZdmNEWnxWIPHDYqO6j2FXAzjv9KGlRoZVdCVIOVYeKvHRfW9nYiS21HMJccSYypPz9qaXUdjeq11Fcwvn/wAJAc1zBqkej25f1Y95/Llhx86qesas2o3DSs5cDsT5NK4yXVpCeX+EfIV4mFt5Bxy+Kjso900kh7KK7j53tjtXrDeqKAOSBUrNvmY+M5qeA8bjj5fSiLRwd0h/VwPpR1u6yylNwAVck/4pXNIY44nwOMZqSU7JEA4z3+dA3afm7V5Yc2Evuriu2/EiKnvUSx/ebXH6k4oJQVYqwyRUyqpGQcURDGDyefmajnf1XCKMZ4H0qSdhChGPyjiuXHp2kYPcruP711bj0bEse7kmox8Fru8k5ruLmSP5c17kE4Hk11u3sI14B748CiRMEX6cYH+KPslKod2N7fEx/wBUpvZPwSvsBU8xwluw77RUd4uNx9+a40dN9tcL881x+UtXlg+25ZPDd64v4Fjl3LxzX6DB+vmpLh9o2j9XeorbDSM5/TwKhunLEL7nFEXo+JUHAwFqS+wkSxgYwMVBMNsCpXpf07kY7bf9VEJSCf4qWJ9p7cnJJom35ZWP7fKj4Izd7lYkIp8HBJr/2Q==" x="46" y="506" width="36" height="36" preserveAspectRatio="xMidYMid slice" clip-path="url(#ph2)"/><circle cx="64" cy="524" r="18" fill="none" stroke="#D8B56A" stroke-opacity=".5"/><text x="96" y="516" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13.5" font-weight="700" fill="#F1E9D8" text-anchor="start">Jordan</text><text x="336" y="516" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="600" fill="#D8B56A" text-anchor="end">81% match</text><text x="96" y="536" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">HYROX 1:18 · Functional</text><text x="96" y="554" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Needs pushing</text><rect x="96" y="564" width="86" height="4" rx="2" fill="#2E2E2B"/><rect x="96" y="564" width="69" height="4" rx="2" fill="#D8B56A"/><text x="44" y="610" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#6b6760" text-anchor="start">Your numbers stay yours. Nobody gets your</text><text x="44" y="626" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#6b6760" text-anchor="start">details until you have both said yes.</text><rect x="28" y="696" width="324" height="44" rx="22" fill="#D8B56A"/><text x="190" y="723" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="700" fill="#17150f" text-anchor="middle">I'm open Tuesday</text><text x="190" y="766" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="middle">Play, train and recover together.</text></svg></div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="feature-split">
+<div class="feature-copy">
+<div class="section-label">INCLUDED WITH MEMBERSHIP</div>
+<h2>Ask Centurio. A coach in your pocket, ready when you are.</h2>
+<p style="margin:14px 0 0; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);">Trained on the whole framework.</p>
+<p class="lede" style="margin-top:22px;">Open in your portal every day, whenever you need it. It knows the six Core Capacities, the principles underneath them and the protocols that make them usable, and it knows where you are in the program.</p>
+<div class="outs">
+<div class="outrow"><div class="outmark"></div><p>Prepare for the conversation you have been avoiding, ten minutes before you walk in.</p></div>
+<div class="outrow"><div class="outmark"></div><p>Work through the decision you keep circling.</p></div>
+<div class="outrow"><div class="outmark"></div><p>Debrief the week that got away from you.</p></div>
+<div class="outrow"><div class="outmark"></div><p>Turn a vague intention into a commitment, and get asked about it later.</p></div>
+</div>
+<p class="note"><strong>The Daily Mentor message.</strong> Every morning, one capacity and one principle, written for the week you are actually training and the commitment you actually made. A few lines, read in under a minute, waiting when you open your phone.</p>
+<p class="note"><strong>It keeps the week pointed the same way.</strong> Tuesday sets the direction. The message holds it Wednesday through Monday, so you arrive at the next session having trained rather than having waited.</p>
+<p class="note">It speaks in the Centurio framework and nothing else. No diagnosis, no therapy, no advice it was never built to give. When something belongs with a human being, it says so.</p>
+<p class="display" style="margin-top:30px; font-size:30px; color:var(--accent);">That's the other six days.</p>
+</div>
+<div class="feature-media">
+<svg viewBox="0 0 380 800" width="100%" role="img" aria-label="Ask Centurio and the Daily Mentor message in the Centurio member portal" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="376" height="796" rx="46" fill="#1b1b1a" stroke="rgba(241,233,216,.12)"/><rect x="13" y="13" width="354" height="774" rx="36" fill="#0D0D0D"/><rect x="153" y="24" width="74" height="5" rx="2.5" fill="#2a2a28"/><text x="34" y="58" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">9:41</text><text x="346" y="58" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="end">Centurio</text><text x="34" y="88" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="19" font-weight="700" fill="#F1E9D8" text-anchor="start">Ask Centurio</text><text x="34" y="106" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">AI assistant. Trained on the Centurio framework.</text><line x1="13" y1="122" x2="367" y2="122" stroke="#26251f"/><rect x="28" y="138" width="324" height="208" rx="10" fill="#141412" stroke="#2b2a24"/><text x="44" y="160" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#D8B56A" text-anchor="start">DAILY MENTOR · TODAY</text><text x="44" y="180" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#F1E9D8" text-anchor="start">Lead, Trust Yourself</text><text x="44" y="197" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#F1E9D8" text-anchor="start">Principle 1: Leadership begins</text><text x="44" y="214" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#F1E9D8" text-anchor="start">with the promises you keep to yourself.</text><text x="44" y="249" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#b9b3a8" text-anchor="start" font-style="italic">"Waste no more time arguing about what</text><text x="44" y="264" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#b9b3a8" text-anchor="start" font-style="italic">a good man should be. Be one."</text><text x="44" y="294" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="400" fill="#78736c" text-anchor="start">Marcus Aurelius, Meditations</text><text x="44" y="316" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#9b9589" text-anchor="start">Think of one small thing you told yourself you</text><text x="44" y="330" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#9b9589" text-anchor="start">would do today. A walk. A call. Twenty minutes</text><text x="44" y="344" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#9b9589" text-anchor="start">of focused work. Do it. Then do the next one.</text><rect x="150" y="362" width="202" height="44" rx="13" fill="#D8B56A"/><text x="164" y="380" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="500" fill="#17150f" text-anchor="start">Got a hard conversation at 3.</text><text x="164" y="396" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="500" fill="#17150f" text-anchor="start">I'm rattled.</text><text x="30" y="430" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="400" fill="#cfc9bd" text-anchor="start">Start with your state, because you will carry</text><text x="30" y="447" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="400" fill="#cfc9bd" text-anchor="start">it into the room either way.</text><text x="30" y="481" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="400" fill="#cfc9bd" text-anchor="start">Two minutes before you walk in: slow the</text><text x="30" y="498" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="400" fill="#cfc9bd" text-anchor="start">breath out longer than you take it in.</text><text x="30" y="515" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="400" fill="#cfc9bd" text-anchor="start">Four in, six out, six rounds.</text><text x="30" y="549" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="400" fill="#cfc9bd" text-anchor="start">Then one question.</text><text x="30" y="566" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#F1E9D8" text-anchor="start">What do you want to be true when</text><text x="30" y="583" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#F1E9D8" text-anchor="start">this conversation ends?</text><rect x="182" y="597" width="170" height="28" rx="13" fill="#D8B56A"/><text x="196" y="616" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="500" fill="#17150f" text-anchor="start">That I actually listened.</text><rect x="28" y="724" width="324" height="42" rx="21" fill="none" stroke="#2b2a24"/><text x="48" y="750" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="400" fill="#5f5b55" text-anchor="start">Ask anything</text><circle cx="330" cy="745" r="11" fill="#D8B56A"/></svg>
+</div>
+</div>
+</div></section>
+
+<section>
+<div class="wrap">
+<div class="feature-split">
+<div class="feature-copy">
+<div class="section-label">INCLUDED WITH MEMBERSHIP</div>
+<h2>Nutrition. The numbers, and somewhere to put them.</h2>
+<p style="margin:14px 0 0; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);">Fuel the body. Train the mind.</p>
+<p class="lede" style="margin-top:22px;">Work out what you actually need. Calories, protein, carbs and fat, calculated from your weight, your training and what you are trying to do, whether that is losing fat, holding steady or building.</p>
+<div class="outs">
+<div class="outrow"><div class="outmark"></div><p>You stop guessing at dinner, because breakfast and lunch are already counted.</p></div>
+<div class="outrow"><div class="outmark"></div><p>You see the week, so one bad meal stays one bad meal.</p></div>
+<div class="outrow"><div class="outmark"></div><p>You find out on the day, while you can still do something about it.</p></div>
+</div>
+<p class="note"><strong>Then track it daily, inside the portal.</strong> Log what you ate as you go, watch the day fill against your target, and know where you landed before the day is over rather than a week later.</p>
+<p class="note"><strong>Your targets follow your training.</strong> Change what you are training for and the numbers move with it, so the plan never belongs to the person you were two months ago.</p>
+<p class="display" style="margin-top:30px; font-size:30px; color:var(--accent);">That's training the body too.</p>
+<a class="cta" href="/nutrition" style="display:inline-block; margin-top:26px;" onclick="gtag('event','cta_click',{location:'join_nutrition'})">Work out your macros</a>
+</div>
+<div class="feature-media">
+<svg viewBox="0 0 380 800" width="100%" role="img" aria-label="The Centurio macro calculator in the member portal, showing daily calorie and macro targets" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="376" height="796" rx="46" fill="#1b1b1a" stroke="rgba(241,233,216,.12)"/><rect x="13" y="13" width="354" height="774" rx="36" fill="#0D0D0D"/><rect x="153" y="24" width="74" height="5" rx="2.5" fill="#2a2a28"/><text x="34" y="58" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">9:41</text><text x="346" y="58" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="end">Centurio</text><text x="34" y="88" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="19" font-weight="700" fill="#F1E9D8" text-anchor="start">Nutrition</text><text x="34" y="106" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Macro calculator</text><line x1="13" y1="122" x2="367" y2="122" stroke="#26251f"/><rect x="28" y="140" width="324" height="166" rx="10" fill="#141412" stroke="#2b2a24"/><text x="44" y="164" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#D8B56A" text-anchor="start">YOUR DETAILS</text><text x="44" y="190" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="start">Sex</text><text x="44" y="207" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="600" fill="#F1E9D8" text-anchor="start">Male</text><text x="200" y="190" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="start">Age</text><text x="200" y="207" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="600" fill="#F1E9D8" text-anchor="start">44</text><text x="44" y="232" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="start">Height</text><text x="44" y="249" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="600" fill="#F1E9D8" text-anchor="start">183 cm</text><text x="200" y="232" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="start">Weight</text><text x="200" y="249" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="600" fill="#F1E9D8" text-anchor="start">92 kg</text><text x="44" y="274" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="start">Activity</text><text x="44" y="291" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="600" fill="#F1E9D8" text-anchor="start">Training 5x a week</text><text x="200" y="274" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="start">Goal</text><text x="200" y="291" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="600" fill="#F1E9D8" text-anchor="start">Lose fat, 0.5 kg/wk</text><rect x="28" y="324" width="324" height="188" rx="10" fill="#141412" stroke="#D8B56A" stroke-opacity=".45"/><text x="44" y="348" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#D8B56A" text-anchor="start">YOUR NUMBERS</text><text x="44" y="374" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11" font-weight="400" fill="#88837E" text-anchor="start">Resting energy</text><text x="336" y="374" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="600" fill="#F1E9D8" text-anchor="end">1,795 kcal</text><text x="44" y="396" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11" font-weight="400" fill="#88837E" text-anchor="start">Maintenance</text><text x="336" y="396" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="600" fill="#F1E9D8" text-anchor="end">2,790 kcal</text><line x1="44" y1="414" x2="336" y2="414" stroke="#2b2a24"/><text x="44" y="440" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11" font-weight="400" fill="#88837E" text-anchor="start">Daily target</text><text x="44" y="480" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="38" font-weight="700" fill="#D8B56A" text-anchor="start">2,240</text><text x="152" y="480" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#88837E" text-anchor="start">kcal</text><text x="44" y="500" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">550 below maintenance</text><rect x="28" y="530" width="324" height="140" rx="10" fill="#141412" stroke="#2b2a24"/><text x="44" y="554" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#D8B56A" text-anchor="start">MACRO SPLIT</text><text x="44" y="580" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Protein</text><text x="44" y="604" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="17" font-weight="700" fill="#F1E9D8" text-anchor="start">174 g</text><text x="44" y="622" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#D8B56A" text-anchor="start">31%</text><text x="160" y="580" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Carbs</text><text x="160" y="604" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="17" font-weight="700" fill="#F1E9D8" text-anchor="start">236 g</text><text x="160" y="622" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#D8B56A" text-anchor="start">42%</text><text x="266" y="580" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="400" fill="#88837E" text-anchor="start">Fat</text><text x="266" y="604" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="17" font-weight="700" fill="#F1E9D8" text-anchor="start">62 g</text><text x="266" y="622" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#D8B56A" text-anchor="start">25%</text><rect x="44" y="636" width="96" height="6" rx="3" fill="#2E2E2B"/><rect x="44" y="636" width="91" height="6" rx="3" fill="#D8B56A"/><rect x="160" y="636" width="90" height="6" rx="3" fill="#2E2E2B"/><rect x="160" y="636" width="70" height="6" rx="3" fill="#D8B56A"/><rect x="266" y="636" width="70" height="6" rx="3" fill="#2E2E2B"/><rect x="266" y="636" width="42" height="6" rx="3" fill="#D8B56A"/><text x="44" y="662" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="400" fill="#6b6760" text-anchor="start">Recalculates when your weight or training changes.</text><rect x="28" y="696" width="324" height="44" rx="22" fill="#D8B56A"/><text x="190" y="723" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="700" fill="#17150f" text-anchor="middle">Save to my dashboard</text><text x="190" y="766" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" fill="#88837E" text-anchor="middle">Then track against it every day.</text></svg>
+</div>
+</div>
+</div></section>
+
+
+
 
 <section>
   <div class="wrap">
@@ -202,16 +381,17 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="pricing">
       <div class="toggle">
         <div class="toggle-pill">
-          <button class="toggle-btn" id="btnMonthly" onclick="setPlan('monthly')">Monthly</button>
-          <button class="toggle-btn active" id="btnAnnual" onclick="setPlan('annual')">Annual</button>
+          <button class="toggle-btn js-btn-monthly" onclick="setPlan('monthly')">Monthly</button>
+          <button class="toggle-btn active js-btn-annual" onclick="setPlan('annual')">Annual</button>
         </div>
       </div>
 
       <div class="plan-card">
         <div class="plan-name">Centurio Membership</div>
-        <div class="plan-price" id="planPrice">$590<span>/year</span></div>
-        <div class="plan-save show" id="planSave">Save $118, that's 2 months free</div>
-        <a class="plan-cta" id="planCta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
+        <div class="plan-price js-plan-price">$590<span>/year</span></div>
+        <div class="plan-save show js-plan-save">Save $118, that's 2 months free</div>
+        <p class="plan-trial js-plan-trial">Free until Tuesday 10 November. Your first payment is taken the day training starts.</p>
+        <a class="plan-cta js-plan-cta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan, location: 'bottom' }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
         <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
     </div>
@@ -233,9 +413,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <span>Mental Fitness for life.</span>
   </div>
   <div class="wrap" style="text-align:center; margin-top:14px; font-size:11px;">
-    <a href="/terms.html" style="color:var(--muted); text-decoration:underline;">Terms of Service</a>
+    <a href='/terms' style='color:var(--muted); text-decoration:underline;'>Terms of Service</a>
     &middot;
-    <a href="/privacy.html" style="color:var(--muted); text-decoration:underline;">Privacy Policy</a>
+    <a href='/privacy' style='color:var(--muted); text-decoration:underline;'>Privacy Policy</a>
   </div>
 </footer>
 
@@ -279,18 +459,36 @@ function checkoutUrl(base){
          'prefilled_promo_code=' + encodeURIComponent(PARTNER_CODE);
 }
 
+// Rewritten 3 November 2026 when a second pricing block went in near the top.
+// getElementById returns one node, so with two blocks on the page the lower
+// one silently stopped updating and could show a price the button did not
+// charge. Everything is addressed by class now and every block is updated, so
+// the two can never disagree whichever toggle is pressed.
 function setPlan(which){
   currentPlan = which;
   const p = plans[which];
-  document.getElementById('planPrice').innerHTML = p.price + '<span>' + p.suffix + '</span>';
-  const saveEl = document.getElementById('planSave');
-  if(p.save){ saveEl.textContent = p.save; saveEl.classList.add('show'); }
-  else { saveEl.classList.remove('show'); }
-  document.getElementById('planCta').textContent = p.cta;
-  document.getElementById('planCta').href = checkoutUrl(p.url);
-  document.getElementById('btnMonthly').classList.toggle('active', which === 'monthly');
-  document.getElementById('btnAnnual').classList.toggle('active', which === 'annual');
+  const all = sel => document.querySelectorAll(sel);
+  all('.js-plan-price').forEach(el => { el.innerHTML = p.price + '<span>' + p.suffix + '</span>'; });
+  all('.js-plan-save').forEach(el => {
+    if(p.save){ el.textContent = p.save; el.classList.add('show'); }
+    else { el.classList.remove('show'); }
+  });
+  all('.js-plan-cta').forEach(el => { el.textContent = p.cta; el.href = checkoutUrl(p.url); });
+  all('.js-btn-monthly').forEach(el => el.classList.toggle('active', which === 'monthly'));
+  all('.js-btn-annual').forEach(el => el.classList.toggle('active', which === 'annual'));
 }
+
+// THE TRIAL LINE EXPIRES BY ITSELF. The Stripe payment links carry a trial
+// that shortens by one day every night and is cleared entirely on 10 November,
+// when training starts. From that morning the page must stop offering a free
+// trial, because Stripe will charge immediately and the claim would be false.
+// Rather than relying on someone remembering to edit this page that day, the
+// line is hidden by default and only revealed before the cutoff.
+(function(){
+  var TRIAL_ENDS = Date.parse('2026-11-09T14:00:00Z'); // midnight, 10 Nov, Brisbane
+  if (!TRIAL_ENDS || Date.now() >= TRIAL_ENDS) return;
+  document.querySelectorAll('.js-plan-trial').forEach(function(el){ el.classList.add('show'); });
+})();
 </script>
 
 </body>
