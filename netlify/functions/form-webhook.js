@@ -21,6 +21,12 @@
 //                             boundary in this system has its own, none are
 //                             shared. Must match the portal's value exactly
 //                             or the waitlist welcome email never fires
+//   SENTRY_DSN                optional. Dormant until set, same convention
+//                             as the portal (sentry.server.config.ts). Set
+//                             it to the same project the portal reports to
+//                             so a broken consent write is visible from
+//                             either side of the trust boundary -- see
+//                             PROMPT_60, Fault 1.
 //
 // The service role key is required (not the anon key) because both target
 // tables have Row Level Security enabled and no insert policy for
@@ -29,10 +35,26 @@
 // never sent to or used by the browser.
 
 const { createClient } = require('@supabase/supabase-js');
+const Sentry = require('@sentry/node');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const ASSESSMENT_NOTIFY_SECRET = process.env.ASSESSMENT_NOTIFY_SECRET;
+
+// PROMPT_60. A broken consent write used to be a console.error swallowed
+// by Netlify's own logs and nothing else -- the exact reason Fault 1 ran
+// undetected for every submission between 2 November and this fix. init()
+// is a no-op without SENTRY_DSN, same as the portal, so this function
+// behaves identically in any environment that has not set it.
+//
+// Sentry.captureException/captureMessage below only queue an event; they
+// do not send it. A Netlify function has nothing keeping the process
+// alive after the handler returns to deliver a queued event on its own,
+// so exports.handler calls Sentry.flush() exactly once, right before its
+// own return, to cover every event queued anywhere during the call.
+if (process.env.SENTRY_DSN) {
+  Sentry.init({ dsn: process.env.SENTRY_DSN, tracesSampleRate: 0 });
+}
 
 // The portal endpoint that sends email 1 of the assessment nurture
 // sequence immediately, rather than waiting for the next daily cron pass.
@@ -91,6 +113,16 @@ const CONSENT_TEXT = {
   // the page itself (the line under the submit button), not repeated
   // inside every version of this checkbox text.
   v3: 'Send me the complimentary follow up to strengthen the capacity I scored lowest on.',
+  // v4, 2 November 2026. The opt in checkbox was removed. Everyone who
+  // taps See My Results now gives marketing consent, via a statement
+  // (id="consentStatement" in score.html) that sits above the fields in
+  // readable type rather than inside a box to tick. This map's own
+  // comment already explains why the wording lives here rather than in
+  // a posted field: posted text is forgeable, and this is the record
+  // that has to survive a complaint. This entry was the one actually
+  // missing when the page shipped v4, which is why every submission
+  // since 2 November recorded no consent at all -- PROMPT_60.
+  v4: 'Enter your details to see your full Mental Fitness Score and get your personalised PDF report. Centurio will also email you one practice a week for the capacity you scored lowest on. Unsubscribe any time.',
 };
 
 const FORM_HANDLERS = {
@@ -130,9 +162,13 @@ const FORM_HANDLERS = {
       // costs one subscriber and is defensible. The console error is the
       // signal to fix the mismatch.
       if (consent && !text) {
-        console.error(
-          `form-webhook: marketing consent ticked with unknown consent_version "${version}", recording as NO consent`
-        );
+        const message = `form-webhook: marketing consent ticked with unknown consent_version "${version}", recording as NO consent`;
+        console.error(message);
+        // PROMPT_60, Fault 1. This exact branch, silent beyond the Netlify
+        // function log above, is why 14 submissions recorded no consent
+        // after the results page moved to a version this map had not yet
+        // learned. A write that silently drops consent must be visible.
+        Sentry.captureMessage(message, { level: 'error', extra: { version, email: str(data.email) } });
       }
 
       const consented = consent && Boolean(text);
@@ -495,6 +531,13 @@ exports.handler = async (event) => {
       `form-webhook: Supabase insert into "${handlerConfig.table}" failed for form "${formName}":`,
       error
     );
+    // PROMPT_60. For the consent carrying form this is also, specifically,
+    // a consent write failing -- the whole row, marketing fields included,
+    // never reaches the table. Visible beyond Netlify's own function log.
+    Sentry.captureException(new Error(`Supabase insert into "${handlerConfig.table}" failed: ${error.message}`), {
+      extra: { formName, table: handlerConfig.table, code: error.code },
+    });
+    await Sentry.flush(2000);
     // 500 so Netlify retries. Nothing was written, so a retry is safe and
     // is the only way the submission is not simply lost.
     return { statusCode: 500, body: `Failed to save submission: ${error.message}` };
@@ -520,6 +563,12 @@ exports.handler = async (event) => {
   if (formName === 'waitlist' && inserted && inserted.id) {
     await triggerWaitlistWelcome(inserted.id);
   }
+
+  // Covers the consent mismatch event queued inside the mental-fitness-score
+  // map() above, on the success path where the row still inserted (minus
+  // consent). A short lived function will not deliver a queued event on
+  // its own once this returns, so every success exit flushes once here.
+  await Sentry.flush(2000);
 
   return { statusCode: 200, body: 'OK' };
 };
