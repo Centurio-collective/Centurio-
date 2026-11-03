@@ -436,9 +436,16 @@ let currentPlan = 'annual';
 
 // The default href is baked into the markup, so apply the code to it on load
 // for anyone who arrives and clicks without touching the toggle.
+// Fixed 3 November 2026. This read getElementById('planCta'), which stopped
+// matching when the pricing block was duplicated and its ids became classes.
+// The guard then failed silently, so anyone arriving on a ?code= link and
+// clicking the button without first touching the plan toggle went to Stripe
+// with no promo code and paid full price. Both blocks are updated now.
 document.addEventListener('DOMContentLoaded', function(){
-  var cta = document.getElementById('planCta');
-  if (cta && PARTNER_CODE) cta.href = checkoutUrl(plans[currentPlan].url);
+  if (!PARTNER_CODE) return;
+  document.querySelectorAll('.js-plan-cta').forEach(function(cta){
+    cta.href = checkoutUrl(plans[currentPlan].url);
+  });
 });
 
 // A partner link carries ?code=<PROMO>. Stripe applies it automatically on
