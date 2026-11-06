@@ -432,20 +432,37 @@ const plans = {
 // handler on planCta (below) knows which plan the visitor was actually
 // looking at -- not PII, just which of two public price points was
 // clicked.
-let currentPlan = 'annual';
+//
+// Monthly is the default for every visitor (6 November 2026, Sterling),
+// not just a fallback for the markup's own initial state -- the markup
+// itself still hardcodes annual ($590/year, the annual toggle button
+// marked active, the CTA pointing at the annual Payment Link), which is
+// why the DOMContentLoaded handler below calls setPlan('monthly')
+// unconditionally rather than relying on this variable alone: setPlan
+// is what actually rewrites the toggle's active state, every price and
+// save line, and both CTA hrefs to match.
+let currentPlan = 'monthly';
 
-// The default href is baked into the markup, so apply the code to it on load
-// for anyone who arrives and clicks without touching the toggle.
-// Fixed 3 November 2026. This read getElementById('planCta'), which stopped
-// matching when the pricing block was duplicated and its ids became classes.
-// The guard then failed silently, so anyone arriving on a ?code= link and
-// clicking the button without first touching the plan toggle went to Stripe
-// with no promo code and paid full price. Both blocks are updated now.
+// Runs on every load, every code and no code alike.
+//
+// setPlan('monthly') establishes the new default -- toggle state, price,
+// and (via checkoutUrl, which already reads PARTNER_CODE) the CTA href,
+// promo code included. This also replaces the narrower fix from 3
+// November 2026 that only patched the CTA href when a code was present:
+// that one line is exactly what setPlan's own '.js-plan-cta' update
+// already does, for every visitor, not only a referred one.
+//
+// GROW50 is a monthly only code -- there is no annual coupon on that
+// Payment Link, and annual is rejected at Stripe for it. So the toggle
+// itself is hidden for GROW50 specifically, rather than left showing an
+// option that would fail at checkout. Every other code, and no code,
+// leaves the toggle visible and switchable to annual exactly as before.
 document.addEventListener('DOMContentLoaded', function(){
-  if (!PARTNER_CODE) return;
-  document.querySelectorAll('.js-plan-cta').forEach(function(cta){
-    cta.href = checkoutUrl(plans[currentPlan].url);
-  });
+  setPlan('monthly');
+
+  if (PARTNER_CODE === 'GROW50') {
+    document.querySelectorAll('.toggle').forEach(function(el){ el.style.display = 'none'; });
+  }
 });
 
 // A partner link carries ?code=<PROMO>. Stripe applies it automatically on
