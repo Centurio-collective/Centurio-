@@ -516,20 +516,19 @@ function checkoutUrl(base){
 // ?prefilled_promo_code=GROW50 showed "Something went wrong" and full
 // price on load -- its client side auto apply races Adaptive Pricing's
 // own currency detection and loses often enough to explain 13 of 16
-// checkouts reaching Stripe with no discount. Routed instead through
-// members.centuriocollective.com/api/checkout/grow50, which creates the
-// Checkout Session server side with GROW50 already attached, so there
-// is no client side apply step left to race. Every other code, and no
-// code, is untouched and still goes straight to the static monthly
-// Payment Link via checkoutUrl above.
-const GROW50_CHECKOUT_URL = 'https://members.centuriocollective.com/api/checkout/grow50';
-
-// These three helpers are the only place that decides when the
-// discounted price, CTA label and CTA destination show, so the toggle
-// hidden for GROW50 (see the DOMContentLoaded handler above) staying
-// monthly only is the one case that matters -- annual is never visible
-// to a GROW50 visitor, so none of the three need a discounted variant
-// for it.
+// checkouts reaching Stripe with no discount. The real fix is a server
+// created Checkout Session (centurio-member-portal's
+// app/api/checkout/grow50/route.ts), temporarily rolled back to this
+// same prefilled_promo_code link 7 November 2026 while that route's own
+// Stripe key is sorted out server side -- re point ctaHref at it once
+// that is live and reverified. Nothing here changes what the discount
+// actually is, only how reliably it gets applied.
+//
+// These two helpers are the only place that decides when the
+// discounted price and CTA label show, so the toggle hidden for GROW50
+// (see the DOMContentLoaded handler above) staying monthly only is the
+// one case that matters -- annual is never visible to a GROW50
+// visitor, so neither needs a discounted variant for it.
 function priceHtml(which){
   const p = plans[which];
   if (which === 'monthly' && PARTNER_CODE === 'GROW50') {
@@ -541,11 +540,6 @@ function priceHtml(which){
 function ctaLabel(which){
   if (which === 'monthly' && PARTNER_CODE === 'GROW50') return 'Join now with 50% off';
   return plans[which].cta;
-}
-
-function ctaHref(which){
-  if (which === 'monthly' && PARTNER_CODE === 'GROW50') return GROW50_CHECKOUT_URL;
-  return checkoutUrl(plans[which].url);
 }
 
 // Rewritten 3 November 2026 when a second pricing block went in near the top.
@@ -562,7 +556,7 @@ function setPlan(which){
     if(p.save){ el.textContent = p.save; el.classList.add('show'); }
     else { el.classList.remove('show'); }
   });
-  all('.js-plan-cta').forEach(el => { el.textContent = ctaLabel(which); el.href = ctaHref(which); });
+  all('.js-plan-cta').forEach(el => { el.textContent = ctaLabel(which); el.href = checkoutUrl(p.url); });
   all('.js-btn-monthly').forEach(el => el.classList.toggle('active', which === 'monthly'));
   all('.js-btn-annual').forEach(el => el.classList.toggle('active', which === 'annual'));
 }
