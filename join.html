@@ -165,6 +165,17 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
      wrong. Shown only until training starts. */
   .plan-trial{ margin-top:16px; font-size:13.5px; line-height:1.5; color:var(--accent); font-weight:600; display:none; }
   .plan-trial.show{ display:block; }
+
+  /* Offer box. GROW50 only, hidden by default for the same reason the
+     trial line is: a promise about money and time should be absent, not
+     wrong, if the script never runs or the deadline has already passed. */
+  .offer-box{ border:1px solid var(--line); border-radius:4px; padding:18px 20px; margin-top:20px; text-align:left; display:none; }
+  .offer-box.show{ display:block; }
+  .offer-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .offer-label{ font-size:11px; letter-spacing:.14em; color:var(--muted); font-weight:600; }
+  .offer-countdown{ font-size:12.5px; color:var(--accent); font-weight:600; white-space:nowrap; }
+  .offer-highlight{ margin-top:10px; font-size:15px; line-height:1.5; color:var(--accent); font-weight:600; }
+  .offer-sub{ margin-top:4px; font-size:13.5px; line-height:1.5; color:var(--muted); }
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -212,6 +223,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="plan-price js-plan-price">$590<span>/year</span></div>
         <div class="plan-save show js-plan-save">Save $118, that's 2 months free</div>
         <p class="plan-trial js-plan-trial">Free until Tuesday 10 November. Your first payment is taken the day training starts.</p>
+        <div class="offer-box js-offer-box">
+          <div class="offer-row">
+            <span class="offer-label">COMPLIMENTARY 1:1 WITH STERLING</span>
+            <span class="offer-countdown js-offer-countdown">Closes in 2d 10h 14m</span>
+          </div>
+          <p class="offer-highlight">30 minutes. One on one. Valued at $150.</p>
+          <p class="offer-sub">Yours when you join before Tuesday 7:30pm.</p>
+        </div>
         <a class="plan-cta js-plan-cta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan, location: 'top' }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
         <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
@@ -392,6 +411,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="plan-price js-plan-price">$590<span>/year</span></div>
         <div class="plan-save show js-plan-save">Save $118, that's 2 months free</div>
         <p class="plan-trial js-plan-trial">Free until Tuesday 10 November. Your first payment is taken the day training starts.</p>
+        <div class="offer-box js-offer-box">
+          <div class="offer-row">
+            <span class="offer-label">COMPLIMENTARY 1:1 WITH STERLING</span>
+            <span class="offer-countdown js-offer-countdown">Closes in 2d 10h 14m</span>
+          </div>
+          <p class="offer-highlight">30 minutes. One on one. Valued at $150.</p>
+          <p class="offer-sub">Yours when you join before Tuesday 7:30pm.</p>
+        </div>
         <a class="plan-cta js-plan-cta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan, location: 'bottom' }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
         <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
@@ -536,6 +563,45 @@ function setPlan(which){
   var TRIAL_ENDS = Date.parse('2026-11-09T14:00:00Z'); // midnight, 10 Nov, Brisbane
   if (!TRIAL_ENDS || Date.now() >= TRIAL_ENDS) return;
   document.querySelectorAll('.js-plan-trial').forEach(function(el){ el.classList.add('show'); });
+})();
+
+// COMPLIMENTARY 1:1 OFFER BOX. GROW50 only, hidden by default for the
+// same reason the trial line is: a promise with a deadline must be
+// absent, not wrong, once the deadline has passed or if this script
+// never runs. The countdown is live rather than a value printed once at
+// load, so a visitor who leaves the tab open overnight still sees a
+// true number and not a stale one. Closes at the same moment training
+// starts, Tuesday 10 November, 7:30pm Brisbane -- later in the same day
+// than the trial line's own midnight cutoff above, since the trial and
+// the complimentary session are two different promises with two
+// different deadlines.
+(function(){
+  var OFFER_DEADLINE = Date.parse('2026-11-10T09:30:00Z'); // 7:30pm, 10 Nov, Brisbane
+  if (!OFFER_DEADLINE || PARTNER_CODE !== 'GROW50') return;
+
+  var boxes = document.querySelectorAll('.js-offer-box');
+  var counters = document.querySelectorAll('.js-offer-countdown');
+  if (!boxes.length) return;
+
+  var timer;
+  function tick(){
+    var remaining = OFFER_DEADLINE - Date.now();
+    if (remaining <= 0) {
+      boxes.forEach(function(el){ el.classList.remove('show'); });
+      if (timer) clearInterval(timer);
+      return;
+    }
+    var totalMinutes = Math.floor(remaining / 60000);
+    var days = Math.floor(totalMinutes / 1440);
+    var hours = Math.floor((totalMinutes % 1440) / 60);
+    var minutes = totalMinutes % 60;
+    var text = 'Closes in ' + days + 'd ' + hours + 'h ' + minutes + 'm';
+    counters.forEach(function(el){ el.textContent = text; });
+    boxes.forEach(function(el){ el.classList.add('show'); });
+  }
+
+  tick();
+  timer = setInterval(tick, 30000);
 })();
 </script>
 
