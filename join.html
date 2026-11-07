@@ -105,6 +105,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .plan-name{ font-size:13px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase; }
   .plan-price{ font-family:'Inter',sans-serif; font-size:52px; font-weight:600; margin-top:10px; }
   .plan-price span{ font-size:16px; font-weight:400; color:var(--muted); font-family:'Inter',sans-serif; }
+  .plan-price-was{ font-size:26px; font-weight:400; color:var(--muted); text-decoration:line-through; margin-right:10px; }
   .plan-save{ margin-top:8px; font-size:13px; color:var(--accent); display:none; }
   .plan-save.show{ display:block; }
   .plan-cta{ display:inline-block; margin-top:24px; width:100%; background:var(--accent); color:#17120b; border:0; border-radius:2px; padding:16px 26px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; cursor:pointer; text-decoration:none; }
@@ -483,6 +484,29 @@ function checkoutUrl(base){
          'prefilled_promo_code=' + encodeURIComponent(PARTNER_CODE);
 }
 
+// GROW50 is 50% off monthly ($59 -> $29.50), applied at Stripe via
+// checkoutUrl's prefilled_promo_code. 7 November 2026, Sterling: 13 of 16
+// checkouts since launch reached Stripe with no promo code applied --
+// the page never showed the discount anywhere, so there was nothing on
+// screen to tell a referred visitor the code had actually done anything,
+// or to catch it if it hadn't. These two helpers are the only place that
+// decides when the discounted price and CTA show, so the toggle hidden
+// for GROW50 (see the DOMContentLoaded handler above) staying monthly
+// only is the one case that matters -- annual is never visible to a
+// GROW50 visitor, so it needs no discounted variant.
+function priceHtml(which){
+  const p = plans[which];
+  if (which === 'monthly' && PARTNER_CODE === 'GROW50') {
+    return '<span class="plan-price-was">' + p.price + '</span>$29.50<span>' + p.suffix + '</span>';
+  }
+  return p.price + '<span>' + p.suffix + '</span>';
+}
+
+function ctaLabel(which){
+  if (which === 'monthly' && PARTNER_CODE === 'GROW50') return 'Join now with 50% off';
+  return plans[which].cta;
+}
+
 // Rewritten 3 November 2026 when a second pricing block went in near the top.
 // getElementById returns one node, so with two blocks on the page the lower
 // one silently stopped updating and could show a price the button did not
@@ -492,12 +516,12 @@ function setPlan(which){
   currentPlan = which;
   const p = plans[which];
   const all = sel => document.querySelectorAll(sel);
-  all('.js-plan-price').forEach(el => { el.innerHTML = p.price + '<span>' + p.suffix + '</span>'; });
+  all('.js-plan-price').forEach(el => { el.innerHTML = priceHtml(which); });
   all('.js-plan-save').forEach(el => {
     if(p.save){ el.textContent = p.save; el.classList.add('show'); }
     else { el.classList.remove('show'); }
   });
-  all('.js-plan-cta').forEach(el => { el.textContent = p.cta; el.href = checkoutUrl(p.url); });
+  all('.js-plan-cta').forEach(el => { el.textContent = ctaLabel(which); el.href = checkoutUrl(p.url); });
   all('.js-btn-monthly').forEach(el => el.classList.toggle('active', which === 'monthly'));
   all('.js-btn-annual').forEach(el => el.classList.toggle('active', which === 'annual'));
 }
