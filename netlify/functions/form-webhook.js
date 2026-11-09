@@ -6,8 +6,15 @@
 // Configure this as the target for the outgoing webhooks in Netlify
 // (Site settings -> Forms -> Form notifications -> Outgoing webhook), one
 // per form ("waitlist", "mental-fitness-score", "affiliate-application",
-// "corporate-enquiry", "snapshot-request", "brand-partner"). All point at the
-// same function URL; the function branches on form_name.
+// "corporate-enquiry", "snapshot-request", "brand-partner", "pt-masterclass").
+// All point at the same function URL; the function branches on form_name.
+//
+// pt-masterclass (PROMPT_63) needs no notify secret of its own: unlike
+// mental-fitness-score and waitlist, which ping the portal immediately so
+// email 1 does not wait on a cron, the masterclass confirmation is picked
+// up by the portal's own hourly masterclass cron within the hour -- one
+// cron handling all seven of that sequence's keys rather than an eighth
+// immediate trigger path alongside it.
 //
 // Required environment variables (set in Netlify: Site settings ->
 // Environment variables):
@@ -301,7 +308,119 @@ const FORM_HANDLERS = {
     }),
     required: ['trainer_name', 'email'],
   },
+  // PROMPT_63. The free weekly PT Masterclass, masterclass.html, posting
+  // the "pt-masterclass" form. UPSERT, not insert: a trainer who
+  // registers a second time is an update to the same row, not a
+  // duplicate, so this is the one handler with upsertKey set -- see
+  // upsertByLowerEmail below for why that needs its own code path
+  // rather than the plain insert every other handler uses.
+  //
+  // Consent is written from the posted values, never resolved from a
+  // version map the way mental-fitness-score's is -- the brief for this
+  // form is explicit that marketing_consent_text is stored verbatim,
+  // because storing the sentence the person actually read is the whole
+  // point of that column.
+  'pt-masterclass': {
+    table: 'masterclass_registrations',
+    upsertKey: 'email',
+    map: (data) => {
+      const consented = str(data.marketing_consent) === 'yes';
+      return {
+        name: str(data.name),
+        email: str(data.email),
+        gym: str(data.gym),
+        client_count: str(data.client_count),
+        ...attribution(data),
+        marketing_consent: consented,
+        marketing_consent_at: consented ? new Date().toISOString() : null,
+        marketing_consent_source: consented ? 'masterclass_page' : null,
+        marketing_consent_version: consented ? str(data.consent_version) : null,
+        marketing_consent_text: consented ? str(data.marketing_consent_text) : null,
+      };
+    },
+    required: ['name', 'email'],
+  },
 };
+
+/**
+ * Escapes the two ilike wildcard characters (and the escape character
+ * itself) so an ilike comparison behaves as a case insensitive EQUALS
+ * rather than a pattern match. Used only to find a masterclass
+ * registration by lower(email) -- see upsertByLowerEmail below.
+ */
+function escapeIlike(value) {
+  return value.replace(/[%_\\]/g, (match) => `\\${match}`);
+}
+
+/**
+ * masterclass_registrations is unique on lower(email), a functional
+ * index, not on the email column itself -- so Supabase's own
+ * .upsert({ onConflict: 'email' }) cannot target it; PostgREST's
+ * onConflict only matches a constraint by its literal column list, and
+ * "email" does not textually match "lower(email)". This does the same
+ * job in two steps instead: find the existing row case insensitively
+ * (ilike with no wildcards in the search value behaves as case
+ * insensitive equality), then update it if found, insert if not.
+ *
+ * The 23505 fallback below closes the one real race this introduces:
+ * two submissions for the same address landing close enough together
+ * that both run the SELECT before either runs the INSERT. The second
+ * INSERT then fails on the unique index rather than silently creating a
+ * duplicate, and is retried as an update rather than surfaced as an
+ * error -- a genuine race resolving to one row with the second
+ * submission's data, which is the correct outcome either way.
+ */
+async function upsertByLowerEmail(client, table, emailField, row) {
+  const emailValue = row[emailField];
+  const emailLower = emailValue.toLowerCase();
+
+  const { data: existing, error: selectError } = await client
+    .from(table)
+    .select('id')
+    .ilike(emailField, escapeIlike(emailLower))
+    .limit(1)
+    .maybeSingle();
+
+  if (selectError) throw selectError;
+
+  if (existing) {
+    const { data: updated, error: updateError } = await client
+      .from(table)
+      .update({ ...row, last_registered_at: new Date().toISOString() })
+      .eq('id', existing.id)
+      .select('id')
+      .single();
+    if (updateError) throw updateError;
+    return { id: updated.id, action: 'updated' };
+  }
+
+  const { data: inserted, error: insertError } = await client.from(table).insert(row).select('id').single();
+
+  if (insertError && insertError.code === '23505') {
+    // Lost the race between the SELECT above and this INSERT -- someone
+    // else's submission for the same address landed in between. Fall
+    // back to the update path rather than erroring the webhook.
+    const { data: retryExisting, error: retrySelectError } = await client
+      .from(table)
+      .select('id')
+      .ilike(emailField, escapeIlike(emailLower))
+      .limit(1)
+      .maybeSingle();
+    if (retrySelectError || !retryExisting) throw insertError;
+
+    const { data: updated, error: updateError } = await client
+      .from(table)
+      .update({ ...row, last_registered_at: new Date().toISOString() })
+      .eq('id', retryExisting.id)
+      .select('id')
+      .single();
+    if (updateError) throw updateError;
+    return { id: updated.id, action: 'updated' };
+  }
+
+  if (insertError) throw insertError;
+  return { id: inserted.id, action: 'inserted' };
+}
 
 // The nine attribution fields, mapped in one place so the assessment
 // and anything added later cannot drift apart on which of them exist
@@ -504,46 +623,76 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: 'Server misconfiguration' };
   }
 
-  // .select('id').single() so the new row's id is available to trigger
-  // email 1. Without it there is nothing to hand the portal.
-  const { data: inserted, error } = await client
-    .from(handlerConfig.table)
-    .insert(row)
-    .select('id')
-    .single();
+  let inserted;
 
-  // ALREADY ON THE LIST IS NOT AN ERROR. waitlist_signups carries a
-  // unique index on lower(email) as of 25 September, because the score
-  // results page became a second entry point and the same person can
-  // now reach the list twice. Returning 500 here would make Netlify
-  // retry forever, and the person would either get a second welcome
-  // email or none at all. 200, no insert, no welcome: they already had
-  // one the first time.
-  if (error && error.code === '23505') {
-    console.log(
-      `form-webhook: "${formName}" submission is already on the list, nothing to do`
-    );
-    return { statusCode: 200, body: 'Already subscribed' };
+  if (handlerConfig.upsertKey) {
+    // PROMPT_63. pt-masterclass only, for now: an update on a repeat
+    // registration rather than the insert-or-ignore every other handler
+    // uses. See upsertByLowerEmail's own doc comment for why this needs
+    // its own two step path instead of Supabase's .upsert({ onConflict }).
+    try {
+      const result = await upsertByLowerEmail(client, handlerConfig.table, handlerConfig.upsertKey, row);
+      inserted = { id: result.id };
+      console.log(
+        `form-webhook: ${result.action} "${formName}" submission in "${handlerConfig.table}" (id ${result.id})`
+      );
+    } catch (err) {
+      console.error(
+        `form-webhook: Supabase upsert into "${handlerConfig.table}" failed for form "${formName}":`,
+        err
+      );
+      Sentry.captureException(new Error(`Supabase upsert into "${handlerConfig.table}" failed: ${err.message}`), {
+        extra: { formName, table: handlerConfig.table, code: err.code },
+      });
+      await Sentry.flush(2000);
+      // 500 so Netlify retries. Nothing was durably lost: a registration
+      // that failed to land here never claimed a row, so a retry is
+      // exactly as safe as the plain insert path's own retry below.
+      return { statusCode: 500, body: `Failed to save submission: ${err.message}` };
+    }
+  } else {
+    // .select('id').single() so the new row's id is available to trigger
+    // email 1. Without it there is nothing to hand the portal.
+    const { data: insertedRow, error } = await client
+      .from(handlerConfig.table)
+      .insert(row)
+      .select('id')
+      .single();
+
+    // ALREADY ON THE LIST IS NOT AN ERROR. waitlist_signups carries a
+    // unique index on lower(email) as of 25 September, because the score
+    // results page became a second entry point and the same person can
+    // now reach the list twice. Returning 500 here would make Netlify
+    // retry forever, and the person would either get a second welcome
+    // email or none at all. 200, no insert, no welcome: they already had
+    // one the first time.
+    if (error && error.code === '23505') {
+      console.log(
+        `form-webhook: "${formName}" submission is already on the list, nothing to do`
+      );
+      return { statusCode: 200, body: 'Already subscribed' };
+    }
+
+    if (error) {
+      console.error(
+        `form-webhook: Supabase insert into "${handlerConfig.table}" failed for form "${formName}":`,
+        error
+      );
+      // PROMPT_60. For the consent carrying form this is also, specifically,
+      // a consent write failing -- the whole row, marketing fields included,
+      // never reaches the table. Visible beyond Netlify's own function log.
+      Sentry.captureException(new Error(`Supabase insert into "${handlerConfig.table}" failed: ${error.message}`), {
+        extra: { formName, table: handlerConfig.table, code: error.code },
+      });
+      await Sentry.flush(2000);
+      // 500 so Netlify retries. Nothing was written, so a retry is safe and
+      // is the only way the submission is not simply lost.
+      return { statusCode: 500, body: `Failed to save submission: ${error.message}` };
+    }
+
+    inserted = insertedRow;
+    console.log(`form-webhook: inserted "${formName}" submission into "${handlerConfig.table}"`);
   }
-
-  if (error) {
-    console.error(
-      `form-webhook: Supabase insert into "${handlerConfig.table}" failed for form "${formName}":`,
-      error
-    );
-    // PROMPT_60. For the consent carrying form this is also, specifically,
-    // a consent write failing -- the whole row, marketing fields included,
-    // never reaches the table. Visible beyond Netlify's own function log.
-    Sentry.captureException(new Error(`Supabase insert into "${handlerConfig.table}" failed: ${error.message}`), {
-      extra: { formName, table: handlerConfig.table, code: error.code },
-    });
-    await Sentry.flush(2000);
-    // 500 so Netlify retries. Nothing was written, so a retry is safe and
-    // is the only way the submission is not simply lost.
-    return { statusCode: 500, body: `Failed to save submission: ${error.message}` };
-  }
-
-  console.log(`form-webhook: inserted "${formName}" submission into "${handlerConfig.table}"`);
 
   // SPLIT FAILURE HANDLING, and the ordering matters. The insert has
   // already succeeded by this point, so a failure in the notify call must
