@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2299379764149940');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXEWKVER9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Centurio PT Masterclass</title>
+<meta name="description" content="A free 45 minute live masterclass for personal trainers. Every Monday, 7:30pm. Learn to train the part of your client that decides." />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:site_name" content="Centurio Collective">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Centurio PT Masterclass">
+<meta property="og:description" content="Free, live, every Monday at 7:30pm. For personal trainers who are tired of watching good clients quit.">
+<meta property="og:image" content="https://centuriocollective.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0f0e; --line:#2c312d; --text:#f4f1e8;
+    --muted:#9aa39c; --accent:#d8b56a;
+    --panel:#121513;
+    --c-lead:#8a8a8a; --c-align:#c9a97e; --c-regulate:#9aa0a3;
+    --c-connect:#b0554c; --c-grow:#5a8055; --c-perform:#8a8862;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .display{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.01em; }
+  a{color:inherit}
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 24px; }
+  img{max-width:100%}
+  @media (prefers-reduced-motion: reduce){ *{ scroll-behavior:auto !important; transition:none !important; } }
+  html{ scroll-behavior:smooth; }
+
+  header{ padding:26px 0; border-bottom:1px solid var(--line); }
+  .header-row{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; max-width:760px; margin:0 auto; padding:0 24px; }
+  .wordmark{ font-family:"League Gothic","Arial Narrow",Impact,sans-serif; font-size:31px; font-weight:400; letter-spacing:.5px; line-height:.85; }
+  .wordmark a{ text-decoration:none; }
+  .member-login-btn{display:inline-block;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
+  .member-login-btn:hover{background:var(--accent);color:#17120b;}
+
+  .eyebrow{ font-size:10px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; }
+  section{ padding:72px 0; }
+  section + section{ border-top:1px solid var(--line); }
+  .section-label{ font-size:10px; letter-spacing:.16em; color:var(--accent); text-transform:uppercase; font-weight:600; margin-bottom:14px; }
+  h1{ font-size:clamp(32px,6vw,54px); line-height:1.03; font-weight:700; letter-spacing:-.01em; }
+  h2{ font-size:clamp(24px,4vw,34px); line-height:1.12; font-weight:700; letter-spacing:-.01em; }
+  h3{ font-size:17px; font-weight:600; line-height:1.3; }
+  p{ font-size:17px; color:var(--text); }
+  .lede{ margin-top:20px; font-size:18px; color:var(--muted); max-width:560px; }
+  .body-copy{ margin-top:18px; color:var(--muted); }
+  .body-copy strong{ color:var(--text); font-weight:600; }
+
+  /* Hero */
+  .hero{ padding:76px 0 64px; }
+  .hero-tag{ display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); border-radius:999px; padding:7px 16px; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:26px; }
+  .pulse{ width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+  .facts{ margin-top:34px; display:flex; flex-wrap:wrap; gap:0; border:1px solid var(--line); border-radius:3px; overflow:hidden; }
+  .fact{ flex:1 1 150px; padding:16px 18px; border-right:1px solid var(--line); }
+  .fact:last-child{ border-right:0; }
+  .fact-k{ font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .fact-v{ margin-top:5px; font-size:15px; font-weight:600; }
+
+  .btn{ display:inline-block; background:var(--accent); color:#17120b; border:0; border-radius:2px; padding:17px 38px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; cursor:pointer; text-decoration:none; }
+  .btn:hover{ filter:brightness(1.08); }
+  .btn:disabled{ opacity:.4; cursor:default; }
+  .cta-row{ margin-top:34px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  .cta-note{ font-size:13px; color:var(--muted); }
+
+  /* Pain list */
+  .beats{ margin-top:26px; display:flex; flex-direction:column; gap:14px; }
+  .beat{ font-size:19px; line-height:1.45; }
+  .beat.last{ color:var(--accent); font-weight:600; }
+
+  /* Cards */
+  .cells{ margin-top:34px; display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden; }
+  .cell{ background:var(--bg); padding:26px 24px; }
+  .cell-n{ font-family:'League Gothic',sans-serif; font-size:24px; color:var(--accent); line-height:1; }
+  .cell h3{ margin-top:12px; }
+  .cell p{ margin-top:8px; font-size:15px; color:var(--muted); }
+
+  /* Run sheet */
+  .run{ margin-top:30px; border-top:1px solid var(--line); }
+  .run-row{ display:flex; gap:22px; padding:20px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+  .run-t{ flex:0 0 58px; font-family:'League Gothic',sans-serif; font-size:21px; color:var(--accent); line-height:1.1; padding-top:2px; }
+  .run-b h3{ font-size:16px; }
+  .run-b p{ margin-top:5px; font-size:15px; color:var(--muted); }
+
+  /* Paths */
+  .paths{ margin-top:34px; display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  .path{ border:1px solid var(--line); border-radius:3px; padding:28px 26px; background:var(--panel); }
+  .path.feature{ border-color:rgba(216,181,106,.45); }
+  .path-k{ font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .path h3{ margin-top:10px; font-size:21px; }
+  .path .who{ margin-top:6px; font-size:13px; color:var(--accent); }
+  .path ul{ margin-top:18px; list-style:none; display:flex; flex-direction:column; gap:11px; }
+  .path li{ font-size:15px; color:var(--muted); padding-left:18px; position:relative; line-height:1.5; }
+  .path li::before{ content:""; position:absolute; left:0; top:9px; width:5px; height:5px; border-radius:50%; background:var(--accent); }
+
+  /* Who for */
+  .who-grid{ margin-top:28px; display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .who-col h3{ color:var(--accent); font-size:13px; letter-spacing:.1em; text-transform:uppercase; }
+  .who-col ul{ margin-top:14px; list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .who-col li{ font-size:15px; color:var(--muted); line-height:1.5; }
+
+  /* Form */
+  .form-shell{ margin-top:30px; border:1px solid var(--line); border-radius:3px; padding:32px 30px; background:var(--panel); }
+  .consent{ margin-top:4px; margin-bottom:20px; color:var(--muted); font-size:15px; line-height:1.55; }
+  .field{ margin-bottom:12px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  label.fl{ display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  input[type=text], input[type=email], select{
+    width:100%; background:#0a0c0b; border:1px solid var(--line); border-radius:2px;
+    padding:14px 15px; color:var(--text); font-family:'Inter',sans-serif; font-size:16px;
+  }
+  input::placeholder{ color:#5f6a63; }
+  input:focus, select:focus{ border-color:var(--accent); outline:none; }
+  select{ appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%); background-position:calc(100% - 20px) 21px, calc(100% - 14px) 21px; background-size:6px 6px,6px 6px; background-repeat:no-repeat; }
+  .accept-note{ margin-top:14px; font-size:12px; line-height:1.6; color:var(--muted); }
+  .accept-note a{ color:var(--muted); text-decoration:underline; }
+  .accept-note a:hover{ color:var(--accent); }
+  .form-msg{ margin-top:14px; font-size:14px; min-height:20px; }
+  .form-msg.err{ color:#e08b7f; }
+  .form-msg.ok{ color:var(--accent); }
+
+  .done{ display:none; text-align:center; padding:24px 0; }
+  .done.active{ display:block; }
+  .done h2{ margin-bottom:14px; }
+
+  footer{ border-top:1px solid var(--line); padding:40px 0 60px; }
+  .foot-row{ display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+  .foot-row a{ text-decoration:none; }
+  .foot-row a:hover{ color:var(--accent); }
+
+  /* Full bleed image band */
+  .media-band{ position:relative; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .media-band img{ display:block; width:100%; height:clamp(260px,42vw,460px); object-fit:cover; object-position:center 42%; }
+  .media-cap{ position:absolute; inset:auto 0 0 0; padding:28px 24px; background:linear-gradient(to top,rgba(13,15,14,.94),rgba(13,15,14,.55) 55%,transparent); }
+  .media-cap .inner{ max-width:760px; margin:0 auto; }
+  .media-cap p{ font-family:'League Gothic',sans-serif; text-transform:uppercase; letter-spacing:.02em; font-size:clamp(20px,3.4vw,32px); line-height:1.1; color:var(--text); }
+  .media-cap span{ color:var(--accent); }
+
+  /* Capacity strip */
+  .cap-strip{ margin-top:28px; display:flex; flex-wrap:wrap; gap:8px; }
+  .cap{ display:inline-flex; align-items:center; gap:9px; border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .cap i{ width:8px; height:8px; border-radius:50%; display:block; }
+
+  /* Host */
+  .host{ margin-top:30px; display:flex; gap:28px; align-items:flex-start; border:1px solid var(--line); border-radius:3px; padding:30px 28px; background:var(--panel); }
+  .host-photo{ flex:0 0 132px; }
+  .host-photo img{ display:block; width:132px; height:132px; object-fit:cover; border-radius:2px; filter:grayscale(1); }
+  .host blockquote{ font-size:19px; line-height:1.45; font-weight:600; }
+  .host cite{ display:block; margin-top:14px; font-style:normal; font-size:13px; color:var(--accent); letter-spacing:.04em; }
+  .host p{ margin-top:14px; font-size:15px; color:var(--muted); }
+
+  /* Mid CTA */
+  .mid-cta{ margin-top:36px; text-align:center; border:1px solid var(--line); border-radius:3px; padding:32px 26px; background:var(--panel); }
+  .mid-cta h3{ font-size:21px; }
+  .mid-cta p{ margin-top:8px; font-size:15px; color:var(--muted); }
+  .mid-cta .btn{ margin-top:20px; }
+
+  /* Sticky bar */
+  .stickybar{ position:fixed; left:0; right:0; bottom:0; z-index:40; background:rgba(13,15,14,.96); border-top:1px solid var(--line); padding:12px 16px; display:none; align-items:center; justify-content:space-between; gap:14px; backdrop-filter:blur(8px); }
+  .stickybar.show{ display:flex; }
+  .stickybar .sb-t{ font-size:12px; color:var(--muted); line-height:1.35; }
+  .stickybar .sb-t b{ display:block; color:var(--text); font-size:13px; font-weight:600; }
+  .stickybar .btn{ padding:13px 22px; font-size:13px; white-space:nowrap; }
+
+  @media (max-width:720px){
+    section{ padding:56px 0; }
+    .hero{ padding:56px 0 48px; }
+    .cells, .paths, .who-grid, .row2{ grid-template-columns:1fr; }
+    .paths{ gap:16px; }
+    .fact{ flex:1 1 50%; border-bottom:1px solid var(--line); }
+    .form-shell{ padding:26px 20px; }
+    .run-row{ gap:16px; }
+    .run-t{ flex:0 0 46px; font-size:18px; }
+    .host{ flex-direction:column; gap:20px; padding:24px 20px; }
+    .host-photo{ flex:none; }
+    .host-photo img{ width:96px; height:96px; }
+    body{ padding-bottom:74px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <div class="wordmark"><a href="/">CENTURIO</a></div>
+      <div class="eyebrow">Evidence based mental fitness training</div>
+    </div>
+    <a class="member-login-btn" href="https://members.centuriocollective.com">Member Login</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-tag"><span class="pulse"></span> Free live masterclass for personal trainers</div>
+      <h1>Your client knows exactly what to do. They stop doing it anyway.</h1>
+      <p class="lede">Forty five minutes, live, every Monday night. You leave knowing how to train the part of your client that decides whether they turn up.</p>
+
+      <div class="facts">
+        <div class="fact"><div class="fact-k">When</div><div class="fact-v">Mondays, 7:30pm AEST</div></div>
+        <div class="fact"><div class="fact-k">Length</div><div class="fact-v">45 minutes</div></div>
+        <div class="fact"><div class="fact-k">Where</div><div class="fact-v">Live on Zoom</div></div>
+        <div class="fact"><div class="fact-k">Cost</div><div class="fact-v">Free</div></div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn" href="#register">Save My Seat</a>
+        <span class="cta-note">Hosted by Sterling Cincotta, founder of Centurio.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE BAND -->
+  <div class="media-band">
+    <picture>
+      <source type="image/webp"
+              srcset="/assets/img/couple-landing-page-700.webp 700w,
+                      /assets/img/couple-landing-page-1000.webp 1000w,
+                      /assets/img/couple-landing-page-1536.webp 1536w"
+              sizes="100vw" />
+      <img src="/assets/img/couple-landing-page-1000.jpg"
+           srcset="/assets/img/couple-landing-page-700.jpg 700w,
+                   /assets/img/couple-landing-page-1000.jpg 1000w,
+                   /assets/img/couple-landing-page-1536.jpg 1536w"
+           sizes="100vw" width="1536" height="1024" decoding="async"
+           alt="A man and a woman running on treadmills on one side of a gym, and the same two people seated on the other side, both writing in notebooks." />
+    </picture>
+    <div class="media-cap">
+      <div class="inner">
+        <p>We did not invent the exercises. <span>We built the gym for your mind to train them.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">Why this exists</div>
+      <h2>To make Mental Fitness as normal as Physical Fitness.</h2>
+      <p class="body-copy">You already own half of that. You have spent years teaching people how to train a body, and you are very good at it.</p>
+      <p class="body-copy">The other half is the part nobody trained you for. It is also the part that decides whether your client is still standing in front of you in March.</p>
+
+      <div class="host">
+        <div class="host-photo">
+          <img src="/assets/img/affiliates/founder-headshot.jpg" width="132" height="132" loading="lazy" decoding="async" alt="Sterling Cincotta, founder of Centurio" />
+        </div>
+        <div>
+          <blockquote>"I believe we have a responsibility to become all that we are capable of becoming."</blockquote>
+          <cite>Sterling Cincotta, Founder, Centurio</cite>
+          <p>Sterling hosts every session himself, live. The Centurio framework is built on the work of Simon Sinek, James Clear, Tim Grover, Shade Zahrai, Maya Raichoora and Tony Robbins, and he coaches it one on one every week.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">The problem you already know</div>
+      <h2>You have watched this happen all year.</h2>
+      <div class="beats">
+        <p class="beat">They start strong. Six weeks in, they are a different person.</p>
+        <p class="beat">Then work gets loud. Something at home goes wrong.</p>
+        <p class="beat">They miss a Tuesday. Then the Thursday.</p>
+        <p class="beat">They stop replying to your messages.</p>
+        <p class="beat last">And you lose a client who was doing really well.</p>
+      </div>
+      <p class="body-copy">Nothing went wrong with the programming. The programming was fine. What broke was the promise they made to themselves, and the moment that breaks, you are not getting them back with a better split.</p>
+      <p class="body-copy"><strong>That is a trainable capacity.</strong> It has a method, it has evidence behind it, and in forty five minutes you will be able to use it on Tuesday morning.</p>
+    </div>
+  </section>
+
+  <!-- WHAT YOU LEAVE WITH -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">What you leave with</div>
+      <h2>Four things, on the night.</h2>
+      <div class="cells">
+        <div class="cell">
+          <div class="cell-n">01</div>
+          <h3>The framework</h3>
+          <p>A clear picture of Mental Fitness and the six Core Capacities, explained the way you would explain muscle groups.</p>
+        </div>
+        <div class="cell">
+          <div class="cell-n">02</div>
+          <h3>One practice you can use</h3>
+          <p>Taught properly, not skimmed. Specific enough to run with a client the next morning.</p>
+        </div>
+        <div class="cell">
+          <div class="cell-n">03</div>
+          <h3>Your own Mental Fitness Score</h3>
+          <p>You take the assessment live, during the session. You cannot coach a capacity you have never measured in yourself.</p>
+        </div>
+        <div class="cell">
+          <div class="cell-n">04</div>
+          <h3>A way to get paid for it</h3>
+          <p>Your own referral link before you log off, and the option to apply for the founding coach cohort.</p>
+        </div>
+      </div>
+
+      <p class="body-copy">The six Core Capacities, which is the whole framework in one line:</p>
+      <div class="cap-strip">
+        <span class="cap"><i style="background:var(--c-lead)"></i> Lead</span>
+        <span class="cap"><i style="background:var(--c-align)"></i> Align</span>
+        <span class="cap"><i style="background:var(--c-regulate)"></i> Regulate</span>
+        <span class="cap"><i style="background:var(--c-connect)"></i> Connect</span>
+        <span class="cap"><i style="background:var(--c-grow)"></i> Grow</span>
+        <span class="cap"><i style="background:var(--c-perform)"></i> Perform</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RUN SHEET -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">How the 45 minutes run</div>
+      <h2>No pitch for forty minutes.</h2>
+      <p class="body-copy">Thirty five minutes of training, ten of questions. The commercial part sits at the end where it belongs, and you are welcome to leave before it.</p>
+      <div class="run">
+        <div class="run-row"><div class="run-t">0:00</div><div class="run-b"><h3>Welcome</h3><p>Where you train, and how long you have been doing this.</p></div></div>
+        <div class="run-row"><div class="run-t">0:07</div><div class="run-b"><h3>The client who quits</h3><p>What actually breaks, and why it has nothing to do with your programming.</p></div></div>
+        <div class="run-row"><div class="run-t">0:12</div><div class="run-b"><h3>The gym for the mind</h3><p>The six Core Capacities, and which ones your clients are failing on.</p></div></div>
+        <div class="run-row"><div class="run-t">0:17</div><div class="run-b"><h3>You take the Score</h3><p>Three minutes, live. You will find out which capacity is your own weakest.</p></div></div>
+        <div class="run-row"><div class="run-t">0:21</div><div class="run-b"><h3>We train one, properly</h3><p>One principle, one practice, taught in full. This is the part you take to work.</p></div></div>
+        <div class="run-row"><div class="run-t">0:29</div><div class="run-b"><h3>What it means for your business</h3><p>Retention first. Then the two ways you can earn from this.</p></div></div>
+        <div class="run-row"><div class="run-t">0:35</div><div class="run-b"><h3>Questions</h3><p>Live, as long as they keep coming.</p></div></div>
+      </div>
+
+      <div class="mid-cta">
+        <h3>Next session is Monday at 7:30pm.</h3>
+        <p>Free, and the replay comes to you either way if something comes up.</p>
+        <a class="btn" href="#register">Save My Seat</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO FOR -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">Who this is for</div>
+      <h2>Trainers who already care past the session.</h2>
+      <div class="who-grid">
+        <div class="who-col">
+          <h3>Come along if</h3>
+          <ul>
+            <li>You are an independent trainer or you run a small studio.</li>
+            <li>You already think about your clients between sessions.</li>
+            <li>You are tired of losing good people to life getting busy.</li>
+            <li>You want something to offer that nobody down the road has.</li>
+          </ul>
+        </div>
+        <div class="who-col">
+          <h3>Probably not for you if</h3>
+          <ul>
+            <li>You are looking for a qualification to put on a wall.</li>
+            <li>You want a done for you program with no learning in it.</li>
+            <li>You are after clinical or psychological training. This is coaching, and anyone who needs clinical help gets referred on.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="body-copy">Trainers employed by a chain are very welcome. Come and learn, and take the referral link.</p>
+    </div>
+  </section>
+
+  <!-- TWO PATHS -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">After the session</div>
+      <h2>Two ways to take it further.</h2>
+      <p class="body-copy">Both are explained on the night. Neither is a condition of attending.</p>
+      <div class="paths">
+        <div class="path">
+          <div class="path-k">Path one</div>
+          <h3>Refer</h3>
+          <div class="who">Open to every trainer on the call</div>
+          <ul>
+            <li>Send clients to the free Mental Fitness Score on your own link.</li>
+            <li>Earn 30% of the membership, every month, for as long as that member stays.</li>
+            <li>Your client gets 10% off their first month.</li>
+            <li>Costs you nothing. You can set it up the same night.</li>
+          </ul>
+        </div>
+        <div class="path feature">
+          <div class="path-k">Path two</div>
+          <h3>Founding coach</h3>
+          <div class="who">Five places, by application</div>
+          <ul>
+            <li>Get certified to deliver Centurio 1:1 and group sessions yourself.</li>
+            <li>Keep 100% of the revenue from your own sessions.</li>
+            <li>Plus 30% on every member who joins through your coach code.</li>
+            <li>Mentored directly by Sterling while you build it.</li>
+            <li>Apply on the night, then an application call to talk it through.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="register">
+    <div class="wrap">
+
+      <div id="formWrap">
+        <div class="section-label">Save your seat</div>
+        <h2>Free, live, every Monday at 7:30pm.</h2>
+
+        <div class="form-shell">
+          <!-- CONSENT NOTE. This paragraph IS the consent. Under the Spam Act
+               express consent can be given by filling in a form, provided the
+               person knows at that moment what they are agreeing to receive.
+               It must name the sender, the cadence and the way out, and it must
+               never be buried in the terms or the privacy policy. If this
+               wording changes, bump consent_version below, because the stored
+               record has to keep matching what was actually on screen. -->
+          <p class="consent" id="consentStatement">Enter your details to save your seat. Centurio will email you the Zoom link, a reminder before we start and the replay afterwards. We will also send you one practice a week that you can use with your own clients. Unsubscribe any time.</p>
+
+          <form id="regForm" method="POST" name="pt-masterclass" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="pt-masterclass" />
+            <p style="display:none"><label>Do not fill this out: <input name="bot-field" /></label></p>
+
+            <div class="field">
+              <label class="fl" for="rName">Your name</label>
+              <input type="text" id="rName" name="name" placeholder="First and last name" autocomplete="name" required />
+            </div>
+
+            <div class="field">
+              <label class="fl" for="rEmail">Email address</label>
+              <input type="email" id="rEmail" name="email" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <label class="fl" for="rGym">Where you train</label>
+                <input type="text" id="rGym" name="gym" placeholder="Gym or suburb" autocomplete="organization" />
+              </div>
+              <div class="field">
+                <label class="fl" for="rClients">Clients right now</label>
+                <select id="rClients" name="client_count">
+                  <option value="">Select</option>
+                  <option value="0">Not training clients yet</option>
+                  <option value="1-10">1 to 10</option>
+                  <option value="11-25">11 to 25</option>
+                  <option value="26-50">26 to 50</option>
+                  <option value="50+">More than 50</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Declared deliberately. Netlify builds this form's field list from
+                 the markup at deploy time and silently discards anything posted
+                 that is not declared here. The consent fields are exactly the
+                 kind that go missing in a later edit and stop being recorded
+                 without ever erroring. -->
+            <input type="hidden" name="consent_version" value="mc-v1" />
+            <input type="hidden" name="marketing_consent" id="rConsent" value="yes" />
+            <!-- The exact sentence shown, stored against this person's own
+                 record. ACMA puts the burden of proving consent on the sender,
+                 and this makes it provable per person rather than something we
+                 have to reconstruct from what the page said on a given date. -->
+            <input type="hidden" name="marketing_consent_text" id="rConsentText" />
+
+            <input type="hidden" name="utm_source" />
+            <input type="hidden" name="utm_medium" />
+            <input type="hidden" name="utm_campaign" />
+            <input type="hidden" name="utm_content" />
+            <input type="hidden" name="utm_term" />
+            <input type="hidden" name="referrer" />
+            <input type="hidden" name="landing_url" />
+            <input type="hidden" name="fbclid" />
+            <input type="hidden" name="gclid" />
+
+            <button type="submit" class="btn" style="width:100%; margin-top:18px;" id="regBtn">Save My Seat</button>
+            <p class="form-msg" id="regMsg"></p>
+
+            <!-- Acceptance of Terms and Privacy ONLY. This is not permission to
+                 send marketing email and must never be written to
+                 marketing_consent. The Spam Act requires that permission to be
+                 its own express act, which is what the statement above the form
+                 is for. Bundling the two would invalidate consent for every
+                 registration. -->
+            <p class="accept-note">By saving your seat you accept our <a href="/terms" target="_blank" rel="noopener">Terms</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+          </form>
+        </div>
+      </div>
+
+      <div class="done" id="doneWrap">
+        <h2>Your seat is saved.</h2>
+        <p class="body-copy" style="max-width:480px;margin-left:auto;margin-right:auto;">Check your inbox. The Zoom link and a calendar invite are on their way, along with the Mental Fitness Score so you can take it before we start.</p>
+        <p class="body-copy" style="max-width:480px;margin-left:auto;margin-right:auto;">See you Monday at 7:30pm.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div>Centurio Collective</div>
+      <div>
+        <a href="/">Home</a> &nbsp;·&nbsp;
+        <a href="/trainers.html">Personal Trainers</a> &nbsp;·&nbsp;
+        <a href="/terms">Terms</a> &nbsp;·&nbsp;
+        <a href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="stickybar" id="stickybar">
+  <div class="sb-t"><b>The Centurio PT Masterclass</b> Free, Mondays 7:30pm</div>
+  <a class="btn" href="#register">Save My Seat</a>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var ATTRIBUTION_FIELDS = ['utm_source','utm_medium','utm_campaign','utm_content',
+                            'utm_term','referrer','landing_url','fbclid','gclid'];
+
+  // Sticky bar on phones only, once the hero CTA has scrolled away, and hidden
+  // again when the form itself is on screen so it never covers the fields.
+  (function stickyCta(){
+    var bar = document.getElementById('stickybar');
+    var hero = document.querySelector('.hero');
+    var reg  = document.getElementById('register');
+    if (!bar || !hero || !reg || !('IntersectionObserver' in window)) return;
+    var heroGone = false, formVisible = false;
+    function apply(){
+      var narrow = window.matchMedia('(max-width:720px)').matches;
+      bar.classList.toggle('show', narrow && heroGone && !formVisible);
+    }
+    new IntersectionObserver(function(es){
+      heroGone = !es[0].isIntersecting; apply();
+    }, { threshold:0 }).observe(hero);
+    new IntersectionObserver(function(es){
+      formVisible = es[0].isIntersecting; apply();
+    }, { threshold:0.12 }).observe(reg);
+    window.addEventListener('resize', apply);
+  })();
+
+  var form = document.getElementById('regForm');
+  if (!form) return;
+
+  // The stored consent text is read out of the live DOM rather than retyped in
+  // code, so the record can never drift from the sentence actually on screen.
+  (function mirrorConsentText(){
+    var p = document.getElementById('consentStatement');
+    var f = document.getElementById('rConsentText');
+    if (p && f) f.value = (p.textContent || '').trim();
+  })();
+
+  // Fill attribution from the URL and referrer.
+  (function fillAttribution(){
+    var params = new URLSearchParams(window.location.search);
+    function set(name, value){
+      var el = form.querySelector('input[name="' + name + '"]');
+      if (el && value) el.value = value;
+    }
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid']
+      .forEach(function(k){ set(k, params.get(k)); });
+    set('referrer', document.referrer || '');
+    set('landing_url', window.location.href);
+  })();
+
+  // Netlify discards any posted field that is not declared in the markup at
+  // deploy time, and it does it silently. This shouts during development if a
+  // field the submit handler sends has gone missing from the form.
+  (function assertPostedFieldsAreDeclared(){
+    var missing = ATTRIBUTION_FIELDS
+      .concat(['name','email','gym','client_count',
+               'marketing_consent','marketing_consent_text','consent_version'])
+      .filter(function(field){
+        return !form.querySelector('[name="' + field + '"]');
+      });
+    if (missing.length && console && console.error) {
+      console.error('[masterclass] fields posted but NOT declared in markup, Netlify will drop them:', missing);
+    }
+  })();
+
+  var btn = document.getElementById('regBtn');
+  var msg = document.getElementById('regMsg');
+
+  function encode(data){
+    return Object.keys(data).map(function(k){
+      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+    }).join('&');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    msg.className = 'form-msg';
+    msg.textContent = '';
+
+    var name  = document.getElementById('rName').value.trim();
+    var email = document.getElementById('rEmail').value.trim();
+
+    if (!name || !email || email.indexOf('@') === -1) {
+      msg.className = 'form-msg err';
+      msg.textContent = 'Please add your name and a valid email address.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Saving your seat...';
+
+    var payload = {
+      'form-name': 'pt-masterclass',
+      name: name,
+      email: email,
+      gym: document.getElementById('rGym').value.trim(),
+      client_count: document.getElementById('rClients').value,
+      marketing_consent: document.getElementById('rConsent').value,
+      consent_version: 'mc-v1',
+      marketing_consent_text: (document.getElementById('consentStatement').textContent || '').trim()
+    };
+    ATTRIBUTION_FIELDS.forEach(function(f){
+      var el = form.querySelector('input[name="' + f + '"]');
+      payload[f] = el ? el.value : '';
+    });
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode(payload)
+    })
+    .then(function(res){
+      if (!res.ok) throw new Error('status ' + res.status);
+      try { if (window.fbq) fbq('track', 'Lead', { content_name: 'PT Masterclass' }); } catch(_){}
+      try { if (window.gtag) gtag('event', 'masterclass_register', { method: 'landing_page' }); } catch(_){}
+      document.getElementById('formWrap').style.display = 'none';
+      document.getElementById('doneWrap').classList.add('active');
+      document.getElementById('doneWrap').scrollIntoView({ block: 'center' });
+    })
+    .catch(function(){
+      btn.disabled = false;
+      btn.textContent = 'Save My Seat';
+      msg.className = 'form-msg err';
+      msg.textContent = 'Something went wrong saving your seat. Please try again, or email sterling@centuriocollective.com and we will add you by hand.';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
