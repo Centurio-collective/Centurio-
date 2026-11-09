@@ -9,12 +9,16 @@
 // "corporate-enquiry", "snapshot-request", "brand-partner", "pt-masterclass").
 // All point at the same function URL; the function branches on form_name.
 //
-// pt-masterclass (PROMPT_63) needs no notify secret of its own: unlike
-// mental-fitness-score and waitlist, which ping the portal immediately so
-// email 1 does not wait on a cron, the masterclass confirmation is picked
-// up by the portal's own hourly masterclass cron within the hour -- one
-// cron handling all seven of that sequence's keys rather than an eighth
-// immediate trigger path alongside it.
+// pt-masterclass (PROMPT_63, revised PROMPT_64): the confirmation email
+// must reach someone within a minute of registering, not wait up to an
+// hour for the portal's hourly cron, since a trainer who registers
+// shortly before a 7:30pm session cannot afford that wait. So it pings
+// the portal immediately, the same shape as mental-fitness-score and
+// waitlist's own email 1 triggers, on every successful write -- an
+// insert OR an update, since someone re registering for a LATER session
+// date is owed a new confirmation too, which the portal's own ledger
+// (keyed on registration id, email key AND session date) is what
+// actually decides, not this function.
 //
 // Required environment variables (set in Netlify: Site settings ->
 // Environment variables):
@@ -28,6 +32,10 @@
 //                             boundary in this system has its own, none are
 //                             shared. Must match the portal's value exactly
 //                             or the waitlist welcome email never fires
+//   MASTERCLASS_NOTIFY_SECRET the same, for the PT Masterclass confirmation
+//                             email. Also its own secret, not shared with
+//                             any of the other two. Must match the portal's
+//                             value exactly or the confirmation never fires
 //   SENTRY_DSN                optional. Dormant until set, same convention
 //                             as the portal (sentry.server.config.ts). Set
 //                             it to the same project the portal reports to
@@ -71,6 +79,14 @@ const NOTIFY_URL =
   'https://members.centuriocollective.com/api/nurture/notify';
 
 const WAITLIST_NOTIFY_SECRET = process.env.WAITLIST_NOTIFY_SECRET;
+
+// The portal endpoint that sends the PT Masterclass confirmation
+// immediately (PROMPT_64), rather than waiting for the next hourly cron
+// pass. Overridable for pointing at a preview deployment while testing.
+const MASTERCLASS_NOTIFY_SECRET = process.env.MASTERCLASS_NOTIFY_SECRET;
+const MASTERCLASS_NOTIFY_URL =
+  process.env.MASTERCLASS_NOTIFY_URL ||
+  'https://members.centuriocollective.com/api/nurture/masterclass-notify';
 
 // The portal endpoint that sends the waitlist welcome immediately, rather
 // than waiting for the next daily cron pass. A welcome email that arrives
@@ -577,6 +593,42 @@ async function triggerWaitlistWelcome(signupId) {
   }
 }
 
+// Same contract as triggerResultEmail/triggerWaitlistWelcome above, and
+// for the same reason: takes only the registration row id, never an
+// email address, because an endpoint that emails whatever it is handed
+// is an open relay for Centurio branded mail. Failures logged and
+// swallowed identically -- the insert or update has already succeeded
+// by the time this runs, so a failed trigger must never turn into a
+// Netlify retry of the whole webhook (see the split failure handling
+// comment in the handler below).
+async function triggerMasterclassConfirmation(registrationId) {
+  if (!MASTERCLASS_NOTIFY_SECRET) {
+    console.error('form-webhook: MASTERCLASS_NOTIFY_SECRET is not set, cannot trigger the masterclass confirmation');
+    return;
+  }
+
+  try {
+    const res = await fetch(MASTERCLASS_NOTIFY_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${MASTERCLASS_NOTIFY_SECRET}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ registrationId }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`form-webhook: masterclass notify returned ${res.status}: ${body}`);
+      return;
+    }
+
+    console.log(`form-webhook: triggered the masterclass confirmation for registration ${registrationId}`);
+  } catch (err) {
+    console.error('form-webhook: masterclass notify call failed:', err.message);
+  }
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -711,6 +763,21 @@ exports.handler = async (event) => {
   // would not, which is why this must never return a non-2xx.
   if (formName === 'waitlist' && inserted && inserted.id) {
     await triggerWaitlistWelcome(inserted.id);
+  }
+
+  // Same split failure handling again, and fires on BOTH outcomes of
+  // the upsert above (an insert or an update), not only an insert --
+  // someone re registering for a later session date is owed a new
+  // confirmation too, and it is the portal's own ledger (keyed on
+  // registration id, email key AND session date, not just the row's
+  // existence) that actually decides whether this particular call has
+  // anything new to send. The portal's hourly cron no longer touches
+  // this key at all, so this is now the one and only path a masterclass
+  // confirmation can go out through -- a lost trigger here has no daily
+  // safety net the way email 1 above does, which is exactly why
+  // PROMPT_64 asked for it to fire inline rather than only from a cron.
+  if (formName === 'pt-masterclass' && inserted && inserted.id) {
+    await triggerMasterclassConfirmation(inserted.id);
   }
 
   // Covers the consent mismatch event queued inside the mental-fitness-score
