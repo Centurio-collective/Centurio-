@@ -94,22 +94,18 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .cap-name{ font-size:13px; font-weight:600; }
   .cap-tag{ font-size:9px; letter-spacing:.06em; color:var(--accent); margin-top:3px; text-transform:uppercase; }
 
-  /* Pricing toggle */
   .pricing{ max-width:560px; margin:44px auto 0; }
-  .toggle{ display:flex; justify-content:center; margin-bottom:32px; }
-  .toggle-pill{ display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:4px; background:#15181c; }
-  .toggle-btn{ font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.04em; font-size:13px; font-weight:600; padding:10px 22px; border-radius:999px; border:0; background:transparent; color:var(--muted); cursor:pointer; transition:all .15s ease; }
-  .toggle-btn.active{ background:var(--accent); color:#17120b; }
 
   .plan-card{ border:1px solid var(--line); border-radius:4px; padding:32px 28px; text-align:center; }
   .plan-name{ font-size:13px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase; }
   .plan-price{ font-family:'Inter',sans-serif; font-size:52px; font-weight:600; margin-top:10px; }
   .plan-price span{ font-size:16px; font-weight:400; color:var(--muted); font-family:'Inter',sans-serif; }
-  .plan-price-was{ font-size:26px; font-weight:400; color:var(--muted); text-decoration:line-through; margin-right:10px; }
   .plan-save{ margin-top:8px; font-size:13px; color:var(--accent); display:none; }
   .plan-save.show{ display:block; }
   .plan-cta{ display:inline-block; margin-top:24px; width:100%; background:var(--accent); color:#17120b; border:0; border-radius:2px; padding:16px 26px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:.06em; font-weight:600; font-size:14px; cursor:pointer; text-decoration:none; }
   .plan-cta:hover{ filter:brightness(1.08); }
+  .plan-copy{ margin-top:8px; font-size:15px; color:var(--muted); }
+  .plan-annual-link{ display:block; margin-top:14px; font-size:14px; color:var(--muted); text-decoration:underline; }
   .plan-note{ margin-top:16px; font-size:12px; color:var(--muted); }
 
   footer{ border-top:1px solid var(--line); padding:32px 0; }
@@ -160,22 +156,6 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .feature-split{ flex-direction:column-reverse; gap:34px; align-items:stretch; }
     .feature-media{ flex:none; max-width:300px; margin:0 auto; }
   }
-  /* The trial line. Hidden by default on purpose: it is a promise about money,
-     so if the script below never runs the claim is simply absent rather than
-     wrong. Shown only until training starts. */
-  .plan-trial{ margin-top:16px; font-size:13.5px; line-height:1.5; color:var(--accent); font-weight:600; display:none; }
-  .plan-trial.show{ display:block; }
-
-  /* Offer box. GROW50 only, hidden by default for the same reason the
-     trial line is: a promise about money and time should be absent, not
-     wrong, if the script never runs or the deadline has already passed. */
-  .offer-box{ border:1px solid var(--line); border-radius:4px; padding:18px 20px; margin-top:20px; text-align:left; display:none; }
-  .offer-box.show{ display:block; }
-  .offer-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
-  .offer-label{ font-size:11px; letter-spacing:.14em; color:var(--muted); font-weight:600; }
-  .offer-countdown{ font-size:12.5px; color:var(--accent); font-weight:600; white-space:nowrap; }
-  .offer-highlight{ margin-top:10px; font-size:15px; line-height:1.5; color:var(--accent); font-weight:600; }
-  .offer-sub{ margin-top:4px; font-size:13.5px; line-height:1.5; color:var(--muted); }
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -192,92 +172,49 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </header>
 
+<!-- PROMPT_66 / copy spec 2.1 (11 November 2026): why (block 1.1), then
+     what (block 1.2), then what it costs (block 1.3). The words in these
+     three blocks are canonical and must read the same on every page that
+     carries them, so edit them in COPY_SPEC, not here. -->
 <section class="hero" style="border-top:0;">
   <div class="wrap">
     <div class="eyebrow">JOIN NOW</div>
-    <h1 class="display">Tuesday Training starts 10&nbsp;November.</h1>
-    <p class="hero-sub">You have your baseline. Tuesday Training is how it moves. Join now and your place is held for session one, then every Tuesday after that, 7:30pm, live.</p>
-  </div>
-</section>
-
-<!-- Pricing, block one of two. Added 3 November 2026 so the price is
-     visible before the scroll for people arriving straight off the
-     assessment. The block at the foot of the page is identical and the
-     two toggles stay in sync, see setPlan. -->
-<section>
-  <div class="wrap">
-    <div class="section-label">MEMBERSHIP</div>
-    <h2>Start with session one.</h2>
-    <p class="lede">Everything below is included. Cancel anytime, pause when you need to, backed by a 14 day satisfaction guarantee.</p>
-
-    <div class="pricing">
-      <div class="toggle">
-        <div class="toggle-pill">
-          <button class="toggle-btn js-btn-monthly" onclick="setPlan('monthly')">Monthly</button>
-          <button class="toggle-btn active js-btn-annual" onclick="setPlan('annual')">Annual</button>
-        </div>
-      </div>
-
-      <div class="plan-card">
-        <div class="plan-name">Centurio Membership</div>
-        <div class="plan-price js-plan-price">$590<span>/year</span></div>
-        <div class="plan-save show js-plan-save">Save $118, that's 2 months free</div>
-        <p class="plan-trial js-plan-trial">Free until Tuesday 10 November. Your first payment is taken the day training starts.</p>
-        <div class="offer-box js-offer-box">
-          <div class="offer-row">
-            <span class="offer-label">COMPLIMENTARY 1:1 WITH STERLING</span>
-            <span class="offer-countdown js-offer-countdown">Closes in 2d 10h 14m</span>
-          </div>
-          <p class="offer-highlight">30 minutes. One on one. Valued at $150.</p>
-          <p class="offer-sub">Yours when you join before Tuesday 7:30pm.</p>
-        </div>
-        <a class="plan-cta js-plan-cta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan, location: 'top' }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
-        <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
-      </div>
-    </div>
+    <h1 class="display">We believe we have a responsibility to become all that we are capable of becoming.</h1>
+    <p class="hero-sub">Mental Fitness should be as normal as Physical Fitness.</p>
+    <p class="hero-sub">You train your body. You book the session, you turn up, you do the reps. Nobody questions it.</p>
+    <p class="hero-sub">Your mind runs all of it. It gets no programme, no measure, no gym.</p>
+    <p class="hero-sub">This is the gym.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="section-label">WHAT YOU GET</div>
-    <h2>Every week, for life.</h2>
     <div class="benefits">
-      <div class="benefit">
-        <div class="benefit-title">Tuesday Training™</div>
-        <div class="benefit-desc">A live 35 minute session every week, 7:30pm, training one principle from one Core Capacity.</div>
-      </div>
-      <div class="benefit">
-        <div class="benefit-title">The Weekly Check In</div>
-        <div class="benefit-desc">Two minutes every week. Your Mental Fitness Score updates and you see which capacity moved.</div>
-      </div>
-      <div class="benefit">
-        <div class="benefit-title">The Dashboard™</div>
-        <div class="benefit-desc">Track your Mental Fitness Score and see your progress across all six capacities over time.</div>
-      </div>
-      <div class="benefit">
-        <div class="benefit-title">The Thursday Briefing™</div>
-        <div class="benefit-desc">A short Thursday note that reinforces the week's principle and carries it forward.</div>
-      </div>
-      <!-- Four more added 3 November 2026. The grid is four across and
-           collapses to two then one, so eight tiles sit as two clean rows at
-           every width. People arrive here straight off the assessment and the
-           page was showing them the Tuesday and little else. -->
-      <div class="benefit">
-        <div class="benefit-title">Ask Centurio</div>
-        <div class="benefit-desc">A mentor trained on the whole framework, there whenever you need it. Ask it anything about what you are training and it answers from the model.</div>
-      </div>
-      <div class="benefit">
-        <div class="benefit-title">The Daily Mentor</div>
-        <div class="benefit-desc">One message a day on the capacity you are training, carrying a line from one of the thinkers behind it.</div>
-      </div>
-      <div class="benefit">
-        <div class="benefit-title">Teemup</div>
-        <div class="benefit-desc">Find someone to train with. Post when you are training, see who else is, and match on the gym and the hours that suit you.</div>
-      </div>
-      <div class="benefit">
-        <div class="benefit-title">Nutrition</div>
-        <div class="benefit-desc">Macro and meal calculators built on Australian food data. Train the mind, feed the body.</div>
+      <div class="benefit"><div class="benefit-title">Your Mental Fitness Score.</div><div class="benefit-desc">Twelve questions, six capacities, a number on each.</div></div>
+      <div class="benefit"><div class="benefit-title">The training for your weakest one.</div><div class="benefit-desc">Short, on demand, sitting there the moment you know which it is.</div></div>
+      <div class="benefit"><div class="benefit-title">A weekly check in.</div><div class="benefit-desc">The same twelve questions, two for each capacity. Six numbers, and you watch them move.</div></div>
+      <div class="benefit"><div class="benefit-title">Ask Centurio.</div><div class="benefit-desc">Your own mentor, trained on the whole model and on your scores.</div></div>
+      <div class="benefit"><div class="benefit-title">A message every morning.</div><div class="benefit-desc">One capacity, one principle, one thing to do with it.</div></div>
+      <div class="benefit"><div class="benefit-title">The Monthly Briefing.</div><div class="benefit-desc">The month's capacity, written.</div></div>
+      <div class="benefit"><div class="benefit-title">One live room a month.</div><div class="benefit-desc">Tuesday Training with Sterling. First Tuesday, 7:30pm.</div></div>
+      <div class="benefit"><div class="benefit-title">Nutrition.</div><div class="benefit-desc">The body is half of it.</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-label">MEMBERSHIP</div>
+    <div class="pricing">
+      <div class="plan-card">
+        <div class="plan-name">Centurio Membership</div>
+        <div class="plan-price">$19 a month.</div>
+        <p class="plan-copy">Or $190 for the year, which is two months free.</p>
+        <p class="plan-copy">Cancel whenever you want.</p>
+        <a class="plan-cta js-cta-monthly" href="https://buy.stripe.com/bJebJ2aHe0IHdyYdr21kA06" target="_blank" rel="noopener noreferrer" onclick="trackCheckout('monthly', 'top')">Join for $19 a month</a>
+        <a class="plan-annual-link js-cta-annual" href="https://buy.stripe.com/14A3cwbLiajh0McaeQ1kA07" target="_blank" rel="noopener noreferrer" onclick="trackCheckout('annual', 'top')">or $190 for the year</a>
+        <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
     </div>
   </div>
@@ -395,31 +332,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <section>
   <div class="wrap">
     <div class="section-label">MEMBERSHIP</div>
-    <h2>Choose how you train.</h2>
-    <p class="lede">Cancel anytime. Pause when you need to. Backed by a 14 day satisfaction guarantee.</p>
-
     <div class="pricing">
-      <div class="toggle">
-        <div class="toggle-pill">
-          <button class="toggle-btn js-btn-monthly" onclick="setPlan('monthly')">Monthly</button>
-          <button class="toggle-btn active js-btn-annual" onclick="setPlan('annual')">Annual</button>
-        </div>
-      </div>
-
       <div class="plan-card">
         <div class="plan-name">Centurio Membership</div>
-        <div class="plan-price js-plan-price">$590<span>/year</span></div>
-        <div class="plan-save show js-plan-save">Save $118, that's 2 months free</div>
-        <p class="plan-trial js-plan-trial">Free until Tuesday 10 November. Your first payment is taken the day training starts.</p>
-        <div class="offer-box js-offer-box">
-          <div class="offer-row">
-            <span class="offer-label">COMPLIMENTARY 1:1 WITH STERLING</span>
-            <span class="offer-countdown js-offer-countdown">Closes in 2d 10h 14m</span>
-          </div>
-          <p class="offer-highlight">30 minutes. One on one. Valued at $150.</p>
-          <p class="offer-sub">Yours when you join before Tuesday 7:30pm.</p>
-        </div>
-        <a class="plan-cta js-plan-cta" href="https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'checkout_start', { plan: currentPlan, location: 'bottom' }); if (window.fbq) fbq('track', 'InitiateCheckout', { value: plans[currentPlan].value, currency: 'AUD', content_name: 'Membership, ' + currentPlan })">Join the Annual Plan</a>
+        <div class="plan-price">$19 a month.</div>
+        <p class="plan-copy">Or $190 for the year, which is two months free.</p>
+        <p class="plan-copy">Cancel whenever you want.</p>
+        <a class="plan-cta js-cta-monthly" href="https://buy.stripe.com/bJebJ2aHe0IHdyYdr21kA06" target="_blank" rel="noopener noreferrer" onclick="trackCheckout('monthly', 'bottom')">Join for $19 a month</a>
+        <a class="plan-annual-link js-cta-annual" href="https://buy.stripe.com/14A3cwbLiajh0McaeQ1kA07" target="_blank" rel="noopener noreferrer" onclick="trackCheckout('annual', 'bottom')">or $190 for the year</a>
         <p class="plan-note">You'll be taken to Stripe's secure checkout to complete payment.</p>
       </div>
     </div>
@@ -451,175 +371,36 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 gtag('event', 'join_view');
 if (window.fbq) fbq('track', 'ViewContent', { content_name: 'Membership' });
 
-const plans = {
-  monthly: { price: "$59", value: 59, suffix: "/month", save: "", cta: "Join the Monthly Plan", url: "https://buy.stripe.com/3cI7sM3eM4YX1Qg0Eg1kA00" },
-  annual:  { price: "$590", value: 590, suffix: "/year", save: "Save $118, that's 2 months free", cta: "Join the Annual Plan", url: "https://buy.stripe.com/cNi3cw9Da0IH2Uk2Mo1kA01" }
-};
+// PROMPT_66 (11 November 2026): $19 monthly, $190 annual. GROW50, the
+// launch trial and the complimentary 1:1 countdown are retired, and with
+// them every piece of script that switched the price, label or
+// destination for a code. The price is the price.
+const PLAN_VALUES = { monthly: 19, annual: 190 };
 
-// Tracks the toggle's current selection so the checkout_start click
-// handler on planCta (below) knows which plan the visitor was actually
-// looking at -- not PII, just which of two public price points was
-// clicked.
-//
-// Monthly is the default for every visitor (6 November 2026, Sterling),
-// not just a fallback for the markup's own initial state -- the markup
-// itself still hardcodes annual ($590/year, the annual toggle button
-// marked active, the CTA pointing at the annual Payment Link), which is
-// why the DOMContentLoaded handler below calls setPlan('monthly')
-// unconditionally rather than relying on this variable alone: setPlan
-// is what actually rewrites the toggle's active state, every price and
-// save line, and both CTA hrefs to match.
-let currentPlan = 'monthly';
+function trackCheckout(plan, location){
+  gtag('event', 'checkout_start', { plan: plan, location: location });
+  if (window.fbq) fbq('track', 'InitiateCheckout', { value: PLAN_VALUES[plan], currency: 'AUD', content_name: 'Membership, ' + plan });
+}
 
-// Runs on every load, every code and no code alike.
-//
-// setPlan('monthly') establishes the new default -- toggle state, price,
-// and (via checkoutUrl, which already reads PARTNER_CODE) the CTA href,
-// promo code included. This also replaces the narrower fix from 3
-// November 2026 that only patched the CTA href when a code was present:
-// that one line is exactly what setPlan's own '.js-plan-cta' update
-// already does, for every visitor, not only a referred one.
-//
-// GROW50 is a monthly only code -- there is no annual coupon on that
-// Payment Link, and annual is rejected at Stripe for it. So the toggle
-// itself is hidden for GROW50 specifically, rather than left showing an
-// option that would fail at checkout. Every other code, and no code,
-// leaves the toggle visible and switchable to annual exactly as before.
-document.addEventListener('DOMContentLoaded', function(){
-  setPlan('monthly');
-
-  if (PARTNER_CODE === 'GROW50') {
-    document.querySelectorAll('.toggle').forEach(function(el){ el.style.display = 'none'; });
-  }
-});
-
-// A partner link carries ?code=<PROMO>. Stripe applies it automatically on
-// the payment link via prefilled_promo_code, so a referred member never has to
-// remember or type anything. Requires "allow promotion codes" on both links.
-// Restricted to a plain code shape so nothing arbitrary is appended to a
-// checkout URL from the query string.
+// A partner link carries ?code=<PROMO> (EMF10 and the like). Stripe
+// applies it on the payment link via prefilled_promo_code, so a referred
+// member never has to type anything. Restricted to a plain code shape so
+// nothing arbitrary is appended to a checkout URL. GROW50 is retired and
+// is dropped rather than passed through to a code that no longer applies.
 const PARTNER_CODE = (function(){
   try {
     var c = new URLSearchParams(window.location.search).get('code');
-    return c && /^[A-Za-z0-9_-]{3,32}$/.test(c) ? c.toUpperCase() : null;
+    if (!c || !/^[A-Za-z0-9_-]{3,32}$/.test(c)) return null;
+    c = c.toUpperCase();
+    return c === 'GROW50' ? null : c;
   } catch (err) { return null; }
 })();
 
-function checkoutUrl(base){
-  if (!PARTNER_CODE) return base;
-  return base + (base.indexOf('?') === -1 ? '?' : '&') +
-         'prefilled_promo_code=' + encodeURIComponent(PARTNER_CODE);
-}
-
-// GROW50 is 50% off monthly ($59 -> $29.50). 7 November 2026, Sterling:
-// a real browser test of the static Payment Link's own
-// ?prefilled_promo_code=GROW50 showed "Something went wrong" and full
-// price on load -- its client side auto apply races Adaptive Pricing's
-// own currency detection and loses often enough to explain 13 of 16
-// checkouts reaching Stripe with no discount. Routed instead through
-// members.centuriocollective.com/api/checkout/grow50 (8 November 2026,
-// reverified live: Production now carries a live Stripe key, the route
-// creates a real Checkout Session with GROW50 already attached, and 3
-// fresh loads each returned a distinct live cs_live_... session with
-// discounts:[{promotion_code:"GROW50"}] and managed_payments disabled
-// to match the Payment Link it replaces -- no client side apply step
-// left to race). Every other code, and no code, is untouched and still
-// goes straight to the static monthly Payment Link via checkoutUrl.
-const GROW50_CHECKOUT_URL = 'https://members.centuriocollective.com/api/checkout/grow50';
-
-// These three helpers are the only place that decides when the
-// discounted price, CTA label and CTA destination show, so the toggle
-// hidden for GROW50 (see the DOMContentLoaded handler above) staying
-// monthly only is the one case that matters -- annual is never visible
-// to a GROW50 visitor, so none of the three need a discounted variant
-// for it.
-function priceHtml(which){
-  const p = plans[which];
-  if (which === 'monthly' && PARTNER_CODE === 'GROW50') {
-    return '<span class="plan-price-was">' + p.price + '</span>$29.50<span>' + p.suffix + '</span>';
-  }
-  return p.price + '<span>' + p.suffix + '</span>';
-}
-
-function ctaLabel(which){
-  if (which === 'monthly' && PARTNER_CODE === 'GROW50') return 'Join now with 50% off';
-  return plans[which].cta;
-}
-
-function ctaHref(which){
-  if (which === 'monthly' && PARTNER_CODE === 'GROW50') return GROW50_CHECKOUT_URL;
-  return checkoutUrl(plans[which].url);
-}
-
-// Rewritten 3 November 2026 when a second pricing block went in near the top.
-// getElementById returns one node, so with two blocks on the page the lower
-// one silently stopped updating and could show a price the button did not
-// charge. Everything is addressed by class now and every block is updated, so
-// the two can never disagree whichever toggle is pressed.
-function setPlan(which){
-  currentPlan = which;
-  const p = plans[which];
-  const all = sel => document.querySelectorAll(sel);
-  all('.js-plan-price').forEach(el => { el.innerHTML = priceHtml(which); });
-  all('.js-plan-save').forEach(el => {
-    if(p.save){ el.textContent = p.save; el.classList.add('show'); }
-    else { el.classList.remove('show'); }
+if (PARTNER_CODE) {
+  document.querySelectorAll('.js-cta-monthly, .js-cta-annual').forEach(function(el){
+    el.href = el.href + (el.href.indexOf('?') === -1 ? '?' : '&') + 'prefilled_promo_code=' + encodeURIComponent(PARTNER_CODE);
   });
-  all('.js-plan-cta').forEach(el => { el.textContent = ctaLabel(which); el.href = ctaHref(which); });
-  all('.js-btn-monthly').forEach(el => el.classList.toggle('active', which === 'monthly'));
-  all('.js-btn-annual').forEach(el => el.classList.toggle('active', which === 'annual'));
 }
-
-// THE TRIAL LINE EXPIRES BY ITSELF. The Stripe payment links carry a trial
-// that shortens by one day every night and is cleared entirely on 10 November,
-// when training starts. From that morning the page must stop offering a free
-// trial, because Stripe will charge immediately and the claim would be false.
-// Rather than relying on someone remembering to edit this page that day, the
-// line is hidden by default and only revealed before the cutoff.
-(function(){
-  var TRIAL_ENDS = Date.parse('2026-11-09T14:00:00Z'); // midnight, 10 Nov, Brisbane
-  if (!TRIAL_ENDS || Date.now() >= TRIAL_ENDS) return;
-  document.querySelectorAll('.js-plan-trial').forEach(function(el){ el.classList.add('show'); });
-})();
-
-// COMPLIMENTARY 1:1 OFFER BOX. GROW50 only, hidden by default for the
-// same reason the trial line is: a promise with a deadline must be
-// absent, not wrong, once the deadline has passed or if this script
-// never runs. The countdown is live rather than a value printed once at
-// load, so a visitor who leaves the tab open overnight still sees a
-// true number and not a stale one. Closes at the same moment training
-// starts, Tuesday 10 November, 7:30pm Brisbane -- later in the same day
-// than the trial line's own midnight cutoff above, since the trial and
-// the complimentary session are two different promises with two
-// different deadlines.
-(function(){
-  var OFFER_DEADLINE = Date.parse('2026-11-10T09:30:00Z'); // 7:30pm, 10 Nov, Brisbane
-  if (!OFFER_DEADLINE || PARTNER_CODE !== 'GROW50') return;
-
-  var boxes = document.querySelectorAll('.js-offer-box');
-  var counters = document.querySelectorAll('.js-offer-countdown');
-  if (!boxes.length) return;
-
-  var timer;
-  function tick(){
-    var remaining = OFFER_DEADLINE - Date.now();
-    if (remaining <= 0) {
-      boxes.forEach(function(el){ el.classList.remove('show'); });
-      if (timer) clearInterval(timer);
-      return;
-    }
-    var totalMinutes = Math.floor(remaining / 60000);
-    var days = Math.floor(totalMinutes / 1440);
-    var hours = Math.floor((totalMinutes % 1440) / 60);
-    var minutes = totalMinutes % 60;
-    var text = 'Closes in ' + days + 'd ' + hours + 'h ' + minutes + 'm';
-    counters.forEach(function(el){ el.textContent = text; });
-    boxes.forEach(function(el){ el.classList.add('show'); });
-  }
-
-  tick();
-  timer = setInterval(tick, 30000);
-})();
 </script>
 
 </body>
