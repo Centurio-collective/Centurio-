@@ -102,6 +102,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   /* Block 4 and the split layout */
   .split{display:grid; grid-template-columns:1fr 1.2fr; gap:64px; align-items:start;}
   .split h2{font-size:clamp(40px,5.4vw,64px);}
+  .split-portrait{display:block; width:100%; max-width:393px; height:auto; margin-top:48px; border:1px solid var(--line);}
   .split .prose p{color:var(--muted); font-size:17px;}
   .split .prose p + p{margin-top:22px;}
   .tabs{display:flex; gap:8px; margin-top:40px;}
@@ -167,6 +168,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   @media (max-width:480px){
     .tab{font-size:11px; letter-spacing:.05em; padding:9px 12px;}
     .cap-grid{grid-template-columns:1fr; gap:36px;}
+    .split-portrait{display:none;}
     .hero .wrap{padding-top:96px; padding-bottom:96px;}
     .lockup{bottom:24px; font-size:16px;}
   }
@@ -259,7 +261,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <!-- Block 4. How the six months run -->
 <section style="padding-top:0;">
   <div class="wrap split">
-    <h2 class="display">Built for you, from your own numbers</h2>
+    <div class="split-side">
+      <h2 class="display">Built for you, from your own numbers</h2>
+      <img class="split-portrait" src="/assets/img/private-built-portrait.jpg" width="393" height="609" alt="Sterling Cincotta" loading="lazy">
+    </div>
     <div class="prose">
       <p>There is no set curriculum and no month by month schedule you get slotted into. Your Mental Fitness Score decides where we start, your weakest capacity goes first, and we work the six in the order you need them for as long as each one needs. The structure is the method, and your numbers set the order and the weight.</p>
       <p>Every month holds two sessions of ninety minutes, the accountability calls between them, your training and your nutrition programmed alongside it, and one practice you are running properly by the end of it. You start on thirty six questions and you finish on the same thirty six. The distance between those two sets of numbers is the point of the whole thing.</p>
