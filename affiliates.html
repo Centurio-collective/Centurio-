@@ -357,6 +357,52 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .nav-trainer-btn,.member-login-btn{padding:8px 12px;letter-spacing:.04em;font-size:11px;}
   }
   @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+  /* Brief Part 16 (11 November 2026): the Teemup section, same tokens and grid as partners.html Part 13. */
+  .teemup{--t-bg:#0d0f0e;--t-panel:#121513;--t-text:#f4f1e8;--t-accent:#d8b56a;--t-muted:#9aa39c;--t-line:#2c312d;background:var(--t-bg);color:var(--t-text);font-family:'Inter',sans-serif;padding:96px 0;border-top:1px solid var(--t-line);}
+  .teemup .t-eyebrow{font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--t-muted);}
+  .teemup .t-display{font-family:'League Gothic',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:0.01em;line-height:1;color:var(--t-text);}
+  .teemup h2.t-display{font-size:clamp(40px,6vw,72px);margin-top:14px;}
+  .teemup h3.t-display{font-size:clamp(26px,3.4vw,38px);}
+  .teemup .t-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;margin-top:32px;}
+  .teemup .t-cols p, .teemup .t-two p{font-size:16px;line-height:1.65;color:var(--t-muted);}
+  .teemup .t-sub{margin-top:72px;}
+  .teemup .t-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:22px;}
+  .teemup .t-card{border:1px solid var(--t-line);padding:28px 24px;}
+  .teemup .t-num{font-family:'League Gothic',sans-serif;font-size:56px;line-height:1;color:var(--t-accent);}
+  .teemup .t-card h4{font-size:17px;font-weight:600;margin-top:14px;color:var(--t-text);}
+  .teemup .t-card p{font-size:14px;line-height:1.6;color:var(--t-muted);margin-top:8px;}
+  .teemup .t-panel{background:var(--t-panel);border:1px solid var(--t-line);margin-top:22px;}
+  .teemup .t-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--t-line);}
+  .teemup .t-bar .t-display{font-size:26px;}
+  .teemup .t-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .teemup .t-pill{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--t-muted);color:var(--t-muted);}
+  .teemup .t-pill.solid{background:var(--t-accent);border-color:var(--t-accent);color:var(--t-bg);font-weight:600;}
+  .teemup .t-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));}
+  .teemup .t-day{border-right:1px solid var(--t-line);padding:14px 10px;min-height:170px;}
+  .teemup .t-day:last-child{border-right:0;}
+  .teemup .t-dayhead{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--t-muted);margin-bottom:12px;}
+  .teemup .t-session{border:1px solid var(--t-line);padding:10px 8px;font-size:12px;line-height:1.45;color:var(--t-muted);}
+  .teemup .t-session .t-act{font-weight:600;color:var(--t-text);font-size:13px;}
+  .teemup .t-session.matched{border-color:var(--t-accent);}
+  .teemup .t-session.matched .t-act, .teemup .t-session.matched .t-status{color:var(--t-accent);}
+  .teemup .t-empty{font-size:12px;color:var(--t-muted);font-style:italic;}
+  .teemup .t-note{font-size:14px;color:var(--t-muted);margin-top:16px;}
+  .teemup .t-venue{border:1px solid var(--t-accent);padding:36px 32px;margin-top:72px;}
+  .teemup .t-two{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px;}
+  .teemup .t-detail{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:22px;}
+  .teemup .t-detail p{font-size:14px;line-height:1.6;color:var(--t-muted);}
+  .teemup .t-detail strong{color:var(--t-text);font-weight:600;}
+  .teemup .t-close{border-top:1px solid var(--t-line);margin-top:72px;padding-top:36px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .teemup .t-close p{font-size:17px;color:var(--t-text);max-width:560px;}
+  .teemup .t-btn{display:inline-block;background:var(--t-accent);color:var(--t-bg);padding:15px 28px;font-weight:600;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;}
+  @media (max-width:900px){
+    .teemup .t-cols, .teemup .t-two{grid-template-columns:1fr;gap:16px;}
+    .teemup .t-cards{grid-template-columns:1fr;}
+    .teemup .t-detail{grid-template-columns:1fr 1fr;}
+    .teemup .t-week{grid-template-columns:1fr;}
+    .teemup .t-day{border-right:0;border-bottom:1px solid var(--t-line);min-height:0;}
+    .teemup .t-day:last-child{border-bottom:0;}
+  }
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -498,7 +544,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<!-- Teemup section removed 11 November 2026 (copy spec 1.2: off the page until it opens). -->
+<!-- The old Teemup section was removed here 11 November 2026; brief Part 16 puts a new gym version back further down, before the application form. -->
 
 <section class="benefits tight">
   <div class="wrap">
@@ -537,6 +583,52 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </section>
 
 <!-- Trainer programme section removed 11 November 2026 (full brief 10.3): trainers is parked; put it back when that workstream restarts. -->
+
+<!-- Brief Part 16 (11 November 2026): Teemup for gyms. The week grid is the
+     Part 13.3 panel, unchanged. No member counts, no match counts. -->
+<section class="teemup" id="teemup">
+  <div class="wrap">
+    <div class="t-eyebrow">Teemup</div>
+    <h2 class="t-display">Connecting active lifestyles.</h2>
+    <div class="t-cols">
+      <p>Teemup is the Centurio training partner finder, and it is part of every membership.</p>
+      <p>Members post when and where they are training. Other members nearby see the week ahead, ask to join, and turn up together.</p>
+    </div>
+
+    <div class="t-venue">
+      <h3 class="t-display">A session someone is waiting at is a session you turn up to.</h3>
+      <div class="t-two">
+        <p>Members search for any gym the way you search an address, so the sessions get posted wherever they already train. Yours included.</p>
+        <p>You refer a member once. They find someone to train with. Both of them have a reason to be in your gym on Tuesday morning that has nothing to do with willpower.</p>
+      </div>
+      <p style="margin-top:20px;font-size:16px;line-height:1.65;color:var(--t-text);">And you earn 50% of their membership every month for twelve months on top of it.</p>
+    </div>
+
+    <div class="t-sub">
+      <div class="t-panel" aria-label="The Teemup week view, with illustrative sessions">
+        <div class="t-bar">
+          <div class="t-display">Teemup</div>
+          <div class="t-pills"><span class="t-pill">Gold Coast</span><span class="t-pill">All activities</span><span class="t-pill solid">Post a session</span></div>
+        </div>
+        <div class="t-week">
+          <div class="t-day"><div class="t-dayhead">MON 16</div><div class="t-session matched"><div class="t-act">Gym</div><div>6:00am</div><div>Nobby Beach</div><div class="t-status">Matched</div></div></div>
+          <div class="t-day"><div class="t-dayhead">TUE 17</div><div class="t-session"><div class="t-act">Tennis</div><div>5:30pm</div><div>Broadbeach</div><div class="t-status">1 spot open</div></div></div>
+          <div class="t-day"><div class="t-dayhead">WED 18</div><div class="t-session matched"><div class="t-act">Gym</div><div>6:00am</div><div>Nobby Beach</div><div class="t-status">Matched</div></div></div>
+          <div class="t-day"><div class="t-dayhead">THU 19</div><div class="t-session"><div class="t-act">Golf</div><div>6:30am</div><div>Palm Meadows</div><div class="t-status">2 spots open</div></div></div>
+          <div class="t-day"><div class="t-dayhead">FRI 20</div><div class="t-session matched"><div class="t-act">Gym</div><div>5:45am</div><div>Nobby Beach</div><div class="t-status">Matched</div></div></div>
+          <div class="t-day"><div class="t-dayhead">SAT 21</div><div class="t-session"><div class="t-act">Wellness</div><div>7:00am</div><div>Esplanade</div><div class="t-status">3 spots open</div></div></div>
+          <div class="t-day"><div class="t-dayhead">SUN 22</div><div class="t-empty">nothing posted</div></div>
+        </div>
+      </div>
+      <p class="t-note">The week is the interface. No browsing people, no messaging strangers, no feed.</p>
+    </div>
+
+    <div class="t-close">
+      <p>Teemup is live in the member portal now. It opens properly in a place once enough members are there to produce a match, which is exactly what a gym full of members solves.</p>
+      <a class="t-btn" href="#apply" onclick="if(window.gtag)gtag('event','cta_click',{location:'affiliates_teemup'})">Apply for your affiliate link</a>
+    </div>
+  </div>
+</section>
 
 <section class="apply" id="apply">
   <div class="wrap">
