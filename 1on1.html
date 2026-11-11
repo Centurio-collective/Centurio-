@@ -85,9 +85,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   /* Block 2. The video block */
   .video-block{background:var(--panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .video-block h2{font-size:clamp(40px,6vw,72px); max-width:900px;}
-  .video-grid{display:grid; grid-template-columns:1fr 1fr; gap:56px; margin-top:56px; align-items:start;}
+  .video-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,540px); gap:56px; margin-top:56px; align-items:start;}
   .film{position:relative; aspect-ratio:16/9; background:#0a0c0b center/cover no-repeat; border:1px solid var(--line);}
-  .video-grid p{color:var(--muted); font-size:17px;}
+  .video-grid p{color:var(--muted); font-size:17px; line-height:1.65; max-width:540px;}
   .video-grid p + p{margin-top:22px;}
 
   /* Block 3. The six cell grid */
@@ -103,7 +103,15 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .split h2{font-size:clamp(40px,5.4vw,64px);}
   .split .prose p{color:var(--muted); font-size:17px;}
   .split .prose p + p{margin-top:22px;}
-  .contents{width:100%; border-collapse:collapse; margin-top:40px; font-size:15px;}
+  .tabs{display:flex; gap:8px; margin-top:40px;}
+  .tab{font-family:'Inter',sans-serif; font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:10px 16px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--muted); cursor:pointer; white-space:nowrap;}
+  .tab[aria-selected="true"]{background:var(--accent); border-color:var(--accent); color:var(--bg);}
+  .tab:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+  .contents{width:100%; border-collapse:collapse; table-layout:fixed; margin-top:20px; font-size:15px;}
+  /* both tables share one grid cell, so the block is always the taller of the two and switching never shifts the page */
+  .panels{display:grid; margin-top:20px;}
+  .panels > .contents{grid-area:1/1; margin-top:0;}
+  .panels > .contents[hidden]{display:table; visibility:hidden;}
   .contents th,.contents td{text-align:left; padding:14px 0; border-bottom:1px solid var(--line); vertical-align:top;}
   .contents th{color:var(--muted); font-weight:500; width:45%; padding-right:16px;}
 
@@ -114,20 +122,20 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .life .prose p + p{margin-top:26px;}
   .life .prose strong{color:var(--accent); font-weight:600;}
   .receipts{max-width:760px; margin-top:72px; padding-top:40px; border-top:1px solid var(--line);}
-  .receipts h3{font-size:15px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;}
+  .receipts h2{font-size:clamp(32px,4vw,44px);}
   .receipts p{color:var(--muted); font-size:15.5px; margin-top:14px;}
 
   /* Block 6 and 7, quiet prose */
   .quiet .prose p{max-width:760px;}
   .quiet .prose p{color:var(--muted); font-size:17px;}
   .quiet .prose p + p{margin-top:20px;}
-  .who h2{font-size:clamp(36px,5vw,56px); margin-bottom:32px;}
+  .quiet h2{font-size:clamp(36px,5vw,56px); margin-bottom:32px;}
 
   /* Block 8. FAQs */
   .faqs h2{font-size:clamp(36px,5vw,56px); margin-bottom:28px;}
   .faq{border-top:1px solid var(--line);}
   .faq:last-child{border-bottom:1px solid var(--line);}
-  .faq summary{list-style:none; cursor:pointer; padding:22px 40px 22px 0; position:relative; font-family:'League Gothic',sans-serif; font-size:clamp(22px,2.6vw,28px); text-transform:uppercase; letter-spacing:.01em; line-height:1.15;}
+  .faq summary{list-style:none; cursor:pointer; padding:28px 44px 28px 0; position:relative; font-family:'Inter',sans-serif; font-weight:600; font-size:17.5px; letter-spacing:normal; line-height:1.4;}
   .faq summary::-webkit-details-marker{display:none;}
   .faq summary::after{content:"+"; position:absolute; right:4px; top:50%; transform:translateY(-50%); font-family:'Inter',sans-serif; font-size:24px; color:var(--accent);}
   .faq[open] summary::after{content:"\00d7";}
@@ -142,7 +150,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
   /* Block 10. The single session */
   .one-session{max-width:560px; margin:0 auto; border:1px solid var(--line); border-radius:4px; padding:32px; background:rgba(216,181,106,.04);}
-  .one-session h3{font-size:16px; font-weight:700;}
+  .one-session h2{font-size:clamp(32px,4vw,40px);}
   .one-session p{font-size:15px; color:var(--muted); margin-top:10px;}
   .one-session .btn-ghost{margin-top:22px;}
   .foot-pad{padding:96px 0;}
@@ -153,7 +161,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
   @media (max-width:900px){
     section{padding:80px 0;}
-    .video-grid,.split{grid-template-columns:1fr; gap:32px;}
+    .video-grid,.split{grid-template-columns:minmax(0,1fr); gap:32px;}
+  }
+  @media (max-width:480px){
+    .tab{font-size:11px; letter-spacing:.05em; padding:9px 12px;}
     .cap-grid{grid-template-columns:1fr; gap:36px;}
     .hero .wrap{padding-top:96px; padding-bottom:96px;}
     .lockup{bottom:24px; font-size:16px;}
@@ -167,7 +178,6 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="wrap header-row">
     <div class="wordmark"><a href="/">CENTURIO</a></div>
     <div class="header-actions">
-      <a href="/affiliates.html" class="affiliate-btn">Gym Partners</a>
       <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
     </div>
     <div class="eyebrow">EVIDENCE BASED MENTAL FITNESS TRAINING</div>
@@ -252,8 +262,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="prose">
       <p>There is no set curriculum and no month by month schedule you get slotted into. Your Mental Fitness Score decides where we start, your weakest capacity goes first, and we work the six in the order you need them for as long as each one needs. The structure is the method, and your numbers set the order and the weight.</p>
       <p>Every month holds two sessions of ninety minutes, the accountability calls between them, your training and your nutrition programmed alongside it, and one practice you are running properly by the end of it. You start on thirty six questions and you finish on the same thirty six. The distance between those two sets of numbers is the point of the whole thing.</p>
-      <table class="contents" aria-label="What is in it">
-        <tbody>
+      <div class="tabs" role="tablist" aria-label="Compare the two programmes">
+        <button type="button" class="tab" role="tab" id="tab-private" aria-selected="true" aria-controls="panel-private" tabindex="0">Centurio Private</button>
+        <button type="button" class="tab" role="tab" id="tab-coaching" aria-selected="false" aria-controls="panel-coaching" tabindex="-1">Centurio Coaching</button>
+      </div>
+      <div class="panels">
+        <table class="contents" id="panel-private" role="tabpanel" aria-labelledby="tab-private">
+          <tbody>
           <tr><th>Term</th><td>Six months</td></tr>
           <tr><th>Discovery</th><td>Half day, in person</td></tr>
           <tr><th>Deep sessions</th><td>Twelve, 90 minutes, fortnightly</td></tr>
@@ -263,8 +278,22 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
           <tr><th>Mental Fitness Score</th><td>Month 0, 3 and 6</td></tr>
           <tr><th>In person intensive</th><td>One half day</td></tr>
           <tr><th>Platform membership</th><td>Included</td></tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+        <table class="contents" id="panel-coaching" role="tabpanel" aria-labelledby="tab-coaching" hidden>
+          <tbody>
+          <tr><th>Term</th><td>Six months</td></tr>
+          <tr><th>Discovery</th><td>Two hours, online</td></tr>
+          <tr><th>Deep sessions</th><td>Twelve, 90 minutes, fortnightly</td></tr>
+          <tr><th>Accountability calls</th><td>Six, 30 minutes, monthly</td></tr>
+          <tr><th>WhatsApp</th><td>Weekdays, next day</td></tr>
+          <tr><th>Body and nutrition</th><td>Nutrition tool only</td></tr>
+          <tr><th>Mental Fitness Score</th><td>Month 0 and 6</td></tr>
+          <tr><th>In person intensive</th><td>None</td></tr>
+          <tr><th>Platform membership</th><td>Included</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </section>
@@ -280,7 +309,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <p><strong>Total transformation, across your mind, your body and the way you move through your own life.</strong></p>
     </div>
     <div class="receipts">
-      <h3>How you will know it happened</h3>
+      <h2 class="display">The proof you walk out with</h2>
       <p>Your why, written down, tested across six months and still standing. Six numbers at the start and six at the end, on the same thirty six questions. A habit system you built and broke and rebuilt until it held. Something you do with your state under pressure that you have run often enough to trust. Six months of training and eating with a programme behind it, and whatever that did. And twenty six weeks of promises kept to yourself, which is the one that quietly rewrites who you think you are.</p>
       <p>Everything you run gets whichever version of you turns up.</p>
     </div>
@@ -290,6 +319,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <!-- Block 6. Why the number is small -->
 <section class="quiet" style="padding-top:0;">
   <div class="wrap prose">
+    <h2 class="display">Why I only take a few</h2>
     <p>Every practice in this programme, I run on myself. Every number in it, I take. I have been through the whole of it from the inside and I am still in it, because the work does not finish.</p>
     <p>I take a handful of people at a time. Six months of this costs me what it costs you, and doing it properly means doing it with a few.</p>
   </div>
@@ -298,6 +328,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <!-- Block 7. Who it is for -->
 <section class="quiet who" style="padding-top:0;">
   <div class="wrap prose">
+    <h2 class="display">Who this is built for</h2>
     <p>Business owners and executives who are already performing and know with total certainty that there is another level sitting there.</p>
     <p>Athletes who have the physical side handled and have worked out that the limit is above the neck.</p>
     <p>Anyone who has decided this is the year for a complete overhaul and wants somebody to hold them to it for twenty six weeks straight.</p>
@@ -340,7 +371,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <p>I built the Centurio model, and every practice inside it I run on myself. Twenty years of building and operating businesses sits behind it, and the six capacities came out of working out what actually held when things got hard. The honest answer is that you will know within twenty minutes on the call whether I am the right person to spend six months with, and that is the correct way to decide something like this.</p>
       </details>
       <details class="faq">
-        <summary>Could I get the same thing from the Centurio platform for $19 a month?</summary>
+        <summary>Could I get the same thing from the Centurio platform?</summary>
         <p>The platform gives you the model, the Score, the training and a check in every week, and you apply all of it yourself. Plenty of people get a long way with it and that is exactly what it is there for. Private is six months of me applying it to you, building the programme around your numbers, sitting in the hard conversations, and holding you to the thing you said you would do when the week goes sideways. Every Private client has the platform too.</p>
       </details>
       <details class="faq">
@@ -368,7 +399,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <section class="foot-pad">
   <div class="wrap">
     <div class="one-session">
-      <h3>One session</h3>
+      <h2 class="display">One session</h2>
       <p>If one conversation is what you are after, that is a thing you can book. An hour with Sterling on whichever Core Capacity is live for you right now. $200.</p>
       <a class="btn-ghost" href="https://calendly.com/iamcenturio-info/centurio-1-1-single-session" target="_blank" rel="noopener noreferrer" onclick="gtag('event','coaching_enquiry',{type:'single_session'})">Book an hour</a>
     </div>
@@ -402,5 +433,30 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </footer>
 
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.tabs .tab'));
+  function select(t,focus){
+    tabs.forEach(function(x){
+      var on=x===t;
+      x.setAttribute('aria-selected',on?'true':'false');
+      x.tabIndex=on?0:-1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden=!on;
+    });
+    if(focus)t.focus({preventScroll:true});
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(t,false);});
+    t.addEventListener('keydown',function(e){
+      var j=null;
+      if(e.key==='ArrowRight')j=(i+1)%tabs.length;
+      else if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;
+      else if(e.key==='Home')j=0;
+      else if(e.key==='End')j=tabs.length-1;
+      if(j!==null){e.preventDefault();select(tabs[j],true);}
+    });
+  });
+})();
+</script>
 </body>
 </html>
