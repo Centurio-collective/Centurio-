@@ -86,7 +86,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .video-block{background:var(--panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .video-block h2{font-size:clamp(40px,6vw,72px); max-width:900px;}
   .video-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,540px); gap:56px; margin-top:56px; align-items:start;}
-  .film{position:relative; aspect-ratio:16/9; background:#0a0c0b center/cover no-repeat; border:1px solid var(--line);}
+  /* 4:3 while it is a still, so the frame runs from the cap line to the arms. Set back to 16/9 when the film drops in. */
+  .film{position:relative; aspect-ratio:4/3; background:#0a0c0b center/cover no-repeat; border:1px solid var(--line);}
   .video-grid p{color:var(--muted); font-size:17px; line-height:1.65; max-width:540px;}
   .video-grid p + p{margin-top:22px;}
 
