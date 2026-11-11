@@ -122,6 +122,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   input:focus{ border-color:var(--accent); }
   .gate-msg{ margin-top:12px; font-size:13px; min-height:18px; }
   .gate-msg.err{ color:#e39a92; }
+  .training-door{ max-width:640px; margin:28px auto 0; text-align:center; }
+  .training-door p{ margin-top:12px; color:var(--muted); }
+  .training-door p strong{ color:var(--text); }
+  .training-door .btn{ margin-top:18px; }
   .consent{ display:flex; gap:10px; align-items:flex-start; margin-top:16px; text-align:left;
             font-size:13px; line-height:1.5; color:var(--muted); cursor:pointer; }
   .consent input{ flex:none; width:16px; height:16px; margin-top:2px; accent-color:var(--accent); }
@@ -322,6 +326,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     </div>
 
     <div id="capResultsList"></div>
+
+    <!-- PROMPT_66 2.3 (11 November 2026): the door to the training for the
+         weakest capacity. Hidden until /api/free-training on the portal says
+         that capacity has a free training published. With no films yet it
+         never shows, and the page reads exactly as it did. -->
+    <div class="training-door" id="trainingDoor" hidden></div>
 
     <div class="results-cta">
       <h2 class="display">This is your baseline.</h2>
@@ -854,6 +864,80 @@ function renderResults(){
       <div class="cap-result-text">${BAND_TEXT[focusCap.key][focusBand]}</div>
     </div>
   `;
+  renderTrainingDoor();
+}
+
+// PROMPT_66 2.3 and brief 11.2. The Score ends on a door: the free
+// training for the weakest capacity, watchable with the email already given
+// at the gate. The portal decides which capacities have a free training
+// (GET) and issues the signed playback link (POST), recording the lead with
+// the consent given on this page.
+//
+// FALLBACK_LINE: brief 11.2 wants the next weakest capacity offered, and said
+// plainly, when the weakest has no film yet. That sentence has not been
+// written. Until it is, a fallback renders no door at all rather than
+// inventing a line. Set it to the approved sentence and the fallback goes live.
+var PORTAL_ORIGIN = 'https://members.centuriocollective.com';
+var FALLBACK_LINE = null;
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+}
+
+function renderTrainingDoor(){
+  var door = document.getElementById('trainingDoor');
+  if (!door || !computedScores) return;
+  var ordered = CAPACITIES.slice().sort(function(a, b){
+    return computedScores.byCapacity[a.key] - computedScores.byCapacity[b.key];
+  });
+  fetch(PORTAL_ORIGIN + '/api/free-training', { method: 'GET' })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data){
+      if (!data || data.gate !== 'email' || !data.trainings || !data.trainings.length) return;
+      var available = {};
+      data.trainings.forEach(function(t){ available[t.capacity] = t; });
+      var pick = null, fallback = false;
+      for (var i = 0; i < ordered.length; i++) {
+        if (available[ordered[i].name]) { pick = ordered[i]; fallback = i > 0; break; }
+      }
+      if (!pick || (fallback && !FALLBACK_LINE)) return;
+      var t = available[pick.name];
+      door.innerHTML =
+        '<p>Your weakest capacity is <strong>' + escapeHtml(ordered[0].name) + '</strong>.</p>' +
+        (fallback ? '<p>' + escapeHtml(FALLBACK_LINE) + '</p>' : '') +
+        (t.principle && !fallback ? '<p>' + escapeHtml(t.principle) + '</p>' : '') +
+        (fallback ? '' : '<p>Here is the training for it. Five minutes.</p>') +
+        '<button class="btn" id="watchTrainingBtn" type="button">Watch it now</button>' +
+        '<p>That training is free to watch. Everything after it, the weekly check in, Ask Centurio, the number you watch move, is inside the membership. $19 a month.</p>';
+      door.hidden = false;
+      gtag('event', 'training_door_view', { fallback: fallback });
+      document.getElementById('watchTrainingBtn').addEventListener('click', function(){
+        var btn = this;
+        btn.disabled = true;
+        fetch(PORTAL_ORIGIN + '/api/free-training', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: (document.getElementById('gEmail').value || '').trim(),
+            capacities: ordered.map(function(c){ return c.name; }),
+            marketing_consent: document.getElementById('gConsent').value,
+            consent_version: 'v4',
+            marketing_consent_text: (document.getElementById('consentStatement').textContent || '').trim()
+          })
+        })
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(res){
+            if (res && res.playbackUrl) {
+              gtag('event', 'training_door_watch', { capacity: res.capacity });
+              window.location.href = res.playbackUrl;
+            } else {
+              btn.disabled = false;
+            }
+          })
+          .catch(function(){ btn.disabled = false; });
+      });
+    })
+    .catch(function(){ /* no door, the page stays as it was */ });
 }
 
 // Partner lockup. A partner link carries ?partner=<code>, and only codes in
