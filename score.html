@@ -335,24 +335,19 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
     <div class="results-cta">
       <h2 class="display">This is your baseline.</h2>
-      <p>Mental Fitness is built one capacity at a time, every Tuesday. Your score today is where you start, not where you stay.</p>
+      <p>Mental Fitness is built one capacity at a time. Your score today is where you start, not where you stay.</p>
       <div class="results-btn-row">
         <button class="btn" onclick="downloadPDF()">Download My PDF Report</button>
         <a class='btn-outline' href='/join'>Start Training</a>
       </div>
     </div>
 
-    <!-- Holding a seat is its own express action, deliberately not folded
-         into the marketing consent checkbox on the gate. ACMA prohibits
-         bundled consent, and the two are different things: one is
-         permission to email, this is a request to be told when training
-         starts. On 26 October this band's button becomes Join Now. -->
+    <!-- Brief 12.3 (11 November 2026): the SESSION ONE band named a
+         session that has been and gone. Replaced whole. -->
     <div class="seat-band">
-      <div class="section-label" style="justify-content:center; display:flex;">SESSION ONE</div>
-      <h2 class="display">Tuesday 10 November, 7:30pm.</h2>
-      <p>Your score is the baseline. Tuesday Training is how it moves. Hold your seat for the first live session and we will email you before it.</p>
-      <button class="btn" id="seatBtn" onclick="holdSeat()">Hold My Seat</button>
-      <p class="seat-msg" id="seatMsg" role="status" aria-live="polite"></p>
+      <div class="section-label" style="justify-content:center; display:flex;">START TRAINING</div>
+      <p>$19 a month. Cancel whenever you want.</p>
+      <a class="btn" href="/join" onclick="gtag('event','cta_click',{location:'score_start_training'})">Join Centurio</a>
     </div>
   </section>
 
@@ -775,64 +770,6 @@ document.getElementById('gateForm').addEventListener('submit', function(e){
   renderResults();
 });
 
-// HOLD MY SEAT. Puts the person on the waitlist from the results page,
-// which is where the warm traffic actually is: the three home page
-// waitlist forms produced four signups in five weeks while this
-// assessment produced fifty one in a fortnight, and only two people
-// were ever on both lists.
-//
-// This posts form-name=waitlist, a form declared on index.html and not
-// on this page. Netlify resolves a form by the posted name across the
-// whole site, but it still discards any field that form's markup does
-// not declare, which is why source and partner_code are declared as
-// hidden inputs on all three home page forms. Change one, change the
-// other, or these two arrive null and nothing says so.
-function holdSeat(){
-  var btn = document.getElementById('seatBtn');
-  var msg = document.getElementById('seatMsg');
-  var nameEl = document.getElementById('gName');
-  var emailEl = document.getElementById('gEmail');
-  var name = (window._pendingName || (nameEl && nameEl.value) || '').trim();
-  var email = ((emailEl && emailEl.value) || '').trim();
-
-  // Unreachable in the normal flow, because this band only renders after
-  // the gate has been passed with both values.
-  if (!name || !email) {
-    msg.className = 'seat-msg err';
-    msg.textContent = 'Something went wrong. Refresh the page and take the assessment again.';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Holding your seat';
-
-  var partner = window._partnerBrand || null;
-
-  fetch("/", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: encodeFormData(withAttribution({
-      "form-name": "waitlist",
-      name: name,
-      email: email,
-      source: "score",
-      partner_code: (partner && partner.slug) || ""
-    }))
-  }).then(function(){
-    btn.style.display = 'none';
-    msg.className = 'seat-msg';
-    msg.textContent = 'Your seat is held. We will email you before 10 November.';
-  }).catch(function(err){
-    console.error("Hold seat failed:", err);
-    btn.disabled = false;
-    btn.textContent = 'Hold My Seat';
-    msg.className = 'seat-msg err';
-    msg.textContent = 'That did not go through. Try once more, or join from the membership page.';
-  });
-
-  gtag('event', 'waitlist_signup', { method: 'score_results' });
-  if (window.fbq) fbq('trackCustom', 'WaitlistFromScore');
-}
 
 function renderResults(){
   showScreen('screen-results');
@@ -846,7 +783,7 @@ function renderResults(){
   // account level. GA4 keeps the band; Meta gets the page view only.
   if (window.fbq) fbq('track', 'ViewContent', { content_name: 'Assessment results' });
   document.getElementById('scoreBandLabel').textContent = bandLabel(overallBand);
-  document.getElementById('scoreSub').textContent = 'Your baseline across all six Core Capacities. This is where you start. Tuesday Training is how it moves.';
+  document.getElementById('scoreSub').textContent = 'Your baseline across all six Core Capacities. This is where you start. The training for it is how it moves.';
 
   // Only the single lowest-scoring capacity is ever shown to the visitor.
   // All six scores are still captured and submitted, just never displayed.
@@ -873,12 +810,10 @@ function renderResults(){
 // (GET) and issues the signed playback link (POST), recording the lead with
 // the consent given on this page.
 //
-// FALLBACK_LINE: brief 11.2 wants the next weakest capacity offered, and said
-// plainly, when the weakest has no film yet. That sentence has not been
-// written. Until it is, a fallback renders no door at all rather than
-// inventing a line. Set it to the approved sentence and the fallback goes live.
+// Brief 12.1: when the weakest capacity has no published film and the next
+// weakest does, the door offers the next one and says so. If neither of the
+// two has a film, no door and nothing in its place.
 var PORTAL_ORIGIN = 'https://members.centuriocollective.com';
-var FALLBACK_LINE = null;
 
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
@@ -896,19 +831,20 @@ function renderTrainingDoor(){
       if (!data || data.gate !== 'email' || !data.trainings || !data.trainings.length) return;
       var available = {};
       data.trainings.forEach(function(t){ available[t.capacity] = t; });
-      var pick = null, fallback = false;
-      for (var i = 0; i < ordered.length; i++) {
-        if (available[ordered[i].name]) { pick = ordered[i]; fallback = i > 0; break; }
-      }
-      if (!pick || (fallback && !FALLBACK_LINE)) return;
+      var weakest = ordered[0], next = ordered[1];
+      var fallback = !available[weakest.name];
+      var pick = fallback ? next : weakest;
+      if (!available[pick.name]) return;
       var t = available[pick.name];
-      door.innerHTML =
-        '<p>Your weakest capacity is <strong>' + escapeHtml(ordered[0].name) + '</strong>.</p>' +
-        (fallback ? '<p>' + escapeHtml(FALLBACK_LINE) + '</p>' : '') +
-        (t.principle && !fallback ? '<p>' + escapeHtml(t.principle) + '</p>' : '') +
-        (fallback ? '' : '<p>Here is the training for it. Five minutes.</p>') +
-        '<button class="btn" id="watchTrainingBtn" type="button">Watch it now</button>' +
-        '<p>That training is free to watch. Everything after it, the weekly check in, Ask Centurio, the number you watch move, is inside the membership. $19 a month.</p>';
+      door.innerHTML = fallback
+        ? '<p>Your weakest is <strong>' + escapeHtml(weakest.name) + '</strong>. That training is still being filmed.</p>' +
+          '<p>Next after it is <strong>' + escapeHtml(next.name) + '</strong>, and that one is ready now.</p>' +
+          '<button class="btn" id="watchTrainingBtn" type="button">Watch ' + escapeHtml(next.name) + '</button>'
+        : '<p>Your weakest capacity is <strong>' + escapeHtml(weakest.name) + '</strong>.</p>' +
+          (t.principle ? '<p>' + escapeHtml(t.principle) + '</p>' : '') +
+          '<p>Here is the training for it. Five minutes.</p>' +
+          '<button class="btn" id="watchTrainingBtn" type="button">Watch it now</button>' +
+          '<p>That training is free to watch. Everything after it, the weekly check in, Ask Centurio, the number you watch move, is inside the membership. $19 a month.</p>';
       door.hidden = false;
       gtag('event', 'training_door_view', { fallback: fallback });
       document.getElementById('watchTrainingBtn').addEventListener('click', function(){
@@ -919,7 +855,7 @@ function renderTrainingDoor(){
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: (document.getElementById('gEmail').value || '').trim(),
-            capacities: ordered.map(function(c){ return c.name; }),
+            capacities: [pick.name],
             marketing_consent: document.getElementById('gConsent').value,
             consent_version: 'v4',
             marketing_consent_text: (document.getElementById('consentStatement').textContent || '').trim()
@@ -1169,7 +1105,7 @@ function downloadPDF(){
   y += 7;
   setFace('helv', 8.5); ink(MUTED);
   const nextLines = doc.splitTextToSize(
-    'Every Tuesday from 10 November, Centurio trains one of six Core Capacities, live. Your score today is a baseline. It moves the way anyone’s does: one week, one principle, one small commitment at a time. Take it again in six months and watch the number.',
+    'A short training for each capacity, a check in every week, and one live room a month. Your score today is a baseline. It moves the way anyone’s does: one week, one principle, one small commitment at a time. Take it again in six months and watch the number.',
     contentW);
   doc.text(nextLines, margin, y);
 

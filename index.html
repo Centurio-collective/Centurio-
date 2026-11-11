@@ -521,43 +521,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <section class="final-cta">
   <div class="wrap">
     <div class="section-label" style="justify-content:center; display:flex;">LAST THING</div>
-    <!-- Copy pack 3.2 (11 November 2026): the soft path points at the Score,
-         not the waitlist. The waitlist form below stays in the markup, hidden,
-         because score.html posts form-name=waitlist and Netlify only knows
-         that form's fields from this declaration. Do not delete it. -->
+    <!-- Copy pack 3.2: the soft path points at the Score. The hidden waitlist
+         form that sat here was removed 11 November 2026 (brief 12.3): nothing
+         on the site posts to it any more. -->
     <h2 class="display">Not ready to join?</h2>
     <p class="pitch">Take the Mental Fitness Score first. It is free and it takes three minutes.</p>
     <a class="cta" href="/score.html" style="display:inline-block; margin-top:26px;" onclick="gtag('event','cta_click',{location:'home_final_score'})">Take the Free Assessment</a>
-    <form hidden data-attribution class="signup" id="signupForm3" name="waitlist" method="POST" action="/" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
-      <input type="hidden" name="form-name" value="waitlist" />
-      <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
-      <!-- Attribution. Populated by /assets/js/attribution.js on load and
-           again on submit. Field ids are hidden_ plus the field name so the
-           populate loop derives them from ATTRIBUTION_FIELDS and the two
-           cannot drift apart. -->
-      <input type="hidden" name="utm_source" id="hidden_utm_source_3" />
-      <input type="hidden" name="utm_medium" id="hidden_utm_medium_3" />
-      <input type="hidden" name="utm_campaign" id="hidden_utm_campaign_3" />
-      <input type="hidden" name="utm_content" id="hidden_utm_content_3" />
-      <input type="hidden" name="utm_term" id="hidden_utm_term_3" />
-      <input type="hidden" name="fbclid" id="hidden_fbclid_3" />
-      <input type="hidden" name="gclid" id="hidden_gclid_3" />
-      <input type="hidden" name="referrer" id="hidden_referrer_3" />
-      <input type="hidden" name="landing_url" id="hidden_landing_url_3" />
-        <!-- Entry point, so a signup from here can be told apart from one
-             held on the score results page. partner_code is declared but
-             empty here: only the score page ever carries one. Netlify
-             builds the field list from this markup, so both have to be
-             declared or they are discarded on arrival. -->
-        <input type="hidden" name="source" value="home" />
-        <input type="hidden" name="partner_code" />
-      <div class="signup-row">
-        <input type="text" name="name" id="fName3" placeholder="First name" autocomplete="given-name" required />
-        <input type="email" name="email" id="fEmail3" placeholder="Email address" autocomplete="email" required />
-        <button type="submit" class="cta" id="submitBtn3">Keep me posted</button>
-      </div>
-      <p class="signup-msg" id="signupMsg3" role="status" aria-live="polite"></p>
-    </form>
+
   </div>
 </section>
 
@@ -603,30 +573,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 
 
-<script>
-function validateBeforeSubmit(nameEl, emailEl, msgEl){
-  const name = nameEl.value.trim();
-  const email = emailEl.value.trim();
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  if(!name || !emailOk){
-    msgEl.textContent = "Enter your first name and a valid email.";
-    msgEl.className = "signup-msg err";
-    return false;
-  }
-  msgEl.textContent = "";
-  return true;
-}
 
-const f3 = document.getElementById('signupForm3');
-if (f3) {
-f3.addEventListener('submit', (e)=>{
-  const ok = validateBeforeSubmit(document.getElementById('fName3'), document.getElementById('fEmail3'), document.getElementById('signupMsg3'));
-  if(!ok){ e.preventDefault(); return; }
-  document.getElementById('submitBtn3').disabled = true;
-  document.getElementById('submitBtn3').textContent = "Sending...";
-  });
-}
-</script>
 
 </body>
 </html>
