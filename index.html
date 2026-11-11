@@ -307,7 +307,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <section class="pitch-band">
   <div class="wrap">
-    <div class="section-label">BE FIRST THROUGH THE DOOR</div>
+    <div class="section-label">THE GYM FOR YOUR MIND</div>
     <h2 class="display">Join a community where your desired behaviour is already the normal behaviour.</h2>
     <!-- Copy spec 2.2: the feature section carries block 1.2, verbatim and in order. -->
     <p class="pitch"><strong>Your Mental Fitness Score.</strong> Twelve questions, six capacities, a number on each.</p>
@@ -364,7 +364,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <section>
   <div class="wrap">
     <div class="section-label">THE TRAINING</div>
-    <h2>Six permanent capacities. Trained every week, for life.</h2>
+    <h2>Six permanent capacities. Trained for life.</h2>
     <!-- Copy spec 2.2: the weekly live sentence is replaced with block 1.4. -->
     <p class="lede"><strong>Tuesday Training.</strong> First Tuesday of the month, 7:30pm AEST, live with Sterling. One capacity, one principle, trained properly. Free to members.</p>
 
@@ -447,16 +447,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section class="pain">
-<div class="wrap"><div class="pain-inner">
-<div class="section-label">THE FOURTH PROBLEM</div>
-<h2 class="display">Tuesday comes once a week. Everything else comes daily.</h2>
-<div class="pain-body">
-<p>Tuesday night you are clear. You know what you are training and you know why it matters.</p>
-<p>Then Thursday arrives. The meeting runs long. The message lands wrong. Someone says the thing that gets under your skin at four in the afternoon, on a day you were already tired.</p>
-<p>The training was six days ago. The notes are somewhere.</p>
-<p><strong>By the time you remember what you were working on, the moment has gone.</strong></p>
-</div></div></div></section>
+<!-- "THE FOURTH PROBLEM" block deleted 11 November 2026 (copy pack 3.1, Sterling). -->
 <section>
 <div class="wrap">
 <div class="feature-split">
@@ -497,7 +488,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <section class="pain">
 <div class="wrap"><div class="pain-inner">
-<div class="section-label">THE FIFTH PROBLEM</div>
+<div class="section-label">THE FOURTH PROBLEM</div>
 <h2 class="display">You train the mind. You train the body. Then you eat on a guess.</h2>
 <div class="pain-body">
 <p>You know your program. You know your lifts. You know what Tuesday night is for.</p>
@@ -536,9 +527,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <section class="final-cta">
   <div class="wrap">
     <div class="section-label" style="justify-content:center; display:flex;">LAST THING</div>
-    <h2 class="display">Not ready to start?</h2>
-    <p class="pitch">Leave your email and we will keep you posted as the first session gets closer.</p>
-    <form data-attribution class="signup" id="signupForm3" name="waitlist" method="POST" action="/" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <!-- Copy pack 3.2 (11 November 2026): the soft path points at the Score,
+         not the waitlist. The waitlist form below stays in the markup, hidden,
+         because score.html posts form-name=waitlist and Netlify only knows
+         that form's fields from this declaration. Do not delete it. -->
+    <h2 class="display">Not ready to join?</h2>
+    <p class="pitch">Take the Mental Fitness Score first. It is free and it takes three minutes.</p>
+    <a class="cta" href="/score.html" style="display:inline-block; margin-top:26px;" onclick="gtag('event','cta_click',{location:'home_final_score'})">Take the Free Assessment</a>
+    <form hidden data-attribution class="signup" id="signupForm3" name="waitlist" method="POST" action="/" netlify data-netlify="true" netlify-honeypot="bot-field" novalidate>
       <input type="hidden" name="form-name" value="waitlist" />
       <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
       <!-- Attribution. Populated by /assets/js/attribution.js on load and

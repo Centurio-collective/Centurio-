@@ -343,25 +343,9 @@ function trackCheckout(plan, location){
   if (window.fbq) fbq('track', 'InitiateCheckout', { value: PLAN_VALUES[plan], currency: 'AUD', content_name: 'Membership, ' + plan });
 }
 
-// A partner link carries ?code=<PROMO> (EMF10 and the like). Stripe
-// applies it on the payment link via prefilled_promo_code, so a referred
-// member never has to type anything. Restricted to a plain code shape so
-// nothing arbitrary is appended to a checkout URL. GROW50 is retired and
-// is dropped rather than passed through to a code that no longer applies.
-const PARTNER_CODE = (function(){
-  try {
-    var c = new URLSearchParams(window.location.search).get('code');
-    if (!c || !/^[A-Za-z0-9_-]{3,32}$/.test(c)) return null;
-    c = c.toUpperCase();
-    return c === 'GROW50' ? null : c;
-  } catch (err) { return null; }
-})();
-
-if (PARTNER_CODE) {
-  document.querySelectorAll('.js-cta-monthly, .js-cta-annual').forEach(function(el){
-    el.href = el.href + (el.href.indexOf('?') === -1 ? '?' : '&') + 'prefilled_promo_code=' + encodeURIComponent(PARTNER_CODE);
-  });
-}
+// Copy pack Part 5 (11 November 2026): no user discount, so the ?code=
+// passthrough that prefilled a promo code on both checkout links is gone.
+// The price is the price.
 </script>
 
 </body>
