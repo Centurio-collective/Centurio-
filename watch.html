@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2299379764149940');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXEWKVER9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Centurio</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<!-- PROMPT_69 v2 (11 November 2026). Where the re offer email 1 "Watch it
+     now" button lands. It carries a signed reference to one recipient and
+     one capacity (r, c, t), exchanges it with the portal for a fresh
+     signed playback URL, and goes straight to the film, the same way the
+     Score door does. No copy on this page by design: it is a hand off,
+     not a page anyone reads. If the link cannot play (no film published
+     for that capacity, or a bad link), it sends the person to the Score,
+     which is never a dead end. -->
+<style>
+  html,body{margin:0;background:#0d0f0e;min-height:100vh;}
+</style>
+</head>
+<body>
+<script>
+(function(){
+  var PORTAL_ORIGIN = 'https://members.centuriocollective.com';
+  var FALLBACK = '/score.html';
+  var q = new URLSearchParams(window.location.search);
+  var r = q.get('r'), c = q.get('c'), t = q.get('t');
+  function fallback(reason){
+    try { gtag('event', 'reoffer_watch_fallback', { reason: reason, capacity: c || '' }); } catch (e) {}
+    window.location.replace(FALLBACK);
+  }
+  if (!r || !c || !t) return fallback('missing_params');
+  var api = PORTAL_ORIGIN + '/api/reoffer/watch?r=' + encodeURIComponent(r) + '&c=' + encodeURIComponent(c) + '&t=' + encodeURIComponent(t);
+  fetch(api, { method: 'GET' })
+    .then(function(res){ return res.ok ? res.json() : null; })
+    .then(function(data){
+      if (!data || !data.playbackUrl) return fallback('unavailable');
+      try { gtag('event', 'reoffer_watch', { capacity: data.capacity || c }); } catch (e) {}
+      window.location.replace(data.playbackUrl);
+    })
+    .catch(function(){ fallback('network'); });
+})();
+</script>
+</body>
+</html>
