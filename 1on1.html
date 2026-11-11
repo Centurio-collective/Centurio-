@@ -129,7 +129,11 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .receipts p,.quiet .prose p{color:var(--muted); font-size:17px; line-height:1.65; max-width:760px;}
   .receipts p + p,.quiet .prose p + p{margin-top:20px;}
 
-  /* Block 6 and 7, quiet prose */
+  /* Receipts, why and who in the left column, portrait held beside them */
+  .trio-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,360px); gap:64px; align-items:start;}
+  .trio-text .quiet{margin-top:120px;}
+  .trio-side{position:sticky; top:96px; margin-top:72px;}
+  .trio-portrait{display:block; width:100%; max-width:393px; height:auto; border:1px solid var(--line);}
 
   /* Block 8. FAQs */
   .faqs h2{font-size:clamp(36px,5vw,56px); margin-bottom:28px;}
@@ -167,6 +171,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .tab{font-size:11px; letter-spacing:.05em; padding:9px 12px;}
     .cap-grid{grid-template-columns:1fr; gap:36px;}
     .split-portrait{display:none;}
+    .trio-grid{grid-template-columns:minmax(0,1fr);}
+    .trio-side{display:none;}
+    .trio-text .quiet{margin-top:80px;}
     .hero .wrap{padding-top:96px; padding-bottom:96px;}
     .lockup{bottom:24px; font-size:16px;}
   }
@@ -303,7 +310,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </section>
 
 <!-- Block 5. The life on the other side -->
-<section class="life" style="padding-top:0;">
+<section class="life" style="padding-top:0; padding-bottom:0;">
   <div class="wrap">
     <h2 class="display">The life waiting on the other side of six months</h2>
     <div class="prose">
@@ -312,30 +319,35 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <p>You become the person your family steady themselves against. Your team too. You go after the thing you have been talking about for four years, and you go after it this year.</p>
       <p><strong>Total transformation, across your mind, your body and the way you move through your own life.</strong></p>
     </div>
-    <div class="receipts">
-      <h2 class="display">The proof you walk out with</h2>
-      <p>Your why, written down, tested across six months and still standing. Six numbers at the start and six at the end, on the same thirty six questions. A habit system you built and broke and rebuilt until it held. Something you do with your state under pressure that you have run often enough to trust. Six months of training and eating with a programme behind it, and whatever that did. And twenty six weeks of promises kept to yourself, which is the one that quietly rewrites who you think you are.</p>
-      <p>Everything you run gets whichever version of you turns up.</p>
+  </div>
+</section>
+
+<!-- Block 5 receipts, Block 6 and Block 7, with the portrait beside them -->
+<section class="trio" style="padding-top:0;">
+  <div class="wrap trio-grid">
+    <div class="trio-text">
+        <div class="receipts">
+          <h2 class="display">The proof you walk out with</h2>
+          <p>Your why, written down, tested across six months and still standing. Six numbers at the start and six at the end, on the same thirty six questions. A habit system you built and broke and rebuilt until it held. Something you do with your state under pressure that you have run often enough to trust. Six months of training and eating with a programme behind it, and whatever that did. And twenty six weeks of promises kept to yourself, which is the one that quietly rewrites who you think you are.</p>
+          <p>Everything you run gets whichever version of you turns up.</p>
+        </div>
+      <!-- Block 6. Why the number is small -->
+      <div class="quiet"><div class="prose">
+            <h2 class="display">Why I only take a few</h2>
+            <p>Every practice in this programme, I run on myself. Every number in it, I take. I have been through the whole of it from the inside and I am still in it, because the work does not finish.</p>
+            <p>I take a handful of people at a time. Six months of this costs me what it costs you, and doing it properly means doing it with a few.</p>
+      </div></div>
+      <!-- Block 7. Who it is for -->
+      <div class="quiet who"><div class="prose">
+        <h2 class="display">Who this is built for</h2>
+        <p>Business owners and executives who are already performing and know with total certainty that there is another level sitting there.</p>
+        <p>Athletes who have the physical side handled and have worked out that the limit is above the neck.</p>
+        <p>Anyone who has decided this is the year for a complete overhaul and wants somebody to hold them to it for twenty six weeks straight.</p>
+      </div></div>
     </div>
-  </div>
-</section>
-
-<!-- Block 6. Why the number is small -->
-<section class="quiet" style="padding-top:0;">
-  <div class="wrap prose">
-    <h2 class="display">Why I only take a few</h2>
-    <p>Every practice in this programme, I run on myself. Every number in it, I take. I have been through the whole of it from the inside and I am still in it, because the work does not finish.</p>
-    <p>I take a handful of people at a time. Six months of this costs me what it costs you, and doing it properly means doing it with a few.</p>
-  </div>
-</section>
-
-<!-- Block 7. Who it is for -->
-<section class="quiet who" style="padding-top:0;">
-  <div class="wrap prose">
-    <h2 class="display">Who this is built for</h2>
-    <p>Business owners and executives who are already performing and know with total certainty that there is another level sitting there.</p>
-    <p>Athletes who have the physical side handled and have worked out that the limit is above the neck.</p>
-    <p>Anyone who has decided this is the year for a complete overhaul and wants somebody to hold them to it for twenty six weeks straight.</p>
+    <div class="trio-side">
+      <img class="trio-portrait" src="/assets/img/private-proof-portrait.jpg" width="393" height="607" alt="Sterling Cincotta" loading="lazy">
+    </div>
   </div>
 </section>
 
