@@ -124,14 +124,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .life .prose p + p{margin-top:26px;}
   .life .prose strong{color:var(--accent); font-weight:600;}
   .receipts{max-width:760px; margin-top:72px; padding-top:40px; border-top:1px solid var(--line);}
-  .receipts h2{font-size:clamp(32px,4vw,44px);}
-  .receipts p{color:var(--muted); font-size:15.5px; margin-top:14px;}
+  /* receipts, why and who share one style: same heading size, gap and body */
+  .receipts h2,.quiet h2{font-size:clamp(36px,5vw,56px); margin-bottom:28px;}
+  .receipts p,.quiet .prose p{color:var(--muted); font-size:17px; line-height:1.65; max-width:760px;}
+  .receipts p + p,.quiet .prose p + p{margin-top:20px;}
 
   /* Block 6 and 7, quiet prose */
-  .quiet .prose p{max-width:760px;}
-  .quiet .prose p{color:var(--muted); font-size:17px;}
-  .quiet .prose p + p{margin-top:20px;}
-  .quiet h2{font-size:clamp(36px,5vw,56px); margin-bottom:32px;}
 
   /* Block 8. FAQs */
   .faqs h2{font-size:clamp(36px,5vw,56px); margin-bottom:28px;}
