@@ -61,15 +61,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
   .wrap{ max-width:1040px; margin:0 auto; padding:0 24px; }
 
-  header{ padding:28px 0 24px; border-bottom:1px solid var(--line); }
-  .header-row{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
   .member-login-btn{display:inline-block;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
   .header-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
   .affiliate-btn{display:inline-block;background:transparent;color:var(--accent);border:1px solid rgba(216,181,106,.45);border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
   .affiliate-btn:hover{border-color:var(--accent);background:rgba(216,181,106,.12);}
   .member-login-btn:hover{background:var(--accent);color:#17120b;}
-  .wordmark{ font-family:"League Gothic","Arial Narrow",Impact,sans-serif; font-size:34px; font-weight:400; letter-spacing:.5px; line-height:.85; }
-  .wordmark a{ text-decoration:none; }
+
   .eyebrow{ font-size:11px; letter-spacing:.14em; color:var(--muted); }
 
   /* Hero: copy left, portrait right */
@@ -194,19 +191,39 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .steps{ grid-template-columns:1fr; }
     .btn-solid, .btn-secondary{ width:100%; text-align:center; }
   }
+  /* centurio-header:start */
+  /* One header, every page (PROMPT_79). Written into each page by tools/sync-header.py
+     from partials/header.css. Edit the partial and run the script; do not edit it here. */
+  header.site-header{ padding:22px 0; border-bottom:1px solid #2c312d; position:relative; z-index:5; margin:0; color:#f4f1e8; text-align:left; }
+  header.site-header > .wrap{ max-width:1040px; width:auto; margin:0 auto; padding:0 24px; }
+  header.site-header .header-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  header.site-header .wordmark{ display:block; color:#f4f1e8; line-height:0; text-decoration:none; }
+  header.site-header .wordmark svg{ display:block; height:30px; width:auto; }
+  header.site-header .header-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  @media (max-width:480px){ header.site-header .wordmark svg{ height:26px; } }
+  /* The strapline lives in the footer, as live text beside the copyright line. */
+  .strapline{ font-size:11px; color:#9aa39c; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; }
+  .copy-line{ display:inline-flex; align-items:baseline; flex-wrap:wrap; column-gap:16px; row-gap:4px; }
+  /* centurio-header:end */
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
 <body>
 
-<header>
+<header class="site-header">
   <div class="wrap header-row">
-    <div class="wordmark"><a href="/">CENTURIO</a></div>
+    <a class="wordmark" href="/" aria-label="Centurio">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.39 150.2" role="img" aria-label="Centurio">
+        <title>Centurio</title>
+        <g fill="currentColor">
+          <path transform="translate(-7.0 148.6)" d="M35.800000000000004 1.6Q26.6 1.6 20.150000000000002 -2.55Q13.700000000000001 -6.7 10.350000000000001 -13.9Q7.0 -21.1 7.0 -30.200000000000003V-116.80000000000001Q7.0 -125.80000000000001 10.45 -133.0Q13.9 -140.20000000000002 20.400000000000002 -144.4Q26.900000000000002 -148.6 35.800000000000004 -148.6Q42.5 -148.6 47.8 -146.1Q53.1 -143.6 56.85 -139.25Q60.6 -134.9 62.60000000000001 -129.15Q64.60000000000001 -123.4 64.60000000000001 -116.80000000000001V-96.60000000000001H44.400000000000006V-116.80000000000001Q44.400000000000006 -121.4 42.5 -124.5Q40.6 -127.60000000000001 36.2 -127.60000000000001Q32.2 -127.60000000000001 30.400000000000002 -124.4Q28.6 -121.2 28.6 -116.80000000000001V-30.200000000000003Q28.6 -25.8 30.55 -22.6Q32.5 -19.400000000000002 36.2 -19.400000000000002Q40.7 -19.400000000000002 42.550000000000004 -22.5Q44.400000000000006 -25.6 44.400000000000006 -30.200000000000003V-50.400000000000006H64.60000000000001V-30.200000000000003Q64.60000000000001 -21.200000000000003 61.10000000000001 -14.000000000000002Q57.6 -6.800000000000001 51.150000000000006 -2.6000000000000005Q44.7 1.6 35.800000000000004 1.6ZM74.28458434221146 0.0V-147.0H123.68458434221147V-124.80000000000001H95.88458434221147V-85.2H115.88458434221147V-63.6H95.88458434221147V-22.200000000000003H123.68458434221147V0.0ZM134.3691686844229 0.0V-147.0H154.56916868442292L174.56916868442292 -70.4L176.3691686844229 -63.6H177.56916868442292V-147.0H197.3691686844229V0.0H179.1691686844229L157.1691686844229 -76.60000000000001L155.3691686844229 -83.4H154.1691686844229V0.0ZM222.45375302663436 0.0V-124.80000000000001H202.05375302663435V-147.0H264.45375302663433V-124.80000000000001H244.05375302663435V0.0ZM297.9383373688458 1.6Q288.83833736884577 1.6 282.3883373688458 -2.6000000000000005Q275.9383373688458 -6.800000000000001 272.53833736884576 -14.000000000000002Q269.1383373688458 -21.200000000000003 269.1383373688458 -30.200000000000003V-147.0H290.7383373688458V-30.200000000000003Q290.7383373688458 -25.900000000000002 292.4383373688458 -22.650000000000002Q294.1383373688458 -19.400000000000002 297.9383373688458 -19.400000000000002Q301.9383373688458 -19.400000000000002 303.53833736884576 -22.650000000000002Q305.1383373688458 -25.900000000000002 305.1383373688458 -30.200000000000003V-147.0H326.7383373688458V-30.200000000000003Q326.7383373688458 -21.200000000000003 323.28833736884576 -14.000000000000002Q319.83833736884577 -6.800000000000001 313.3883373688458 -2.6000000000000005Q306.9383373688458 1.6 297.9383373688458 1.6ZM337.42292171105726 0.0V-147.0H359.0229217110573Q378.42292171105726 -147.0 387.62292171105724 -136.25Q396.82292171105723 -125.5 396.82292171105723 -104.60000000000001Q396.82292171105723 -92.2 392.4729217110572 -83.15Q388.12292171105724 -74.10000000000001 381.92292171105726 -69.9L396.62292171105724 0.0H375.0229217110573L362.82292171105723 -62.0H359.0229217110573V0.0ZM359.0229217110573 -82.0Q365.0229217110573 -82.0 368.5229217110573 -84.65Q372.0229217110573 -87.30000000000001 373.5229217110573 -92.20000000000002Q375.0229217110573 -97.10000000000001 375.0229217110573 -103.80000000000001Q375.0229217110573 -114.30000000000001 371.57292171105723 -119.95000000000002Q368.12292171105724 -125.60000000000001 359.0229217110573 -125.60000000000001ZM403.5075060532687 0.0V-147.0H425.1075060532687V0.0ZM463.59209039548017 1.6Q454.59209039548017 1.6 448.1420903954802 -2.6000000000000005Q441.69209039548014 -6.800000000000001 438.24209039548015 -14.000000000000002Q434.79209039548016 -21.200000000000003 434.79209039548016 -30.200000000000003V-116.80000000000001Q434.79209039548016 -125.9 438.24209039548015 -133.05Q441.69209039548014 -140.20000000000002 448.1420903954802 -144.4Q454.59209039548017 -148.6 463.59209039548017 -148.6Q472.59209039548017 -148.6 479.04209039548016 -144.4Q485.49209039548015 -140.20000000000002 488.94209039548014 -133.0Q492.3920903954802 -125.80000000000001 492.3920903954802 -116.80000000000001V-30.200000000000003Q492.3920903954802 -21.200000000000003 488.94209039548014 -14.000000000000002Q485.49209039548015 -6.800000000000001 479.04209039548016 -2.6000000000000005Q472.59209039548017 1.6 463.59209039548017 1.6ZM463.59209039548017 -19.400000000000002Q467.59209039548017 -19.400000000000002 469.19209039548014 -22.75Q470.79209039548016 -26.1 470.79209039548016 -30.200000000000003V-116.80000000000001Q470.79209039548016 -120.9 469.09209039548017 -124.25Q467.3920903954802 -127.60000000000001 463.59209039548017 -127.60000000000001Q459.8920903954802 -127.60000000000001 458.1420903954802 -124.25Q456.3920903954802 -120.9 456.3920903954802 -116.80000000000001V-30.200000000000003Q456.3920903954802 -26.1 458.09209039548017 -22.75Q459.79209039548016 -19.400000000000002 463.59209039548017 -19.400000000000002Z"/>
+        </g>
+      </svg>
+    </a>
     <div class="header-actions">
       <a href="/affiliates.html" class="affiliate-btn">Gym Partners</a>
       <a href="https://members.centuriocollective.com" class="member-login-btn">Member Login</a>
     </div>
-    <div class="eyebrow">EVIDENCE BASED MENTAL FITNESS TRAINING</div>
   </div>
 </header>
 
@@ -535,7 +552,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <footer>
   <div class="wrap footer-row">
-    <span>&copy; 2026 Centurio Collective. All rights reserved.</span>
+    <span class="copy-line"><span>&copy; 2026 Centurio Collective. All rights reserved.</span><span class="strapline">Evidence based mental fitness training</span></span>
     <div class="social-links">
       <a href="https://instagram.com/centuriocollective" target="_blank" rel="noopener noreferrer" aria-label="Centurio on Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">

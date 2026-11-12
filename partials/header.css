@@ -1,0 +1,12 @@
+  /* One header, every page (PROMPT_79). Written into each page by tools/sync-header.py
+     from partials/header.css. Edit the partial and run the script; do not edit it here. */
+  header.site-header{ padding:22px 0; border-bottom:1px solid #2c312d; position:relative; z-index:5; margin:0; color:#f4f1e8; text-align:left; }
+  header.site-header > .wrap{ max-width:1040px; width:auto; margin:0 auto; padding:0 24px; }
+  header.site-header .header-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  header.site-header .wordmark{ display:block; color:#f4f1e8; line-height:0; text-decoration:none; }
+  header.site-header .wordmark svg{ display:block; height:30px; width:auto; }
+  header.site-header .header-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  @media (max-width:480px){ header.site-header .wordmark svg{ height:26px; } }
+  /* The strapline lives in the footer, as live text beside the copyright line. */
+  .strapline{ font-size:11px; color:#9aa39c; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; }
+  .copy-line{ display:inline-flex; align-items:baseline; flex-wrap:wrap; column-gap:16px; row-gap:4px; }
