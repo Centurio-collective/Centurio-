@@ -180,6 +180,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .spot-price{ font-size:13px; color:var(--muted); }
   .cta-ghost{ background:transparent; color:var(--accent); border:1px solid var(--accent); padding:13px 25px; }
   .cta-ghost:hover{ background:rgba(216,181,106,.12); filter:none; }
+  /* PROMPT_76: the line under every Get the free guide button */
+  .nosignup{ display:block; margin:8px 0 0; font-size:13px; line-height:1.3; color:var(--muted); letter-spacing:normal; text-transform:none; font-weight:400; }
+  .guide-cta-wrap{ display:flex; flex-direction:column; align-items:center; }
+  @media (max-width:520px){ .guide-cta-wrap{ width:100%; } }
 
   @media (max-width:760px){
     .pain-inner{ padding-left:20px; }
@@ -398,8 +402,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       </div>
     </div>
     <!-- PROMPT_75: the guide, where the reader has just met the six. -->
-    <p class="lede" style="margin-top:44px;">Want the six in your hands? One practice for each capacity, and the research behind each one.</p>
-    <a class="cta cta-ghost" href="/guide" style="display:inline-block; margin-top:18px;" data-guide-loc="home_capacities">Read the guide</a>
+    <p class="lede" style="margin-top:44px; color:var(--text); font-weight:600;">Now train them.</p>
+    <p class="lede" style="margin-top:8px;">One practice for each capacity, the research behind every one, and a page at the back for the one you start with.</p>
+    <a class="cta cta-ghost" href="/guide" style="display:inline-block; margin-top:18px;" data-guide-loc="home_capacities">Get the free guide</a>
+    <p class="nosignup">No signup.</p>
   </div>
 </section>
 
@@ -532,9 +538,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
          on the site posts to it any more. -->
     <h2 class="display">Not ready to join?</h2>
     <p class="pitch">Take the Mental Fitness Score first. It is free and it takes three minutes.</p>
-    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:26px;">
+    <div style="display:flex; gap:12px; justify-content:center; align-items:flex-start; flex-wrap:wrap; margin-top:26px;">
       <a class="cta" href="/score.html" style="display:inline-block;" onclick="gtag('event','cta_click',{location:'home_final_score'})">Take the Free Assessment</a>
-      <a class="cta cta-ghost" href="/guide" style="display:inline-block;" onclick="gtag('event','cta_click',{location:'home_final_guide'})">Read the guide</a>
+      <div class="guide-cta-wrap">
+        <a class="cta cta-ghost" href="/guide" style="display:inline-block;" onclick="gtag('event','cta_click',{location:'home_final_guide'})">Get the free guide</a>
+        <p class="nosignup">No signup.</p>
+      </div>
     </div>
 
   </div>
