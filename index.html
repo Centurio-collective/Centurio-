@@ -151,6 +151,38 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .pitch-band .signup-row{ justify-content:center; }
   .pitch-band input[type=text], .pitch-band input[type=email]{ background:rgba(13,15,14,.4); border:1px solid var(--line); }
 
+  /* PROMPT_78. The membership feature table, on bone. Left aligned throughout. */
+  section.feature-table{ text-align:left; border-top:0; padding:58px 0; }
+  .feature-table .section-label{ color:#6a6f6b; font-size:11px; font-weight:600; letter-spacing:.18em; margin-bottom:14px; }
+  .feature-table h2.ft-head{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:none; letter-spacing:.005em; font-size:56px; line-height:.98; max-width:none; margin:0; color:#0d0f0e; }
+  .ft-lede{ margin-top:16px; font-size:16px; line-height:1.6; color:#434944; max-width:62ch; }
+  .ft-grid{ margin-top:30px; display:grid; grid-template-columns:32% 36% 32%; gap:0; }
+  .ft-th{ font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#6a6f6b; padding-bottom:12px; }
+  .ft-th-out{ padding-left:23px; }
+  .ft-prod, .ft-what{ padding:19px 24px 21px 0; border-top:1px solid #d8d3c6; }
+  .ft-grid > .ft-prod:nth-last-child(3), .ft-grid > .ft-what:nth-last-child(2){ border-bottom:1px solid #d8d3c6; }
+  .ft-prod{ display:flex; align-items:baseline; gap:18px; }
+  .ft-num{ flex:0 0 34px; width:34px; font-family:'League Gothic',sans-serif; font-size:26px; line-height:1; color:#0d0f0e; opacity:.34; }
+  .ft-name{ font-size:15.5px; font-weight:600; line-height:1.6; color:#0d0f0e; }
+  .ft-what{ font-size:14.5px; line-height:1.6; color:#434944; }
+  .ft-out{ background:#0d0f0e; color:var(--bone); font-size:14.5px; font-weight:600; line-height:1.6; padding:19px 24px 21px 20px; border:0; border-left:3px solid var(--accent); box-shadow:inset 0 1px 0 rgba(244,241,232,.13); }
+  .ft-grid > .ft-out:nth-child(6){ box-shadow:none; }
+  .ft-foot{ margin-top:40px; display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+  .ft-btn{ display:inline-block; background:#0d0f0e; color:var(--bone); font-size:13px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; padding:17px 36px; border-radius:0; }
+  .ft-btn:hover{ background:#24282b; }
+  .ft-price{ font-size:13px; color:#6a6f6b; }
+  @media (max-width:760px){
+    .feature-table h2.ft-head{ font-size:44px; }
+    .ft-grid{ grid-template-columns:minmax(0,1fr); }
+    .ft-th{ display:none; }
+    .ft-prod{ border-top:1px solid #d8d3c6; padding:20px 0 6px; }
+    .ft-what{ border-top:0; padding:0 0 14px; }
+    .ft-grid > .ft-prod:nth-last-child(3){ border-bottom:0; }
+    .ft-grid > .ft-what:nth-last-child(2){ border-bottom:0; }
+    .ft-out{ box-shadow:none; margin-bottom:20px; padding:14px 18px 15px 16px; }
+    .ft-grid > .ft-out:last-child{ margin-bottom:0; }
+  }
+
   /* Outcomes */
   .outs{ margin-top:32px; max-width:760px; }
   .outrow{ display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--line); }
@@ -204,7 +236,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
      C photo: --panel, a 380px portrait block beside the copy (PROMPT_77; full bleed waits for the original).
      D gold: --accent ground, centred, once per page. */
   section.band-panel{ background:var(--panel); border-top:0; }
-  section.band-statement{ background:var(--panel); border-top:0; padding:128px 0; }
+  section.band-statement{ background:var(--panel); border-top:0; padding:96px 0; }
   .band-statement .rule{ width:80px; height:3px; background:var(--accent); margin-bottom:26px; }
   .band-statement h2{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:none; letter-spacing:.005em; font-size:clamp(52px,5vw,72px); line-height:.94; max-width:22ch; }
   section.band-photo{ background:var(--panel); border-top:0; padding:36px 0; }
@@ -319,7 +351,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section class="band-statement band-bone">
+<section class="band-statement">
   <div class="wrap">
     <div class="rule" aria-hidden="true"></div>
     <h2>You have a program for your body. You have nothing for your mind.</h2>
@@ -349,20 +381,41 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section class="pitch-band">
+<section class="pitch-band band-bone feature-table">
   <div class="wrap">
     <div class="section-label">THE GYM FOR YOUR MIND</div>
-    <h2 class="display">Join a community where your desired behaviour is already the normal behaviour.</h2>
-    <!-- Copy spec 2.2: the feature section carries block 1.2, verbatim and in order. -->
-    <p class="pitch"><strong>Your Mental Fitness Score.</strong> Thirty six questions, six capacities, a number on each.</p>
-    <p class="pitch"><strong>On demand training.</strong> Short sessions for every capacity, there whenever you want them. How to build a habit plan. How to find your why. How to protect and harness your energy. How to follow through.</p>
-    <p class="pitch"><strong>A weekly check in.</strong> The same twelve questions, two for each capacity. Six numbers, and you watch them move.</p>
-    <p class="pitch"><strong>Ask Centurio.</strong> Your own mentor, trained on the whole model and on your scores.</p>
-    <p class="pitch"><strong>A message every morning.</strong> One capacity, one principle, one thing to do with it.</p>
-    <p class="pitch"><strong>The Monthly Briefing.</strong> The month's capacity, written.</p>
-    <p class="pitch"><strong>One live room a month.</strong> Tuesday Training with Sterling. Second Tuesday, 7:30pm.</p>
-    <p class="pitch"><strong>Nutrition.</strong> The body is half of it.</p>
-    <div class="hero-cta" style="margin-top:28px;"><a class="cta" href="/join.html" style="display:inline-block;" onclick="gtag('event','cta_click',{location:'home_mid_start'})">Start now</a></div>
+    <!-- PROMPT_78: the membership as a three column feature table on bone. Grid, not a table,
+         so the outcome column runs as one unbroken ink bar. Numeral and name share one cell. -->
+    <h2 class="ft-head">Everything in the membership.<br>$19 a month.</h2>
+    <p class="ft-lede">Join a community where your desired behaviour is already the normal behaviour.</p>
+    <div class="ft-grid">
+      <div class="ft-th">Product</div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">01</span><span class="ft-name">Your Mental Fitness Score</span></div>
+      <div class="ft-what">Thirty six questions, six capacities, a number on each.</div>
+      <div class="ft-out">You stop guessing which part of you needs the work.</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">02</span><span class="ft-name">On demand training</span></div>
+      <div class="ft-what">A short session for every capacity. How to build a habit plan. How to find your why. How to protect and harness your energy. How to follow through.</div>
+      <div class="ft-out">You train the weakest one the day you find out.</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">03</span><span class="ft-name">A weekly check in</span></div>
+      <div class="ft-what">The same twelve questions, two for each capacity.</div>
+      <div class="ft-out">Six numbers that move, and you see them move.</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">04</span><span class="ft-name">Ask Centurio</span></div>
+      <div class="ft-what">Your own mentor, trained on the whole model and on your scores.</div>
+      <div class="ft-out">An answer at eleven at night from something that knows where you are.</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">05</span><span class="ft-name">A message every morning</span></div>
+      <div class="ft-what">One capacity, one principle, one thing to do with it.</div>
+      <div class="ft-out">Your week keeps pointing the same way.</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">06</span><span class="ft-name">The Monthly Briefing</span></div>
+      <div class="ft-what">The month's capacity, written.</div>
+      <div class="ft-out">One capacity, properly, every month.</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">07</span><span class="ft-name">One live room a month</span></div>
+      <div class="ft-what">Tuesday Training with Sterling. Second Tuesday, 7:30pm.</div>
+      <div class="ft-out">You train it live, with everyone else in the room.</div>
+      <div class="ft-prod"><span class="ft-num" aria-hidden="true">08</span><span class="ft-name">Nutrition</span></div>
+      <div class="ft-what">The body is half of it.</div>
+      <div class="ft-out">Your training and your eating run on one plan.</div>
+    </div>
+    <div class="ft-foot"><a class="ft-btn" href="/join.html" onclick="gtag('event','cta_click',{location:'home_mid_start'})">Start now</a><span class="ft-price">$19 a month. Cancel whenever you want.</span></div>
   </div>
 </section>
 
