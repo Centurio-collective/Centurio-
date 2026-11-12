@@ -64,6 +64,23 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .details strong{ color:var(--text); }
   .footnote{ margin-top:24px; font-size:12px; color:var(--muted); }
 </style>
+<style>
+  /* Site footer (PROMPT_74, 12 November 2026): the Private page's footer
+     pattern, scoped to .site-footer so it cannot collide with this page's
+     own footer rules. Carries Score and Guide on every page. */
+  footer.site-footer{display:block; border-top:1px solid #2c312d; padding:40px 0; margin:0; font-family:'Inter',system-ui,sans-serif; font-size:13px; line-height:1.6; color:#9aa39c; text-align:left; background:transparent;}
+  footer.site-footer .sf-wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  footer.site-footer .sf-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;}
+  footer.site-footer .sf-social a{color:#9aa39c; display:inline-block;}
+  footer.site-footer .sf-social svg{width:20px; height:20px; display:block;}
+  footer.site-footer .sf-extra{text-align:center; margin-top:16px; font-size:12px;}
+  footer.site-footer .sf-links{text-align:center; margin-top:14px; font-size:11px;}
+  footer.site-footer .sf-extra a, footer.site-footer .sf-links a{color:#9aa39c; text-decoration:underline;}
+  /* This page centres one card with a flex row on body: let it wrap so the
+     footer takes its own full width line under the card. */
+  body{flex-wrap:wrap; align-content:center;}
+  footer.site-footer{flex:0 0 100%; margin-top:48px;}
+</style>
 </head>
 <body>
 
@@ -84,6 +101,23 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
   <p class="footnote">After your Discovery Session, you'll schedule each of your six Capacity Sessions directly with Sterling as you go.</p>
 </div>
+
+<footer class="site-footer">
+  <div class="sf-wrap sf-row">
+    <span>&copy; 2026 Centurio Collective. All rights reserved.</span>
+    <div class="sf-social">
+      <a href="https://instagram.com/centuriocollective" target="_blank" rel="noopener noreferrer" aria-label="Centurio on Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </div>
+    <span>Mental Fitness for life.</span>
+  </div>
+  <div class="sf-wrap sf-links"><a href="/score">Score</a> &middot; <a href="/guide">Guide</a> &middot; <a href="/about.html">About</a> &middot; <a href="/corporate.html">Corporate</a> &middot; <a href="/affiliates.html">Gym Partners</a> &middot; <a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></div>
+</footer>
 
 </body>
 </html>

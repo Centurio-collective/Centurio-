@@ -529,7 +529,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
          on the site posts to it any more. -->
     <h2 class="display">Not ready to join?</h2>
     <p class="pitch">Take the Mental Fitness Score first. It is free and it takes three minutes.</p>
-    <a class="cta" href="/score.html" style="display:inline-block; margin-top:26px;" onclick="gtag('event','cta_click',{location:'home_final_score'})">Take the Free Assessment</a>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:26px;">
+      <a class="cta" href="/score.html" style="display:inline-block;" onclick="gtag('event','cta_click',{location:'home_final_score'})">Take the Free Assessment</a>
+      <a class="cta cta-ghost" href="/guide" style="display:inline-block;" onclick="gtag('event','cta_click',{location:'home_final_guide'})">Read the guide</a>
+    </div>
 
   </div>
 </section>
@@ -560,6 +563,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <span>Mental Fitness for life.</span>
   </div>
   <div class="wrap" style="text-align:center; margin-top:14px; font-size:11px;">
+   <a href="/score" style="color:var(--muted); text-decoration:underline;">Score</a>
+   &middot;
+   <a href="/guide" style="color:var(--muted); text-decoration:underline;">Guide</a>
+   &middot;
    <a href="/about.html" style="color:var(--muted); text-decoration:underline;">About</a>
 &middot;
  <a href="/corporate.html" style="color:var(--muted); text-decoration:underline;">Corporate</a>

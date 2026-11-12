@@ -21,3 +21,14 @@
   to = "/"
   status = 301
   force = true
+
+# PROMPT_74. The Six Capacities guide opens in the browser rather than
+# forcing a save (a reader who can see it straight away is far more likely
+# to reach the last page, where the Score call to action sits), and saves
+# under a readable name. filename* carries the same name RFC 5987 encoded
+# for browsers that prefer it; the plain filename is the fallback.
+[[headers]]
+  for = "/downloads/the-six-capacities.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Content-Disposition = "inline; filename=\"The Six Capacities, Centurio.pdf\"; filename*=UTF-8''The%20Six%20Capacities%2C%20Centurio.pdf"
