@@ -178,6 +178,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .spot-facts span::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); }
   .spot-cta{ margin-top:28px; display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
   .spot-price{ font-size:13px; color:var(--muted); }
+  .cta-ghost{ background:transparent; color:var(--accent); border:1px solid var(--accent); padding:13px 25px; }
+  .cta-ghost:hover{ background:rgba(216,181,106,.12); filter:none; }
 
   @media (max-width:760px){
     .pain-inner{ padding-left:20px; }
@@ -335,6 +337,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <p class="spot-lede">Build the identity. Become unrecognisable.</p>
         <div class="spot-cta">
           <a class="cta" href="/1on1.html" onclick="gtag('event','cta_click',{location:'home_1on1_spotlight'})">See Centurio Private</a>
+          <a class="cta cta-ghost" href="/about.html" onclick="gtag('event','cta_click',{location:'home_spotlight_story'})">Sterling's Story</a>
         </div>
       </div>
     </div>
