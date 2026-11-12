@@ -28,7 +28,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>About Us — Centurio</title>
+<title>About | Centurio</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -43,13 +43,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --bg:#0d0f0e; --line:#2c312d; --text:#f4f1e8; --muted:#9aa39c; --accent:#d8b56a; }
+  :root{ --bg:#0d0f0e; --panel:#121513; --line:#2c312d; --text:#f4f1e8; --muted:#9aa39c; --accent:#d8b56a; }
   *{box-sizing:border-box; margin:0; padding:0}
   body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased; }
   .display{ font-family:'League Gothic',"Arial Narrow",Impact,sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.01em; }
   a{ color:var(--accent); }
   :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
-  .wrap{ max-width:760px; margin:0 auto; padding:0 24px; }
   header{ padding:26px 0; border-bottom:1px solid var(--line); }
   .header-row{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; max-width:760px; margin:0 auto; padding:0 24px; }
   .member-login-btn{display:inline-block;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:2px;padding:8px 20px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:12px;text-decoration:none;white-space:nowrap;transition:all .15s ease;}
@@ -59,16 +58,43 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .member-login-btn:hover{background:var(--accent);color:#17120b;}
   .wordmark{ font-family:"League Gothic","Arial Narrow",Impact,sans-serif; font-size:31px; font-weight:400; letter-spacing:.5px; line-height:.85; }
   .wordmark a{ text-decoration:none; color:var(--text); }
-  main{ padding:56px 0 90px; }
   .eyebrow{ font-size:11px; letter-spacing:.14em; color:var(--muted); margin-bottom:14px; text-transform:uppercase; }
-  h1{ font-size:clamp(34px,6vw,54px); line-height:1.05; }
-  section{ margin-top:48px; }
-  h2{ font-size:clamp(20px,3vw,26px); line-height:1.1; margin-bottom:16px; }
-  p{ margin-bottom:14px; font-size:15px; color:#d6d3c8; }
-  .emphasis{ font-size:clamp(20px,3vw,26px); line-height:1.2; color:var(--text); margin:32px 0; }
-  .citations{ margin-top:32px; }
-  .citations p{ font-size:12px; line-height:1.6; color:var(--muted); margin-bottom:8px; }
   footer{ border-top:1px solid var(--line); padding:28px 0; text-align:center; font-size:12px; color:var(--muted); }
+
+  /* PROMPT_73. A reading page: one column, about 65 characters a line. */
+  main{ padding:72px 24px 104px; }
+  .read{ max-width:580px; margin:0 auto; }
+  .read p{ font-size:18px; line-height:1.8; color:#dcd9ce; }
+  .read p + p{ margin-top:22px; }
+  .part{ margin-top:72px; }
+
+  /* Portrait above the statement, never wider than 300px: the file is 416px across. */
+  .portrait{ display:block; width:100%; max-width:220px; height:auto; }
+  .opening h1{ font-size:clamp(44px,6vw,64px); line-height:1.02; margin-top:40px; }
+
+  /* The turn: a rule above and a step up in type */
+  .turn{ margin-top:88px; padding-top:56px; border-top:1px solid var(--line); }
+  .turn h2{ font-size:clamp(38px,5vw,52px); line-height:1.05; color:var(--text); margin-bottom:28px; }
+  .turn p{ font-size:20px; line-height:1.75; color:var(--text); }
+
+  .cap{ color:var(--accent); font-weight:600; }
+
+  .mission{ margin-top:96px; padding-top:56px; border-top:1px solid var(--line); }
+  .mission h2{ font-size:clamp(44px,6.4vw,68px); line-height:1.02; margin-bottom:28px; }
+
+  .ctas{ margin-top:72px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .cta{ display:flex; align-items:center; justify-content:center; text-align:center; background:var(--accent); color:var(--bg); padding:18px 16px; font-weight:600; font-size:13px; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; border-radius:2px; }
+  .cta:hover{ filter:brightness(1.08); }
+
+  @media (max-width:640px){
+    main{ padding:48px 20px 80px; }
+    .read p{ font-size:17px; }
+    .turn p{ font-size:18px; }
+    .portrait{ max-width:200px; }
+    .opening h1{ margin-top:32px; }
+    .part{ margin-top:56px; }
+    .ctas{ grid-template-columns:1fr; }
+  }
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -85,41 +111,63 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </header>
 
-<main class="wrap">
-  <div class="eyebrow">Who We Are</div>
-  <h1 class="display">About Us</h1>
-
-  <section>
-    <h2 class="display">Mental Fitness Definition</h2>
-    <p>Mental Fitness is the lifelong practice of strengthening the six Core Capacities that help us continually become all that we are capable of becoming.</p>
-    <p>It is not the same conversation as mental health. Mental health is what you do when something is wrong. Mental Fitness is what you do so less goes wrong in the first place. Physical health has doctors. Physical fitness has a gym. Mental health has therapists and psychiatrists, and that matters enormously. Mental Fitness has never had its own gym.</p>
-  </section>
-
-  <section>
-    <h2 class="display">Where mental fitness came from</h2>
-    <p>The term mental fitness was coined in 1964 by Dorothea McCarthy in American Psychologist, as an answer to a public health expert who had written that positive mental health was being ignored and needed a new name, one that would actually engage ordinary people. She proposed pairing it with President Kennedy's national physical fitness program to create what she called a total fitness solution.</p>
-    <p>Nearly fifty years later, a study out of the University of Wollongong put the concept to an international panel of twenty five experts, who reached consensus on a definition: mental fitness is the modifiable capacity to utilise resources and skills to flexibly adapt to challenges or advantages, enabling thriving. They chose the word modifiable deliberately, because it means the capacity can be trained in the same way physical fitness is trained.</p>
-    <p>They agreed on four principles. That fitness is a positive term free of the stigma attached to mental health. That it should be understood like physical fitness. That it is measurable. And that it can be improved through regular practice. That last one drew the strongest agreement of anything they tested.</p>
-    <p>The researchers said mental fitness is measurable and improvable, and then said nobody had built the instrument or the program.</p>
-    <p class="emphasis">We built both.</p>
-    <div class="citations">
-      <p>McCarthy, D. (1964). Mental Fitness. American Psychologist, 19, 201-202.</p>
-      <p>Robinson, P., Oades, L.&nbsp;G., &amp; Caputi, P. (2015). <a href="https://www.internationaljournalofwellbeing.org/index.php/ijow/article/view/256" target="_blank" rel="noopener noreferrer">Conceptualising and measuring mental fitness: A Delphi study</a>. International Journal of Wellbeing, 5(1), 53-73.</p>
+<!-- PROMPT_73 (12 November 2026). The founder story. Copy is final and
+     goes to the lawyer with the Private agreement: do not edit it here.
+     The treatment paragraph stays, in full, above the calls to action. -->
+<main>
+  <article class="read">
+    <div class="opening">
+      <img class="portrait" src="/assets/img/sterling-portrait-about.jpg" width="416" height="626" alt="Sterling Cincotta">
+      <h1 class="display">I believe we have a responsibility to become all that we are capable of becoming.</h1>
     </div>
-  </section>
 
-  <section>
-    <h2 class="display">Our Mission</h2>
-    <p>To make Mental Fitness as normal as Physical Fitness. We believe people should train their minds with the same consistency, intention and discipline that society has normalised for physical fitness. Centurio exists to make that possible.</p>
-  </section>
+    <div class="part">
+      <p>I did not always believe it. For a long stretch I would have told you I was doing fine and I would have meant it, because the businesses were working, the numbers were going the right way, and nobody looking in from the outside could see a problem.</p>
+      <p>Here is what the inside looked like.</p>
+      <p>I was 103 kilos. I ate whatever was quickest and I drank most nights, and the drinking had stopped being a decision some years before that. I gambled. I made promises to myself on a Sunday evening and broke them by Tuesday, then made them again the following Sunday, which is its own particular kind of exhausting. My state ran the room. Something would go against me at nine in the morning and everyone near me knew about it by ten, and I would lose the rest of the week to a thing that took ninety seconds to happen.</p>
+      <p>None of that appears in a set of accounts. It appears in the people around you, in what you are like at home, and in the quiet certainty that there is a version of you somewhere that you are not currently being.</p>
+      <p>I have spent a great deal of money becoming the person I am today. Some of it went on courses, coaches, programmes and books. The best money I have ever spent. Far more of it went on decisions I made while I was not in control of myself, and those were the expensive ones. I paid for this education the hard way, and not in course fees.</p>
+    </div>
 
-  <section>
-    <h2 class="display">Why Centurio Exists</h2>
-    <p>Most of us have spent years training the body. A gym membership. A running habit. A social sport. Someone holding us accountable when we would rather skip it. All of that effort, and the mind, the thing every single one of those efforts actually depends on, gets none of the same discipline.</p>
-    <p>We assume it will keep up on its own. It does not, simply because nothing has ever asked it to train.</p>
-    <p>Physical fitness has a gym, a coach, a habit everyone understands. Mental fitness never has. So we built one.</p>
-    <p>Centurio exists because the gap between how well we train our bodies and how little we train our minds was never actually necessary. It was just never built. Now it is.</p>
-  </section>
+    <div class="turn">
+      <h2 class="display">I remember the day I had enough.</h2>
+      <p>It was time to take massive action. What I understood standing there was that massive action was going to look like something very small. A few adjustments, made that day, then made again the next day, and the day after that, for as long as it took to stay on the path while everything underneath me changed.</p>
+      <p>It took time. It was always going to take time. The decision happened in a moment and the transformation happened in increments, and I have been making them ever since.</p>
+    </div>
+
+    <div class="part">
+      <p>What I could not find was anywhere to train it.</p>
+      <p>I could book a session for my body. I could walk into any gym in the country, and somebody would measure me, give me a programme and hold me to it, and nobody would think that was strange. My mind was running every part of my life and there was nothing. No measure, no programme, no gym. Advice, yes. Plenty of advice. Nothing you could turn up to on a Tuesday and do the reps.</p>
+      <p>So I built it.</p>
+    </div>
+
+    <div class="part">
+      <p>The six Core Capacities are not something I read in a book and decided to sell. They are what it actually took, named afterwards. Every one of them is a thing I got wrong first.</p>
+      <p><strong class="cap">Lead</strong> is the promises you keep to yourself, and I had broken every one of mine. <strong class="cap">Align</strong> is knowing where you are going, and I had been busy for years without being able to say what it was adding up to. <strong class="cap">Regulate</strong> is your state, and mine had been running me since I was old enough to have one. <strong class="cap">Connect</strong> is the people around you, and the people closest to me were getting the worst of me. <strong class="cap">Grow</strong> is staying teachable, and I had known most of this for a decade without changing any of it. <strong class="cap">Perform</strong> is turning intention into action, and my intentions were excellent.</p>
+      <p>Six things. Train them and your life changes. Leave them and it does not.</p>
+    </div>
+
+    <div class="part">
+      <p>Today I am alcohol free. I do not bet. I train, I eat to a plan, and I take the same assessment I give everybody else, because the work does not finish and I am not above my own programme.</p>
+      <p>That is not a before and after story. It is a practice, and I am still in it.</p>
+    </div>
+
+    <div class="mission">
+      <h2 class="display">Mental Fitness should be as normal as Physical Fitness.</h2>
+      <p>That is what Centurio is for. Not as a slogan, as a thing that should be literally true, with a measure, a programme, a coach, and a room you turn up to.</p>
+    </div>
+
+    <div class="part">
+      <p>Business owners, executives and athletes who are performing and know with total certainty that there is another level sitting there.</p>
+      <p>And people in the position I was in. If you are running something successful and the thing you are not talking about is the drinking, or the betting, or the fact that you have not kept a promise to yourself in two years, I know exactly what that is from the inside and nothing you say is going to shock me.</p>
+      <p>One thing I will always be straight about. I am a coach and Centurio is training, not treatment. If what you are carrying needs medical or psychological care, I will tell you that on the call and I will help you find it, and that is not me handing you off. A lot of people need both. What I do is the part that comes after the decision, which is building the person who can keep it.</p>
+    </div>
+
+    <div class="ctas">
+      <a class="cta" href="/score" onclick="gtag('event','cta_click',{location:'about_score'})">Take the Mental Fitness Score</a>
+      <a class="cta" href="/1on1" onclick="gtag('event','cta_click',{location:'about_private'})">Centurio Private</a>
+    </div>
+  </article>
 </main>
 
 <footer>&copy; 2026 Centurio Collective. <a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></footer>
