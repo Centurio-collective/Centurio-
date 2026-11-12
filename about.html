@@ -43,7 +43,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --bg:#0d0f0e; --panel:#121513; --line:#2c312d; --text:#f4f1e8; --muted:#9aa39c; --accent:#d8b56a; }
+  :root{ --bg:#0d0f0e; --panel:#191e1b; --bone:#f4f1e8; --line:#2c312d; --text:#f4f1e8; --muted:#9aa39c; --accent:#d8b56a; }
   *{box-sizing:border-box; margin:0; padding:0}
   body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased; }
   .display{ font-family:'League Gothic',"Arial Narrow",Impact,sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.01em; }
@@ -91,6 +91,25 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .ctas{ margin-top:72px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .cta{ display:flex; align-items:center; justify-content:center; text-align:center; background:var(--accent); color:var(--bg); padding:18px 16px; font-weight:600; font-size:13px; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; border-radius:2px; }
   .cta:hover{ filter:brightness(1.08); }
+
+  /* PROMPT_77. About is a bone page: dark is for selling, bone is for
+     reading. Header and footer stay dark; the story reads as a document
+     between them. No gold type on bone (about 1.6:1); ink rules instead. */
+  body{ background:var(--bone); color:#24282b; }
+  header{ background:var(--bg); color:var(--text); border-bottom:0; }
+  body > footer.site-footer{ background:var(--bg); }
+  main a{ color:#0d0f0e; }
+  main :focus-visible{ outline-color:#0d0f0e; }
+  .read p{ color:#24282b; }
+  .opening h1, .turn h2, .mission h2{ color:#0d0f0e; }
+  .turn p{ color:#24282b; }
+  .turn, .mission{ border-top-color:rgba(13,15,14,.22); }
+  .cap{ color:#0d0f0e; font-weight:600; }
+  .guide-btn{ border-color:#0d0f0e; color:#0d0f0e; }
+  .guide-btn:hover{ background:rgba(13,15,14,.06); }
+  .read .nosignup{ color:#6a6f6b; }  /* #6b706c measured 4.47:1 on bone; one step darker passes at 4.54:1 */
+  .cta{ background:#0d0f0e; color:var(--bone); }
+  .cta:hover{ filter:none; background:#24282b; }
 
   @media (max-width:640px){
     main{ padding:48px 20px 80px; }

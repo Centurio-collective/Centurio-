@@ -45,7 +45,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   :root{
     --bg:#0d0f0e; --line:#2c312d; --text:#f4f1e8;
     --muted:#9aa39c; --accent:#d8b56a;
-    --panel:#121513;
+    --panel:#191e1b; --bone:#f4f1e8;
     --c-lead:#8a8a8a; --c-align:#c9a97e; --c-regulate:#9aa0a3;
     --c-connect:#b0554c; --c-grow:#5a8055; --c-perform:#8a8862;
   }
@@ -105,7 +105,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .signup-msg.ok{ color:var(--accent); }
   .signup-msg.err{ color:#e39a92; }
 
-  section{ padding:68px 0; border-top:1px solid var(--line); }
+  section{ padding:58px 0; border-top:1px solid var(--line); }
   .section-label{ font-size:11px; letter-spacing:.14em; color:var(--muted); margin-bottom:16px; }
   h2{ font-size:clamp(28px,4vw,44px); font-weight:700; max-width:680px; line-height:1.08; }
   .lede{ margin-top:22px; font-size:17px; color:var(--muted); max-width:600px; }
@@ -126,7 +126,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .founder blockquote{ font-size:22px; line-height:1.4; font-weight:500; max-width:600px; }
   .founder cite{ display:block; margin-top:16px; font-style:normal; font-size:13px; color:var(--muted); letter-spacing:.03em; }
 
-  .final-cta{ text-align:center; padding:88px 0; }
+  .final-cta{ text-align:center; padding:76px 0; }
   .final-cta h2{ margin:0 auto; }
   .final-cta .lede{ margin-left:auto; margin-right:auto; }
   .final-cta .pitch{ margin:22px auto 0; font-size:17px; color:var(--muted); max-width:620px; }
@@ -142,7 +142,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .pain-body strong{ color:var(--text); font-weight:600; }
 
   /* Waitlist pitch, mid page, directly under the definition */
-  .pitch-band{ text-align:center; border-top:1px solid var(--line); padding:80px 0; }
+  .pitch-band{ text-align:center; border-top:1px solid var(--line); padding:68px 0; }
   .pitch-band h2{ margin:0 auto; }
   .pitch-band .pitch{ margin:22px auto 0; font-size:17px; color:var(--muted); max-width:620px; }
   .pitch-band .pitch strong{ color:var(--text); font-weight:600; }
@@ -201,17 +201,16 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   /* PROMPT_76. The four band types. These are the only four.
      A panel: full bleed --panel against sections on --bg.
      B statement: --panel, one League Gothic line under a short gold rule, nothing else.
-     C photo: --panel, image slot 38% (gradient into the panel) and copy 62%.
+     C photo: --panel, a 380px portrait block beside the copy (PROMPT_77; full bleed waits for the original).
      D gold: --accent ground, centred, once per page. */
   section.band-panel{ background:var(--panel); border-top:0; }
   section.band-statement{ background:var(--panel); border-top:0; padding:128px 0; }
   .band-statement .rule{ width:80px; height:3px; background:var(--accent); margin-bottom:26px; }
   .band-statement h2{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:none; letter-spacing:.005em; font-size:clamp(52px,5vw,72px); line-height:.94; max-width:22ch; }
-  section.band-photo{ background:var(--panel); border-top:0; padding:0; }
-  .band-photo .photo-grid{ display:grid; grid-template-columns:38% 62%; align-items:stretch; min-height:380px; }
-  .band-photo .photo-slot{ position:relative; background:var(--panel) center/cover no-repeat; }
-  .band-photo .photo-slot::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(18,21,19,0) 55%, var(--panel) 100%); }
-  .band-photo .photo-copy{ padding:64px 48px 64px 56px; display:flex; flex-direction:column; justify-content:center; }
+  section.band-photo{ background:var(--panel); border-top:0; padding:36px 0; }
+  .band-photo .photo-grid{ display:grid; grid-template-columns:380px minmax(0,1fr); gap:56px; align-items:center; }
+  .band-photo .photo-block{ display:block; width:380px; height:auto; border:1px solid var(--line); border-radius:3px; }
+  .band-photo .photo-copy{ display:flex; flex-direction:column; justify-content:center; }
   .band-photo h2{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:none; letter-spacing:.005em; font-size:clamp(40px,4.2vw,52px); line-height:1.02; max-width:16ch; }
   .band-photo .photo-line{ margin-top:16px; font-size:16.5px; color:var(--muted); max-width:520px; }
   .band-photo .spot-cta{ margin-top:28px; }
@@ -222,21 +221,25 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .band-gold .gold-btn:hover{ background:#1a1d1b; }
   .band-gold .gold-micro{ margin-top:10px; font-size:13px; color:rgba(13,15,14,.72); }
   .tone-accent{ color:var(--accent); }
+  /* PROMPT_77. The third ground. Bone is for reading; never beside the gold band. */
+  section.band-bone{ background:var(--bone); color:#0d0f0e; }
+  .band-bone .rule{ background:#0d0f0e; }
+  .band-bone h2{ color:#0d0f0e; }
+  .band-bone .section-label{ color:#6a6f6b; }
   /* Two panel coloured bands that meet keep a hairline between them. */
-  section.band-panel + section.band-panel, section.band-panel + section.band-statement, section.band-statement + section.band-panel,
+  section.band-panel + section.band-panel, section.band-panel + section.band-statement:not(.band-bone), section.band-statement:not(.band-bone) + section.band-panel,
   section.band-photo + section.band-statement, section.band-statement + section.band-photo, section.band-photo + section.band-panel, section.band-panel + section.band-photo{ border-top:1px solid var(--line); }
   @media (max-width:760px){
     section.band-statement{ padding:96px 0; }
-    .band-photo .photo-grid{ grid-template-columns:1fr; min-height:0; }
-    .band-photo .photo-slot{ display:none; }
-    .band-photo .photo-copy{ padding:72px 24px; }
+    .band-photo .photo-grid{ grid-template-columns:minmax(0,1fr); gap:32px; }
+    .band-photo .photo-block{ width:100%; max-width:380px; }
     section.band-gold{ padding:80px 0; }
   }
 
   /* PROMPT_76 Part 3. Capacity cards: separated panel cards, icon chip with the
      capacity's mark (from The Six Capacities guide), tagline in the capacity colour. */
   .cap-grid{ margin-top:44px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; background:none; border:0; }
-  .cap{ background:var(--panel); border:1px solid var(--line); border-radius:3px; padding:20px 20px 22px; }
+  .cap{ background:var(--bg); border:1px solid var(--line); border-radius:3px; padding:20px 20px 22px; }
   .cap-head{ display:flex; align-items:center; gap:14px; }
   .cap-chip{ flex:none; width:40px; height:40px; border-radius:7px; background:var(--chip); display:flex; align-items:center; justify-content:center; }
   .cap-chip img{ width:30px; height:auto; display:block; }
@@ -316,7 +319,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section class="band-statement">
+<section class="band-statement band-bone">
   <div class="wrap">
     <div class="rule" aria-hidden="true"></div>
     <h2>You have a program for your body. You have nothing for your mind.</h2>
@@ -364,12 +367,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </section>
 
 <section class="band-photo" id="private">
-  <div class="photo-grid">
-    <!-- PHOTO SLOT. Held until the full resolution photograph of Sterling
-         arrives (the current file is 416px wide and softens at full bleed).
-         To add it: set background-image on .photo-slot below. The gradient
-         into the panel is already in place. -->
-    <div class="photo-slot" aria-hidden="true"></div>
+  
+  <div class="wrap photo-grid">
+    <!-- PROMPT_77: a fixed 380px portrait block at its natural aspect, under
+         the file's native 416px so it stays sharp. Full bleed waits for the
+         full resolution original. -->
+    <img class="photo-block" src="/assets/img/sterling-portrait-about.jpg" width="416" height="626" alt="Sterling Cincotta" loading="lazy">
     <div class="photo-copy">
       <h2>Complete transformation. Private Coaching with Sterling</h2>
       <p class="photo-line">Six months. Mind, body and performance. Built from your numbers, measured against them.</p>
@@ -503,7 +506,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<section class="band-statement">
+<section class="band-statement band-bone">
   <div class="wrap">
     <div class="rule" aria-hidden="true"></div>
     <h2>You train the mind. You train the body. Then you eat on a guess.</h2>

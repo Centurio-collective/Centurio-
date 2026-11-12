@@ -47,7 +47,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
      no testimonials. Copy is final; do not edit it here. -->
 <style>
   :root{
-    --bg:#0d0f0e; --panel:#121513; --text:#f4f1e8; --accent:#d8b56a; --muted:#9aa39c; --line:#2c312d;
+    --bg:#0d0f0e; --panel:#191e1b; --text:#f4f1e8; --accent:#d8b56a; --muted:#9aa39c; --line:#2c312d;
     --c-lead:#8a8a8a; --c-align:#c9a97e; --c-regulate:#9aa0a3; --c-connect:#b0554c; --c-grow:#5a8055; --c-perform:#8a8862;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -92,10 +92,11 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .video-grid p + p{margin-top:22px;}
 
   /* Block 3. The six cell grid */
+  section.caps{background:var(--panel);}
   .grid-head{text-align:center;}
   .grid-head h2{font-size:clamp(40px,6vw,72px); margin-top:14px;}
   .cap-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:64px;}
-  .cap-cell{background:var(--panel); border:1px solid var(--line); border-radius:3px; padding:22px 22px 24px;}
+  .cap-cell{background:var(--bg); border:1px solid var(--line); border-radius:3px; padding:22px 22px 24px;}
   .cap-head{display:flex; align-items:center; gap:14px;}
   .cap-chip{flex:none; width:40px; height:40px; border-radius:7px; background:var(--chip); display:flex; align-items:center; justify-content:center;}
   .cap-chip img{width:30px; height:auto; display:block;}
@@ -227,8 +228,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
-<!-- Block 3. The six cell grid -->
-<section>
+<!-- Block 3. The six cell grid. PROMPT_77: cards on --bg, the section on --panel. -->
+<section class="caps">
   <div class="wrap">
     <div class="grid-head">
       <div class="eyebrow">The Six Core Capacities</div>
@@ -282,7 +283,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </section>
 
 <!-- Block 4. How the six months run -->
-<section style="padding-top:0;">
+<section>
   <div class="wrap split">
     <div class="split-side">
       <h2 class="display">Built for you, from your own numbers</h2>
