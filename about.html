@@ -78,6 +78,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .turn p{ font-size:20px; line-height:1.75; color:var(--text); }
 
   .cap{ color:var(--accent); font-weight:600; }
+  .read p.guide-link{ margin-top:28px; margin-bottom:6px; }
+  .guide-btn{ display:inline-block; border:1px solid var(--accent); color:var(--accent); padding:13px 26px; border-radius:2px; font-size:12px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; line-height:1.4; }
+  .guide-btn:hover{ background:rgba(216,181,106,.12); }
 
   .mission{ margin-top:96px; padding-top:56px; border-top:1px solid var(--line); }
   .mission h2{ font-size:clamp(44px,6.4vw,68px); line-height:1.02; margin-bottom:28px; }
@@ -156,6 +159,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <div class="part">
       <p>The six Core Capacities are not something I read in a book and decided to sell. They are what it actually took, named afterwards. Every one of them is a thing I got wrong first.</p>
       <p><strong class="cap">Lead</strong> is the promises you keep to yourself, and I had broken every one of mine. <strong class="cap">Align</strong> is knowing where you are going, and I had been busy for years without being able to say what it was adding up to. <strong class="cap">Regulate</strong> is your state, and mine had been running me since I was old enough to have one. <strong class="cap">Connect</strong> is the people around you, and the people closest to me were getting the worst of me. <strong class="cap">Grow</strong> is staying teachable, and I had known most of this for a decade without changing any of it. <strong class="cap">Perform</strong> is turning intention into action, and my intentions were excellent.</p>
+      <p class="guide-link"><a class="guide-btn" href="/guide" data-guide-loc="about_capacities">Read the guide</a></p>
       <p>Six things. Train them and your life changes. Leave them and it does not.</p>
     </div>
 
@@ -199,5 +203,28 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="sf-wrap sf-links"><a href="/score">Score</a> &middot; <a href="/guide">Guide</a> &middot; <a href="/about.html">About</a> &middot; <a href="/corporate.html">Corporate</a> &middot; <a href="/affiliates.html">Gym Partners</a> &middot; <a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></div>
 </footer>
 
+<script>
+/* PROMPT_75. Buttons to /guide placed in the page body fire guide_download
+   with their own link_location, so each placement can be compared. Same
+   parameters as the /guide page's own event: the session's stored
+   utm_source, utm_medium and utm_campaign from assets/js/attribution.js. */
+(function(){
+  var links = document.querySelectorAll('a[data-guide-loc]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function(){
+      var a = {};
+      try { a = (typeof attributionRead === 'function') ? attributionRead() : {}; } catch (e) {}
+      var p = {
+        utm_source: a.utm_source || '(none)',
+        utm_medium: a.utm_medium || '(none)',
+        utm_campaign: a.utm_campaign || '(none)',
+        link_location: this.getAttribute('data-guide-loc')
+      };
+      try { gtag('event', 'guide_download', Object.assign({ transport_type: 'beacon' }, p)); } catch (e) {}
+      try { fbq('trackCustom', 'GuideDownload', p); } catch (e) {}
+    });
+  }
+})();
+</script>
 </body>
 </html>

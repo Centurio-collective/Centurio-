@@ -397,6 +397,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <p class="cap-desc">Execute consistently when it matters most. Turn intention into disciplined action.</p>
       </div>
     </div>
+    <!-- PROMPT_75: the guide, where the reader has just met the six. -->
+    <p class="lede" style="margin-top:44px;">Want the six in your hands? One practice for each capacity, and the research behind each one.</p>
+    <a class="cta cta-ghost" href="/guide" style="display:inline-block; margin-top:18px;" data-guide-loc="home_capacities">Read the guide</a>
   </div>
 </section>
 
@@ -585,5 +588,28 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 
 
+<script>
+/* PROMPT_75. Buttons to /guide placed in the page body fire guide_download
+   with their own link_location, so each placement can be compared. Same
+   parameters as the /guide page's own event: the session's stored
+   utm_source, utm_medium and utm_campaign from assets/js/attribution.js. */
+(function(){
+  var links = document.querySelectorAll('a[data-guide-loc]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function(){
+      var a = {};
+      try { a = (typeof attributionRead === 'function') ? attributionRead() : {}; } catch (e) {}
+      var p = {
+        utm_source: a.utm_source || '(none)',
+        utm_medium: a.utm_medium || '(none)',
+        utm_campaign: a.utm_campaign || '(none)',
+        link_location: this.getAttribute('data-guide-loc')
+      };
+      try { gtag('event', 'guide_download', Object.assign({ transport_type: 'beacon' }, p)); } catch (e) {}
+      try { fbq('trackCustom', 'GuideDownload', p); } catch (e) {}
+    });
+  }
+})();
+</script>
 </body>
 </html>
