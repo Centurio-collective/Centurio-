@@ -267,17 +267,11 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <!-- IMAGE BAND -->
   <div class="media-band">
     <picture>
-      <source type="image/webp"
-              srcset="/assets/img/couple-landing-page-700.webp 700w,
-                      /assets/img/couple-landing-page-1000.webp 1000w,
-                      /assets/img/couple-landing-page-1536.webp 1536w"
-              sizes="100vw" />
-      <img src="/assets/img/couple-landing-page-1000.jpg"
-           srcset="/assets/img/couple-landing-page-700.jpg 700w,
-                   /assets/img/couple-landing-page-1000.jpg 1000w,
-                   /assets/img/couple-landing-page-1536.jpg 1536w"
-           sizes="100vw" width="1536" height="1024" decoding="async"
-           alt="A man and a woman running on treadmills on one side of a gym, and the same two people seated on the other side, both writing in notebooks." />
+      <!-- Train the mind, train the body. Phones get the 3:4 crop. -->
+      <source media="(max-width:760px)" type="image/webp" srcset="/assets/img/train-both-phone-720.webp 720w, /assets/img/train-both-phone-1080.webp 1080w, /assets/img/train-both-phone-1440.webp 1440w" sizes="100vw" width="1440" height="1920">
+      <source media="(max-width:760px)" srcset="/assets/img/train-both-phone-720.jpg 720w, /assets/img/train-both-phone-1080.jpg 1080w, /assets/img/train-both-phone-1440.jpg 1440w" sizes="100vw" width="1440" height="1920">
+      <source type="image/webp" srcset="/assets/img/train-both-wide-960.webp 960w, /assets/img/train-both-wide-1440.webp 1440w, /assets/img/train-both-wide-1920.webp 1920w, /assets/img/train-both-wide-2880.webp 2880w" sizes="100vw">
+      <img src="/assets/img/train-both-wide-1440.jpg" srcset="/assets/img/train-both-wide-960.jpg 960w, /assets/img/train-both-wide-1440.jpg 1440w, /assets/img/train-both-wide-1920.jpg 1920w, /assets/img/train-both-wide-2880.jpg 2880w" sizes="100vw" width="2880" height="1920" decoding="async" alt="A gym overlooking the hills: treadmill running on one side, and two people seated at a table on the other, writing in notebooks.">
     </picture>
   </div>
 
