@@ -78,9 +78,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .pct-ip sup.tm{ font-size:.62em; line-height:0; vertical-align:super; }
 
   /* 1. Hero: dark, left aligned, no photograph. Same scale as the Private hero. */
-  section.pct-hero{ padding:128px 0 112px; }
+  section.pct-hero{ position:relative; overflow:hidden; min-height:min(calc(100vh - 82px), 860px); display:flex; align-items:center; padding:96px 0; background:var(--bg); }
+  .pct-hero .hero-photo{ position:absolute; inset:0; z-index:0; }
+  .pct-hero .hero-photo img{ display:block; width:100%; height:100%; object-fit:cover; object-position:100% 50%; }
+  .pct-hero .wrap{ position:relative; z-index:1; width:100%; }
   .pct-hero .eyebrow{ font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
-  .pct-hero h1{ font-size:clamp(64px,13vw,176px); line-height:.92; margin-top:18px; overflow-wrap:break-word; }
+  .pct-hero h1{ font-size:clamp(64px,8vw,116px); line-height:.92; margin-top:18px; max-width:4.3em; overflow-wrap:break-word; }
   .pct-hero .lede{ margin-top:26px; font-size:clamp(17px,2vw,21px); max-width:620px; color:#e6e2d6; }
 
   /* The band system, as on the home page. */
@@ -153,7 +156,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .social-links svg{ width:20px; height:20px; }
 
   @media (max-width:760px){
-    section.pct-hero{ padding:88px 0 80px; }
+    section.pct-hero{ min-height:0; padding:120px 0 72px; align-items:flex-end; }
+    .pct-hero .hero-photo::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(13,15,14,.15) 0%, rgba(13,15,14,.55) 45%, rgba(13,15,14,.9) 100%); }
     section.band-statement{ padding:80px 0; }
     .cap-grid{ grid-template-columns:1fr 1fr; }
     .band-photo .photo-grid{ grid-template-columns:minmax(0,1fr); gap:32px; }
@@ -211,6 +215,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
      progressions stay inside the membership and the certification. Do not publish them here. -->
 <main>
 <section class="pct-hero">
+  <picture class="hero-photo" aria-hidden="true">
+    <source media="(max-width:760px)" type="image/webp" srcset="/assets/img/pct-hero-phone.webp">
+    <source media="(max-width:760px)" srcset="/assets/img/pct-hero-phone.jpg">
+    <source type="image/webp" srcset="/assets/img/pct-hero-1672.webp">
+    <img src="/assets/img/pct-hero-1672.jpg" width="1672" height="941" alt="" fetchpriority="high" decoding="async">
+  </picture>
   <div class="wrap">
     <div class="eyebrow">Our method</div>
     <h1 class="display">Progressive Capacity Theory<sup class="tm">&trade;</sup></h1>
