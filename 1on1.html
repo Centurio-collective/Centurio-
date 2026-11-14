@@ -28,8 +28,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   gtag('config', 'G-PTXEWKVER9', { 'cookie_domain': '.centuriocollective.com' });
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- The hero plate is the Largest Contentful Paint: preload exactly the srcset the picture uses. -->
-<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/home-hero-768.webp 768w, /assets/img/home-hero-1152.webp 1152w, /assets/img/home-hero-1535.webp 1535w" imagesizes="100vw" fetchpriority="high">
+<!-- The Private hero plate is the Largest Contentful Paint: preload the one this viewport uses. -->
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/private-hero-wide-1440.webp 1440w, /assets/img/private-hero-wide-1920.webp 1920w, /assets/img/private-hero-wide-2880.webp 2880w" imagesizes="100vw" media="(min-width:761px)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/private-hero-phone-720.webp 720w, /assets/img/private-hero-phone-1080.webp 1080w, /assets/img/private-hero-phone-1440.webp 1440w" imagesizes="100vw" media="(max-width:760px)" fetchpriority="high">
 <title>Centurio Private. Become unrecognisable.</title>
 <meta name="description" content="Six months, one on one, rebuilding how you think, how you train, how you eat and how you carry yourself into every room you walk into." />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -204,7 +205,12 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   /* The hero plate is a real file, served as WebP with a srcset and preloaded, not base64 in the CSS. */
   .hero > .hero-bg{ position:absolute; inset:0; z-index:-2; }
   .hero > .hero-bg img{ display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
-  .hero::before{ content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(13,15,14,.55) 0%, rgba(13,15,14,.82) 70%, var(--bg) 100%); }
+  /* A flat tint over the sunrise plate, not a gradient: a directional one kills the ember band
+     on the left and leaves a seam across the sky. Measured, not guessed: see PROMPT notes. */
+  .private-hero .scrim{ position:absolute; inset:0; z-index:-1; background:rgba(13,15,14,.68); }
+  @media (max-width:760px){ .private-hero .scrim{ background:rgba(13,15,14,.60); } .private-hero > .hero-bg img{ object-position:80% 50%; } }
+  /* Over the tinted sky the muted eyebrow fails; the home hero's lighter eyebrow passes. */
+  .private-hero .eyebrow{ color:#d7dad4; }
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -227,11 +233,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </header>
 
 <!-- Block 1. The hero -->
-<section class="hero">
+<section class="hero private-hero">
   <picture class="hero-bg">
-    <source type="image/webp" srcset="/assets/img/home-hero-768.webp 768w, /assets/img/home-hero-1152.webp 1152w, /assets/img/home-hero-1535.webp 1535w" sizes="100vw">
-    <img src="/assets/img/home-hero-1535.jpg" srcset="/assets/img/home-hero-768.jpg 768w, /assets/img/home-hero-1152.jpg 1152w, /assets/img/home-hero-1535.jpg 1535w" sizes="100vw" width="1535" height="1024" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
+    <source media="(max-width:760px)" type="image/webp" srcset="/assets/img/private-hero-phone-720.webp 720w, /assets/img/private-hero-phone-1080.webp 1080w, /assets/img/private-hero-phone-1440.webp 1440w" sizes="100vw" width="1440" height="2160">
+    <source media="(max-width:760px)" srcset="/assets/img/private-hero-phone-720.jpg 720w, /assets/img/private-hero-phone-1080.jpg 1080w, /assets/img/private-hero-phone-1440.jpg 1440w" sizes="100vw" width="1440" height="2160">
+    <source media="(min-width:761px)" type="image/webp" srcset="/assets/img/private-hero-wide-1440.webp 1440w, /assets/img/private-hero-wide-1920.webp 1920w, /assets/img/private-hero-wide-2880.webp 2880w" sizes="100vw">
+    <img src="/assets/img/private-hero-wide-1920.jpg" srcset="/assets/img/private-hero-wide-1440.jpg 1440w, /assets/img/private-hero-wide-1920.jpg 1920w, /assets/img/private-hero-wide-2880.jpg 2880w" sizes="100vw" width="2880" height="1620" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
   </picture>
+  <div class="scrim" aria-hidden="true"></div>
   <div class="wrap">
     <div class="eyebrow">Centurio Private</div>
     <h1 class="display">Become unrecognisable</h1>
