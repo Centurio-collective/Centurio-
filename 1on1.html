@@ -180,6 +180,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .hero .wrap{padding-top:96px; padding-bottom:96px;}
     .lockup{bottom:24px; font-size:16px;}
   }
+  .method-link{color:inherit; text-decoration:underline; text-decoration-color:rgba(216,181,106,.6); text-underline-offset:3px;}
+  .method-link:hover{text-decoration-color:var(--accent);}
   /* centurio-header:start */
   /* One header, every page (PROMPT_79). Written into each page by tools/sync-header.py
      from partials/header.css. Edit the partial and run the script; do not edit it here. */
@@ -194,6 +196,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .strapline{ font-size:11px; color:#9aa39c; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; }
   .copy-line{ display:inline-flex; align-items:baseline; flex-wrap:wrap; column-gap:16px; row-gap:4px; }
   /* centurio-header:end */
+  /* centurio-footer-ip:start */
+  .ip-line{ max-width:1040px; margin:14px auto 0; padding:0 24px; text-align:center; font-family:'Inter',system-ui,sans-serif; font-size:11px; line-height:1.6; color:#9aa39c; }
+  .ip-line sup{ font-size:.62em; line-height:0; vertical-align:super; }
+  /* centurio-footer-ip:end */
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -306,7 +312,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <img class="split-portrait" src="/assets/img/private-built-portrait.jpg" width="393" height="609" alt="Sterling Cincotta" loading="lazy">
     </div>
     <div class="prose">
-      <p>There is no set curriculum and no month by month schedule you get slotted into. Your Mental Fitness Score decides where we start, your weakest capacity goes first, and we work the six in the order you need them for as long as each one needs. The structure is the method, and your numbers set the order and the weight.</p>
+      <p>There is no set curriculum and no month by month schedule you get slotted into. Your Mental Fitness Score decides where we start, <a href="/progressive-capacity" class="method-link">your weakest capacity goes first</a>, and we work the six in the order you need them for as long as each one needs. The structure is the method, and your numbers set the order and the weight.</p>
       <p>Every month holds two sessions of ninety minutes, the accountability calls between them, your training and your nutrition programmed alongside it, and one practice you are running properly by the end of it. You start on thirty six questions and you finish on the same thirty six. The distance between those two sets of numbers is the point of the whole thing.</p>
       <div class="tabs" role="tablist" aria-label="Compare the two programmes">
         <button type="button" class="tab" role="tab" id="tab-private" aria-selected="true" aria-controls="panel-private" tabindex="0">Centurio Private</button>
@@ -486,6 +492,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     &middot;
     <a href="/privacy.html" style="color:var(--muted); text-decoration:underline;">Privacy Policy</a>
   </div>
+  <div class="ip-line">Progressive Capacity Theory<sup>&trade;</sup>, the Centurio Mental Fitness Score<sup>&trade;</sup> and the six Core Capacities are original methodologies of Centurio Collective.</div>
 </footer>
 
 <script>

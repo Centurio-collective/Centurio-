@@ -19,7 +19,7 @@ page:  python3 tools/sync-header.py
 import os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = ['index', 'join', '1on1', 'score', 'guide', 'about', 'nutrition', 'corporate',
+PAGES = ['index', 'join', '1on1', 'score', 'guide', 'about', 'nutrition', 'corporate', 'progressive-capacity',
          'partners', 'trainers', 'affiliates', 'terms', 'privacy']
 CSS_START = '/* centurio-header:start */'
 CSS_END = '/* centurio-header:end */'
@@ -104,6 +104,33 @@ def sync(page, header_tpl, header_css, wordmark):
     return path
 
 
+IP_START = '/* centurio-footer-ip:start */'
+IP_END = '/* centurio-footer-ip:end */'
+IP_LINE = ('<div class="ip-line">Progressive Capacity Theory<sup>&trade;</sup>, the Centurio Mental '
+           'Fitness Score<sup>&trade;</sup> and the six Core Capacities are original methodologies '
+           'of Centurio Collective.</div>')
+IP_CSS = '''  .ip-line{ max-width:1040px; margin:14px auto 0; padding:0 24px; text-align:center; font-family:'Inter',system-ui,sans-serif; font-size:11px; line-height:1.6; color:#9aa39c; }
+  .ip-line sup{ font-size:.62em; line-height:0; vertical-align:super; }'''
+
+
+def sync_footer_ip(path):
+    """PROMPT_81: the IP statement in the footer of every page that has one.
+    A page that carries the statement as its own section (progressive-capacity)
+    is skipped, so the trade mark is not set twice there."""
+    s = read(path)
+    if '<footer' not in s or 'class="ip-statement"' in s:
+        return None
+    s = re.sub(r'[ \t]*' + re.escape(IP_START) + r'[\s\S]*?' + re.escape(IP_END) + r'\n?', '', s)
+    i = s.index('</style>')
+    s = s[:i] + '  ' + IP_START + '\n' + IP_CSS + '\n  ' + IP_END + '\n' + s[i:]
+    if 'class="ip-line"' not in s:
+        j = s.index('</footer>')
+        s = s[:j] + '  ' + IP_LINE + '\n' + s[j:]
+    with open(os.path.join(ROOT, path), 'w', encoding='utf-8') as f:
+        f.write(s)
+    return path
+
+
 def main():
     header_tpl = read('partials/header.html').rstrip('\n')
     header_css = read('partials/header.css')
@@ -111,6 +138,9 @@ def main():
     wordmark = '\n'.join('      ' + l for l in wordmark.split('\n'))
     for p in PAGES:
         print('synced', sync(p, header_tpl, header_css, wordmark))
+    for f in sorted(os.listdir(ROOT)):
+        if f.endswith('.html') and sync_footer_ip(f):
+            print('footer ip line', f)
 
 
 if __name__ == '__main__':

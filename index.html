@@ -183,6 +183,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .ft-grid > .ft-out:last-child{ margin-bottom:0; }
   }
 
+  /* PROMPT_81: the method block, panel band after the six capacities. */
+  .method-grid{ display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:56px; align-items:start; }
+  .method-band h2{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:none; letter-spacing:.005em; font-size:clamp(40px,4.2vw,52px); line-height:1.02; }
+  .method-body{ font-size:17px; color:var(--muted); max-width:560px; }
+  .method-line{ margin-top:18px; font-family:'League Gothic',sans-serif; font-size:30px; line-height:1.1; color:var(--accent); }
+  @media (max-width:760px){ .method-grid{ grid-template-columns:minmax(0,1fr); gap:18px; } }
+
   /* Outcomes */
   .outs{ margin-top:32px; max-width:760px; }
   .outrow{ display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--line); }
@@ -329,6 +336,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .strapline{ font-size:11px; color:#9aa39c; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; }
   .copy-line{ display:inline-flex; align-items:baseline; flex-wrap:wrap; column-gap:16px; row-gap:4px; }
   /* centurio-header:end */
+  /* centurio-footer-ip:start */
+  .ip-line{ max-width:1040px; margin:14px auto 0; padding:0 24px; text-align:center; font-family:'Inter',system-ui,sans-serif; font-size:11px; line-height:1.6; color:#9aa39c; }
+  .ip-line sup{ font-size:.62em; line-height:0; vertical-align:super; }
+  /* centurio-footer-ip:end */
 </style>
 <script src="/assets/js/attribution.js"></script>
 </head>
@@ -515,6 +526,21 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </section>
 
+<!-- PROMPT_81: the method, linking to /progressive-capacity. -->
+<section class="band-panel method-band">
+  <div class="wrap method-grid">
+    <div>
+      <div class="section-label">OUR METHOD</div>
+      <h2>Progressive Capacity Theory</h2>
+    </div>
+    <div>
+      <p class="method-body">Your mind takes load the way your body does. Six capacities, a number on each, and the lowest one is where your training starts. A small daily load, a little heavier every week, and a measurement at the end that tells you whether it worked.</p>
+      <p class="method-line">Motivation makes it possible. Reps make it inevitable.</p>
+      <a class="cta cta-ghost" href="/progressive-capacity" style="display:inline-block; margin-top:22px;" onclick="gtag('event','cta_click',{location:'home_method'})">Learn the method</a>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="section-label">THE OUTCOME</div>
@@ -684,6 +710,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     &middot;
     <a href="/privacy.html" style="color:var(--muted); text-decoration:underline;">Privacy Policy</a>
   </div>
+  <div class="ip-line">Progressive Capacity Theory<sup>&trade;</sup>, the Centurio Mental Fitness Score<sup>&trade;</sup> and the six Core Capacities are original methodologies of Centurio Collective.</div>
 </footer>
 
 
