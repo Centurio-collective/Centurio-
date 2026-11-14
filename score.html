@@ -220,7 +220,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <!-- SCREEN 1: INTRO -->
   <section class="screen active" id="screen-intro">
     <div class="intro">
-      <div class="eyebrow"><span>FREE ASSESSMENT</span></div>
+      <div class="eyebrow"><span>FREE CHECK</span></div>
       <h1 class="display">What's your Mental Fitness Score?</h1>
       <p>12 questions, about 3 minutes. A real baseline across all six Core Capacities: Lead, Align, Regulate, Connect, Grow and Perform, plus a personalised breakdown of where to focus first.</p>
       <div class="cap-strip">
@@ -231,7 +231,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <span class="cap-dot">Grow</span>
         <span class="cap-dot">Perform</span>
       </div>
-      <button class="btn" onclick="startQuiz()">Start the Assessment</button>
+      <button class="btn" onclick="startQuiz()">Start the Check</button>
       <p class="meta-note">Free. Takes about 3 minutes. Your results are private.</p>
     </div>
   </section>
@@ -357,6 +357,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <div class="score-number"><span id="scoreValue">0</span><span>/100</span></div>
       <div class="score-band" id="scoreBandLabel"></div>
       <p class="score-sub" id="scoreSub"></p>
+      <p class="score-sub">This is the twelve question Check. Members take the full thirty six question Assessment.</p>
     </div>
 
     <div id="capResultsList"></div>
@@ -1150,7 +1151,7 @@ function downloadPDF(){
   y += 7;
   setFace('helv', 8.5); ink(MUTED);
   const nextLines = doc.splitTextToSize(
-    'A short training for each capacity, a check in every week, and one live room a month. Your score today is a baseline. It moves the way anyone’s does: one week, one principle, one small commitment at a time. Take it again in six months and watch the number.',
+    'A short training for each capacity, a check in every week, and one live room a month. Your score today is a baseline. It moves the way anyone’s does: one week, one principle, one small commitment at a time. Take the Check again in six months and watch the number.',
     contentW);
   doc.text(nextLines, margin, y);
 
