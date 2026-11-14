@@ -19,7 +19,7 @@ page:  python3 tools/sync-header.py
 import os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = ['index', 'join', '1on1', 'score', 'guide', 'about', 'nutrition', 'corporate', 'progressive-capacity',
+PAGES = ['index', 'join', '1on1', 'score', 'guide', 'about', 'nutrition', 'corporate', 'progressive-capacity', 'performance',
          'partners', 'trainers', 'affiliates', 'terms', 'privacy']
 CSS_START = '/* centurio-header:start */'
 CSS_END = '/* centurio-header:end */'
