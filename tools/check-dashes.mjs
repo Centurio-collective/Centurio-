@@ -34,13 +34,22 @@ const stripTechnical = (s) => s
   // A licence's registered name is not ours to respell.
   .replace(/\bCC BY(?:-SA|-NC|-ND)*\b/g, ' ');
 
+// Hyphenated words the owner has decided may stay (Sterling, 14 November 2026):
+// standard legal usage on the Terms and Privacy pages. Only these exact words, only on
+// these pages. A new hyphen anywhere else still fails.
+const ALLOWED = {
+  'terms.html': ['12-month', '14-Day', '14-day', '30-minute', 'first-ever', 'no-show', 'non-refundable', 'self-reported'],
+  'privacy.html': ['dispute-resolution', 'early-stage', 'self-reported'],
+};
+const allow = (file, s) => (ALLOWED[file] || []).reduce((t, w) => t.split(w).join(' '), s);
+
 let checked = 0;
 const hits = [];
 const test = (file, where, raw) => {
   const s = stripTechnical(decode(raw)).replace(/\s+/g, ' ').trim();
   if (!s) return;
   checked++;
-  if (DASH.test(s)) hits.push(`${file} [${where}] ${s.slice(0, 140)}`);
+  if (DASH.test(allow(file, s))) hits.push(`${file} [${where}] ${s.slice(0, 140)}`);
 };
 
 for (const file of files) {
