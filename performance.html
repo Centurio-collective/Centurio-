@@ -51,8 +51,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <meta name="twitter:description" content="One to one coaching for people who want to be capable for the whole of their lives.">
 <meta name="twitter:image" content="https://centuriocollective.com/assets/og/performance.png">
 <!-- The hero plate is the Largest Contentful Paint. Preload only the one this viewport will use. -->
-<link rel="preload" as="image" type="image/webp" href="/assets/img/performance-hero.webp" media="(min-width:431px)" fetchpriority="high">
-<link rel="preload" as="image" type="image/webp" href="/assets/img/performance-hero-phone.webp" media="(max-width:430px)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="/assets/img/performance-hero.webp" media="not all and (max-aspect-ratio: 1/1)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="/assets/img/performance-hero-phone.webp" media="(max-aspect-ratio: 1/1)" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -285,9 +285,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <main>
 <section class="perf-hero">
   <picture class="hero-photo">
-    <source media="(max-width:430px)" type="image/webp" srcset="/assets/img/performance-hero-phone.webp">
-    <source media="(max-width:430px)" type="image/jpeg" srcset="/assets/img/performance-hero-phone.jpg">
-    <source media="(min-width:431px)" type="image/webp" srcset="/assets/img/performance-hero.webp">
+    <source media="(max-aspect-ratio: 1/1)" type="image/webp" srcset="/assets/img/performance-hero-phone.webp">
+    <source media="(max-aspect-ratio: 1/1)" type="image/jpeg" srcset="/assets/img/performance-hero-phone.jpg">
+    <source type="image/webp" srcset="/assets/img/performance-hero.webp">
     <img src="/assets/img/performance-hero.jpg" width="2880" height="1620" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
   </picture>
   <div class="hero-scrim" aria-hidden="true"></div>

@@ -49,8 +49,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <meta name="twitter:description" content="Progressive Capacity Theory. Your mind takes load the way your body does. Six capacities, a number on each, and the lowest one is where training starts.">
 <meta name="twitter:image" content="https://centuriocollective.com/assets/og/progressive-capacity.png">
 <!-- The hero plate is the Largest Contentful Paint. Preload only the one this viewport will use. -->
-<link rel="preload" as="image" type="image/webp" href="/assets/img/pct-hero-desktop.webp" media="(min-width:761px)" fetchpriority="high">
-<link rel="preload" as="image" type="image/webp" href="/assets/img/pct-hero-phone.webp" media="(max-width:760px)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="/assets/img/pct-hero-desktop.webp" media="not all and (max-aspect-ratio: 1/1)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="/assets/img/pct-hero-phone.webp" media="(max-aspect-ratio: 1/1)" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -225,9 +225,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <main>
 <section class="pct-hero">
   <picture class="hero-photo">
-    <source media="(max-width:760px)" type="image/webp" srcset="/assets/img/pct-hero-phone.webp">
-    <source media="(max-width:760px)" srcset="/assets/img/pct-hero-phone.jpg">
-    <source media="(min-width:761px)" type="image/webp" srcset="/assets/img/pct-hero-desktop.webp">
+    <source media="(max-aspect-ratio: 1/1)" type="image/webp" srcset="/assets/img/pct-hero-phone.webp">
+    <source media="(max-aspect-ratio: 1/1)" srcset="/assets/img/pct-hero-phone.jpg">
+    <source type="image/webp" srcset="/assets/img/pct-hero-desktop.webp">
     <img src="/assets/img/pct-hero-desktop.jpg" width="2880" height="1620" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
   </picture>
   <div class="hero-scrim" aria-hidden="true"></div>

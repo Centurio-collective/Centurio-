@@ -29,8 +29,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- The Private hero plate is the Largest Contentful Paint: preload the one this viewport uses. -->
-<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/private-hero-wide-1440.webp 1440w, /assets/img/private-hero-wide-1920.webp 1920w, /assets/img/private-hero-wide-2880.webp 2880w" imagesizes="100vw" media="(min-width:761px)" fetchpriority="high">
-<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/private-hero-phone-720.webp 720w, /assets/img/private-hero-phone-1080.webp 1080w, /assets/img/private-hero-phone-1440.webp 1440w" imagesizes="100vw" media="(max-width:760px)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/private-hero-wide-1440.webp 1440w, /assets/img/private-hero-wide-1920.webp 1920w, /assets/img/private-hero-wide-2880.webp 2880w" imagesizes="100vw" media="not all and (max-aspect-ratio: 1/1)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/private-hero-phone-720.webp 720w, /assets/img/private-hero-phone-1080.webp 1080w, /assets/img/private-hero-phone-1440.webp 1440w" imagesizes="100vw" media="(max-aspect-ratio: 1/1)" fetchpriority="high">
 <title>Centurio Private. Become unrecognisable.</title>
 <meta name="description" content="Six months, one on one, rebuilding how you think, how you train, how you eat and how you carry yourself into every room you walk into." />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -235,9 +235,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <!-- Block 1. The hero -->
 <section class="hero private-hero">
   <picture class="hero-bg">
-    <source media="(max-width:760px)" type="image/webp" srcset="/assets/img/private-hero-phone-720.webp 720w, /assets/img/private-hero-phone-1080.webp 1080w, /assets/img/private-hero-phone-1440.webp 1440w" sizes="100vw" width="1440" height="2160">
-    <source media="(max-width:760px)" srcset="/assets/img/private-hero-phone-720.jpg 720w, /assets/img/private-hero-phone-1080.jpg 1080w, /assets/img/private-hero-phone-1440.jpg 1440w" sizes="100vw" width="1440" height="2160">
-    <source media="(min-width:761px)" type="image/webp" srcset="/assets/img/private-hero-wide-1440.webp 1440w, /assets/img/private-hero-wide-1920.webp 1920w, /assets/img/private-hero-wide-2880.webp 2880w" sizes="100vw">
+    <source media="(max-aspect-ratio: 1/1)" type="image/webp" srcset="/assets/img/private-hero-phone-720.webp 720w, /assets/img/private-hero-phone-1080.webp 1080w, /assets/img/private-hero-phone-1440.webp 1440w" sizes="100vw" width="1440" height="2160">
+    <source media="(max-aspect-ratio: 1/1)" srcset="/assets/img/private-hero-phone-720.jpg 720w, /assets/img/private-hero-phone-1080.jpg 1080w, /assets/img/private-hero-phone-1440.jpg 1440w" sizes="100vw" width="1440" height="2160">
+    <source type="image/webp" srcset="/assets/img/private-hero-wide-1440.webp 1440w, /assets/img/private-hero-wide-1920.webp 1920w, /assets/img/private-hero-wide-2880.webp 2880w" sizes="100vw">
     <img src="/assets/img/private-hero-wide-1920.jpg" srcset="/assets/img/private-hero-wide-1440.jpg 1440w, /assets/img/private-hero-wide-1920.jpg 1920w, /assets/img/private-hero-wide-2880.jpg 2880w" sizes="100vw" width="2880" height="1620" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
   </picture>
   <div class="scrim" aria-hidden="true"></div>
