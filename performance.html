@@ -96,14 +96,20 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .perf-hero .frags span{ display:block; }
   .perf-hero .lede{ margin-top:16px; font-size:18px; line-height:1.6; max-width:460px; color:#c5c9c3; }
   .perf-hero .btn{ margin-top:32px; }
+  /* Phones: the plate carries athletes across its full width in the top two thirds, so no
+     object-position keeps them clear of the copy. The hero stacks instead: the photograph
+     as a band at the top, the type beneath it on solid --bg. Desktop is unaffected. */
   @media (max-width:430px){
-    section.perf-hero{ min-height:min(calc(100svh - 82px), 820px); align-items:flex-end; padding:280px 0 56px; }
-    .perf-hero .hero-photo img{ object-position:50% 20%; }
-    /* Measured: with the 88% stop at 56% the headline sat over a lit limb at 3.45:1. Same four
-       opacities, middle stops moved up: 5.23:1. */
-    .perf-hero .hero-scrim{ background:linear-gradient(180deg, rgba(13,15,14,.10) 0%, rgba(13,15,14,.40) 30%, rgba(13,15,14,.88) 46%, rgba(13,15,14,.97) 100%); }
-    .perf-hero h1{ font-size:72px; white-space:normal; }
-    .perf-hero .m-br{ display:inline; }
+    section.perf-hero{ display:block; min-height:0; padding:0 0 56px; }
+    .perf-hero .hero-photo{ position:relative; display:block; height:clamp(240px, 40svh, 360px); }
+    .perf-hero .hero-photo img{ object-position:50% 0%; }
+    .perf-hero .hero-photo::after{ content:""; position:absolute; inset:auto 0 0 0; height:38%; background:linear-gradient(180deg, rgba(13,15,14,0) 0%, rgba(13,15,14,.85) 70%, var(--bg) 100%); }
+    .perf-hero .hero-scrim{ display:none; }
+    .perf-hero .hero-copy{ padding-top:12px; }
+    .perf-hero h1{ font-size:clamp(2.75rem, 13vw, 6rem); white-space:nowrap; text-wrap:balance; max-width:100%; }
+    .perf-hero .m-br{ display:none; }
+    .perf-hero .frags span, .perf-hero .lede{ text-wrap:pretty; }
+    .perf-hero .btn{ min-height:48px; display:inline-flex; align-items:center; }
   }
 
   /* The band system, as on the home page. */
@@ -200,6 +206,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
   /* PROMPT_87: two tables in the one bone surface, and the inert buttons. */
   .ft-block{ margin-top:80px; }
+  #plans{ scroll-margin-top:24px; }
   .ft-btn[aria-disabled="true"], .gold-btn.is-disabled{ cursor:default; pointer-events:none; }
 
   @media (max-width:760px){
@@ -266,7 +273,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <h1 class="display">Perform<br class="m-br"> for life</h1>
     <p class="frags"><span>Stronger this year than last.</span><span>Stronger again the year after that.</span><span>Repeat that long enough and it is a different life.</span></p>
     <p class="lede">All of it gets built one week at a time, in your body and in the part of you that decides. Find out what you are capable of.</p>
-    <a class="btn" href="#start" onclick="gtag('event','cta_click',{location:'perf_hero'})">Find out</a>
+    <a class="btn" href="#plans" onclick="gtag('event','cta_click',{location:'perf_hero'})">See the plans</a>
   </div>
 </section>
 
@@ -315,7 +322,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     </div>
     <!-- PROMPT_87: the two tiers, on the shipped index feature table component. Both buttons are
          inert until the page is cleared to launch; each then becomes a one line link. -->
-    <div class="feature-table ft-block">
+    <div class="feature-table ft-block" id="plans">
       <h2 class="ft-head">Centurio Performance RISE</h2>
       <div class="ft-grid">
         <div class="ft-th"></div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
