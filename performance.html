@@ -157,6 +157,41 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .social-links a{ display:inline-flex; color:var(--muted); transition:color .15s ease; }
   .social-links a:hover{ color:var(--accent); }
   .social-links svg{ width:20px; height:20px; }
+  /* PROMPT_78. The membership feature table, on bone. Left aligned throughout. */
+  section.feature-table{ text-align:left; border-top:0; padding:58px 0; }
+  .feature-table .section-label{ color:#6a6f6b; font-size:11px; font-weight:600; letter-spacing:.18em; margin-bottom:14px; }
+  .feature-table h2.ft-head{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:none; letter-spacing:.005em; font-size:56px; line-height:.98; max-width:none; margin:0; color:#0d0f0e; }
+  .ft-lede{ margin-top:16px; font-size:16px; line-height:1.6; color:#434944; max-width:62ch; }
+  .ft-grid{ margin-top:30px; display:grid; grid-template-columns:32% 36% 32%; gap:0; }
+  .ft-th{ font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#6a6f6b; padding-bottom:12px; }
+  .ft-th-out{ padding-left:23px; }
+  .ft-prod, .ft-what{ padding:19px 24px 21px 0; border-top:1px solid #d8d3c6; }
+  .ft-grid > .ft-prod:nth-last-child(3), .ft-grid > .ft-what:nth-last-child(2){ border-bottom:1px solid #d8d3c6; }
+  .ft-prod{ display:flex; align-items:baseline; gap:18px; }
+  .ft-num{ flex:0 0 34px; width:34px; font-family:'League Gothic',sans-serif; font-size:26px; line-height:1; color:#0d0f0e; opacity:.34; }
+  .ft-name{ font-size:15.5px; font-weight:600; line-height:1.6; color:#0d0f0e; }
+  .ft-what{ font-size:14.5px; line-height:1.6; color:#434944; }
+  .ft-out{ background:#0d0f0e; color:var(--bone); font-size:14.5px; font-weight:600; line-height:1.6; padding:19px 24px 21px 20px; border:0; border-left:3px solid var(--accent); box-shadow:inset 0 1px 0 rgba(244,241,232,.13); }
+  .ft-grid > .ft-out:nth-child(6){ box-shadow:none; }
+  .ft-foot{ margin-top:40px; display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+  .ft-btn{ display:inline-block; background:#0d0f0e; color:var(--bone); font-size:13px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; padding:17px 36px; border-radius:0; }
+  .ft-btn:hover{ background:#24282b; }
+  .ft-price{ font-size:13px; color:#6a6f6b; }
+  @media (max-width:760px){
+    .feature-table h2.ft-head{ font-size:44px; }
+    .ft-grid{ grid-template-columns:minmax(0,1fr); }
+    .ft-th{ display:none; }
+    .ft-prod{ border-top:1px solid #d8d3c6; padding:20px 0 6px; }
+    .ft-what{ border-top:0; padding:0 0 14px; }
+    .ft-grid > .ft-prod:nth-last-child(3){ border-bottom:0; }
+    .ft-grid > .ft-what:nth-last-child(2){ border-bottom:0; }
+    .ft-out{ box-shadow:none; margin-bottom:20px; padding:14px 18px 15px 16px; }
+    .ft-grid > .ft-out:last-child{ margin-bottom:0; }
+  }
+
+  /* PROMPT_87: two tables in the one bone surface, and the inert buttons. */
+  .ft-block{ margin-top:80px; }
+  .ft-btn[aria-disabled="true"], .gold-btn.is-disabled{ cursor:default; pointer-events:none; }
 
   @media (max-width:760px){
     section.band-statement{ padding:80px 0; }
@@ -204,8 +239,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </header>
 
-<!-- PROMPT_84 (14 November 2026). Centurio Performance. Every engagement is quoted:
-     no price anywhere on this page. Not in any navigation yet. -->
+<!-- PROMPT_84 (14 November 2026), tiers from PROMPT_87. Centurio Performance RISE and PRO.
+     Not in any navigation yet. -->
 <main>
 <section class="perf-hero">
   <picture class="hero-photo">
@@ -254,7 +289,59 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <p>Every engagement starts the same way. We work out what you are actually training for, we measure where you are, and we build the programme backwards from the thing you want to be true.</p>
       <p>Training is written for your body, your schedule, your equipment and your history, and it changes as you change. Nutrition sits underneath it, calculated rather than guessed, built around food you will genuinely eat.</p>
       <p>Then there is the part nobody else is coaching. You take the Mental Fitness Check and we find which of the six capacities is holding the rest down. That one gets trained alongside the body, every week, for as long as we work together.</p>
-      <p>Everything is quoted individually, because a sixteen year old swimmer with a national qualifier in March and a forty five year old founder who has not trained since his second child need different things from me.</p>
+      <p>A sixteen year old swimmer with a qualifier in March and a fifty year old founder who has not trained since his second child need different things, so the programme gets built around the person it is for. The tier decides how much of me you get.</p>
+    </div>
+    <!-- PROMPT_87: the two tiers, on the shipped index feature table component. Both buttons are
+         inert until the page is cleared to launch; each then becomes a one line link. -->
+    <div class="feature-table ft-block">
+      <h2 class="ft-head">Centurio Performance RISE</h2>
+      <div class="ft-grid">
+        <div class="ft-th"></div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">01</span><span class="ft-name">Your starting point</span></div>
+        <div class="ft-what">Bodyweight, measurements, progress photos, training history and a movement screen. The baseline everything after it is measured against.</div>
+        <div class="ft-out">You know exactly where you are standing.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">02</span><span class="ft-name">Your training programme</span></div>
+        <div class="ft-what">Written for your body, your schedule, your equipment and your history. Rebuilt every four weeks.</div>
+        <div class="ft-out">You walk in knowing what you are doing and why.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">03</span><span class="ft-name">Your nutrition</span></div>
+        <div class="ft-what">Calories and macros calculated on your bodyweight and your goal, built around food you will eat.</div>
+        <div class="ft-out">You eat for the result you asked for.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">04</span><span class="ft-name">The weekly check in</span></div>
+        <div class="ft-what">Bodyweight, progress photos, measurements, your training log and how the week actually went. Sterling reads every one and the programme moves with it.</div>
+        <div class="ft-out">Nothing drifts for more than seven days.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">05</span><span class="ft-name">Mental fitness support</span></div>
+        <div class="ft-what">The Assessment finds which of the six capacities is costing you most in the gym. That one gets trained alongside the lifting.</div>
+        <div class="ft-out">The part of you that decides gets trained too.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">06</span><span class="ft-name">Centurio Membership</span></div>
+        <div class="ft-what">The full library, included for as long as you train.</div>
+        <div class="ft-out">The whole library, from the day you join.</div>
+      </div>
+      <div class="ft-foot"><span class="ft-btn" role="link" aria-disabled="true">Joining opens soon</span><span class="ft-price">$249 a month. Cancel anytime.</span></div>
+    </div>
+    <div class="feature-table ft-block">
+      <h2 class="ft-head">Centurio Performance PRO</h2>
+      <div class="ft-grid">
+        <div class="ft-th"></div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">01</span><span class="ft-name">Everything in RISE</span></div>
+        <div class="ft-what">All six rows above, unchanged.</div>
+        <div class="ft-out">The base is already running underneath.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">02</span><span class="ft-name">Built backwards from the date</span></div>
+        <div class="ft-what">The programme periodised to the day you have to arrive, with the peak planned to the week.</div>
+        <div class="ft-out">You arrive ready on the day that matters.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">03</span><span class="ft-name">Performance testing</span></div>
+        <div class="ft-what">Strength, output and conditioning benchmarks, retested every block. Numbers that mean something on the day.</div>
+        <div class="ft-out">You know you are better, because the numbers say so.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">04</span><span class="ft-name">Mental rehearsal</span></div>
+        <div class="ft-what">The visualisation work athletes use before they compete, trained on a schedule like everything else.</div>
+        <div class="ft-out">You have already been there before you get there.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">05</span><span class="ft-name">The full capacity progression</span></div>
+        <div class="ft-what">All six trained in sequence across the engagement, so nothing is carrying a weak link into the day.</div>
+        <div class="ft-out">Every one of the six is carrying its weight.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">06</span><span class="ft-name">Sterling, monthly and between</span></div>
+        <div class="ft-what">Sixty minutes on video each month where the next block gets decided, and WhatsApp between.</div>
+        <div class="ft-out">Never more than a message from an answer.</div>
+      </div>
+      <div class="ft-foot"><span class="ft-btn" role="link" aria-disabled="true">Booking opens soon</span><span class="ft-price">$890 a month. Twelve week minimum, then monthly.</span></div>
     </div>
   </div>
 </section>
@@ -286,8 +373,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <section class="band-gold" id="start">
   <div class="wrap">
     <h2>What are you training for?</h2>
-    <p class="gold-line">It is a harder question than it looks. Ask a professional halfway through a season and watch them hesitate. Finding your answer is where every engagement starts, and it is usually the thing that changes everything after it.</p>
-    <a class="gold-btn" href="#booking-link-pending" target="_blank" rel="noopener noreferrer" onclick="gtag('event','perf_conversation',{location:'gold'})">Find out</a>
+    <p class="gold-line">It is a harder question than it looks. Ask a professional halfway through a season and watch them hesitate. Finding your answer is where every PRO engagement starts, and it is usually the thing that changes everything after it.</p>
+    <!-- BOOK A CALL: inert until the Centurio Performance Calendly event exists. Never The Conversation. -->
+    <span class="gold-btn is-disabled" role="link" aria-disabled="true">Booking opens soon</span>
     <p class="gold-micro">Twenty minutes, no obligation. If I am the wrong person for you I will say so on the call.</p>
   </div>
 </section>
