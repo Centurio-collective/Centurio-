@@ -50,6 +50,9 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 <meta name="twitter:title" content="Centurio Performance. Perform for life.">
 <meta name="twitter:description" content="One to one coaching for people who want to be capable for the whole of their lives.">
 <meta name="twitter:image" content="https://centuriocollective.com/assets/og/performance.png">
+<!-- The hero plate is the Largest Contentful Paint. Preload only the one this viewport will use. -->
+<link rel="preload" as="image" type="image/webp" href="/assets/img/performance-hero.webp" media="(min-width:431px)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="/assets/img/performance-hero-phone.webp" media="(max-width:430px)" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -78,15 +81,30 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .plain-link{ color:inherit; text-decoration:underline; text-decoration-color:rgba(216,181,106,.6); text-underline-offset:3px; }
   .plain-link:hover{ text-decoration-color:var(--accent); }
 
-  /* 1. Hero: dark, full bleed photograph, left aligned type, the Private hero's scale.
-     The plate (performance-hero) is still to come; the picture and its measured scrim
-     go in .hero-photo and .hero-scrim when it arrives. Until then it is type on --bg. */
-  section.perf-hero{ position:relative; overflow:hidden; min-height:86vh; display:flex; align-items:flex-end; padding:0; background:var(--bg); }
-  .perf-hero .hero-copy{ position:relative; z-index:2; width:100%; padding-top:140px; padding-bottom:120px; }
-  /* PERFORM FOR LIFE sets at the full width of the type column, unbroken (about 5.13em wide). */
-  .perf-hero h1{ font-size:min(calc((100vw - 48px) / 5.2), 190px); margin-top:18px; white-space:nowrap; }
-  .perf-hero .lede{ margin-top:22px; font-size:clamp(17px,2vw,21px); max-width:620px; color:#e6e2d6; }
-  .perf-hero .btn{ margin-top:36px; }
+  /* 1. Hero (PROMPT_86). Built the same way as the /progressive-capacity hero, with its own
+     measured scrim: the plate keeps an empty dark column on the left for the type, so it
+     stays centred. Do not copy the /progressive-capacity gradient here. */
+  section.perf-hero{ position:relative; overflow:hidden; min-height:min(calc(100vh - 82px), 860px); display:flex; align-items:center; padding:96px 0; background:var(--bg); }
+  .perf-hero .hero-photo{ position:absolute; inset:0; z-index:0; }
+  .perf-hero .hero-photo img{ position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; object-position:50% 50%; }
+  .perf-hero .hero-scrim{ position:absolute; inset:0; z-index:1; background:linear-gradient(90deg, rgba(13,15,14,.95) 0%, rgba(13,15,14,.90) 38%, rgba(13,15,14,.50) 60%, rgba(13,15,14,0) 78%); }
+  .perf-hero .hero-copy{ position:relative; z-index:2; width:100%; }
+  /* PERFORM FOR LIFE: 116px, unbroken, shrinking only where the column is narrower than the line. */
+  .perf-hero h1{ font-size:min(calc((100vw - 48px) / 5.2), 116px); line-height:.92; margin-top:18px; white-space:nowrap; }
+  .perf-hero .m-br{ display:none; }
+  .perf-hero .frags{ margin-top:26px; font-size:19px; line-height:1.6; color:#dfe2dc; }
+  .perf-hero .frags span{ display:block; }
+  .perf-hero .lede{ margin-top:16px; font-size:18px; line-height:1.6; max-width:460px; color:#c5c9c3; }
+  .perf-hero .btn{ margin-top:32px; }
+  @media (max-width:430px){
+    section.perf-hero{ min-height:min(calc(100svh - 82px), 820px); align-items:flex-end; padding:280px 0 56px; }
+    .perf-hero .hero-photo img{ object-position:50% 20%; }
+    /* Measured: with the 88% stop at 56% the headline sat over a lit limb at 3.45:1. Same four
+       opacities, middle stops moved up: 5.23:1. */
+    .perf-hero .hero-scrim{ background:linear-gradient(180deg, rgba(13,15,14,.10) 0%, rgba(13,15,14,.40) 30%, rgba(13,15,14,.88) 46%, rgba(13,15,14,.97) 100%); }
+    .perf-hero h1{ font-size:72px; white-space:normal; }
+    .perf-hero .m-br{ display:inline; }
+  }
 
   /* The band system, as on the home page. */
   section.band-panel{ background:var(--panel); }
@@ -141,7 +159,6 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .social-links svg{ width:20px; height:20px; }
 
   @media (max-width:760px){
-    .perf-hero .hero-copy{ padding-top:96px; padding-bottom:96px; }
     section.band-statement{ padding:80px 0; }
     .who-grid{ grid-template-columns:minmax(0,1fr); gap:32px; }
     section.perf-read{ padding:64px 0; }
@@ -191,10 +208,18 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
      no price anywhere on this page. Not in any navigation yet. -->
 <main>
 <section class="perf-hero">
+  <picture class="hero-photo">
+    <source media="(max-width:430px)" type="image/webp" srcset="/assets/img/performance-hero-phone.webp">
+    <source media="(max-width:430px)" type="image/jpeg" srcset="/assets/img/performance-hero-phone.jpg">
+    <source media="(min-width:431px)" type="image/webp" srcset="/assets/img/performance-hero.webp">
+    <img src="/assets/img/performance-hero.jpg" width="2880" height="1620" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
+  </picture>
+  <div class="hero-scrim" aria-hidden="true"></div>
   <div class="wrap hero-copy">
     <div class="eyebrow">Centurio Performance</div>
-    <h1 class="display">Perform for life</h1>
-    <p class="lede">One to one coaching for people who want to be capable for the whole of their lives. Your body is trained for that distance. So is the part of you that decides.</p>
+    <h1 class="display">Perform<br class="m-br"> for life</h1>
+    <p class="frags"><span>Stronger this year than last.</span><span>Stronger again the year after that.</span><span>Repeat that long enough and it is a different life.</span></p>
+    <p class="lede">All of it gets built one week at a time, in your body and in the part of you that decides. Find out what you are capable of.</p>
     <a class="btn" href="#start" onclick="gtag('event','cta_click',{location:'perf_hero'})">Find out</a>
   </div>
 </section>
@@ -217,8 +242,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <p>You know what to do. You have known for years. The gap is in the doing.</p>
     </div>
     <div class="who">
-      <h3>People coming back</h3>
-      <p>You were fit once. Work happened, life happened, and you want it back without pretending the last ten years did not occur.</p>
+      <h3>People who choose to start</h3>
+      <p>First time, or first time in ten years. The clock starts the day you decide, and nothing before it counts against you.</p>
     </div>
   </div>
 </section>
