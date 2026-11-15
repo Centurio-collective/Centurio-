@@ -135,6 +135,10 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   /* 4. What we do: the one bone surface. Ink type only, no gold type. */
   section.band-bone{ background:var(--bone); color:#24282b; }
   section.perf-read{ padding:88px 0 92px; }
+  /* PROMPT_90: the bone section's opening matches the statement band's: the same short gold rule
+     (a rule on bone, never type), then the heading in ink, one step above the table headings below. */
+  .perf-read .rule{ width:80px; height:3px; background:var(--accent); margin-bottom:26px; }
+  .perf-read h2.perf-head{ font-family:'League Gothic',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.005em; font-size:clamp(60px,4.45vw,64px); line-height:.94; max-width:none; white-space:nowrap; color:#0d0f0e; margin:0 0 36px; }
   .perf-read .measure{ max-width:64ch; }
   .perf-read p{ font-size:18px; line-height:1.75; color:#24282b; }
   .perf-read p + p{ margin-top:22px; }
@@ -215,6 +219,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     .perf-greats .founder-quote p:not(.byline){ font-size:20px; }
     .who-grid{ grid-template-columns:minmax(0,1fr); gap:32px; }
     section.perf-read{ padding:64px 0; }
+    .perf-read h2.perf-head{ font-size:52px; white-space:normal; margin-bottom:28px; }
     .perf-read p{ font-size:17px; }
     .band-photo .photo-grid{ grid-template-columns:minmax(0,1fr); gap:32px; }
     .band-photo .photo-block{ width:100%; max-width:380px; }
@@ -314,6 +319,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <section class="band-bone perf-read">
   <div class="wrap">
+    <div class="rule" aria-hidden="true"></div>
+    <h2 class="perf-head">Train everything</h2>
     <div class="measure">
       <p>Every engagement starts the same way. We work out what you are actually training for, we measure where you are, and we build the programme backwards from the thing you want to be true.</p>
       <p>Training is written for your body, your schedule, your equipment and your history, and it changes as you change. Nutrition sits underneath it, calculated rather than guessed, built around food you will genuinely eat.</p>
