@@ -212,6 +212,24 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .ft-block{ margin-top:80px; }
   #plans{ scroll-margin-top:24px; }
   .ft-btn[aria-disabled="true"], .gold-btn.is-disabled{ cursor:default; pointer-events:none; }
+  /* PROMPT_94. The Performance waitlist capture: one field, the brief's line under it. */
+  .wl-open{ border:0; cursor:pointer; font-family:inherit; }
+  .wl-form{ margin-top:28px; max-width:560px; text-align:left; }
+  .band-gold .wl-form{ margin-left:auto; margin-right:auto; }
+  .wl-form[hidden], .wl-open[hidden]{ display:none; }
+  .wl-label{ display:block; font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; color:#0d0f0e; }
+  .wl-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .wl-input{ flex:1 1 240px; min-width:0; min-height:52px; padding:0 16px; font:inherit; font-size:16px; color:#0d0f0e; background:#fff; border:1px solid #0d0f0e; border-radius:0; }
+  .wl-input:focus-visible{ outline:2px solid #0d0f0e; outline-offset:2px; }
+  .wl-submit{ flex:0 0 auto; min-height:52px; padding:0 28px; border:0; cursor:pointer; background:#0d0f0e; color:var(--bone); font:inherit; font-size:13px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; }
+  .band-gold .wl-submit{ color:var(--accent); }
+  .wl-submit:hover{ background:#24282b; }
+  .wl-submit[disabled]{ cursor:default; opacity:.7; }
+  .wl-line{ margin:12px 0 0; font-size:14px; line-height:1.55; color:#3a3f3c; }
+  .wl-status{ margin:10px 0 0; font-size:14px; font-weight:600; color:#0d0f0e; }
+  .wl-status:empty{ display:none; }
+  .wl-form.is-done .wl-label, .wl-form.is-done .wl-row, .wl-form.is-done .wl-line{ display:none; }
+  @media (max-width:560px){ .wl-submit{ flex:1 1 100%; } }
 
   @media (max-width:760px){
     section.band-statement{ padding:80px 0; }
@@ -352,7 +370,28 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="ft-what">The full library, included for as long as you train.</div>
         <div class="ft-out">The whole library, from the day you join.</div>
       </div>
-      <div class="ft-foot"><span class="ft-btn" role="link" aria-disabled="true">Joining opens soon</span><span class="ft-price">$249 a month. Cancel anytime.</span></div>
+      <div class="ft-foot"><button type="button" class="ft-btn wl-open" aria-expanded="false" aria-controls="wl-rise" data-wl="wl-rise">Tell me when it opens</button><span class="ft-price">$249 a month. Cancel anytime.</span></div>
+    <form class="wl-form" id="wl-rise" name="performance-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-attribution data-tier="rise" hidden>
+      <input type="hidden" name="form-name" value="performance-waitlist">
+      <input type="hidden" name="tier" value="rise">
+      <p hidden><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <input type="hidden" name="utm_source">
+      <input type="hidden" name="utm_medium">
+      <input type="hidden" name="utm_campaign">
+      <input type="hidden" name="utm_content">
+      <input type="hidden" name="utm_term">
+      <input type="hidden" name="fbclid">
+      <input type="hidden" name="gclid">
+      <input type="hidden" name="referrer">
+      <input type="hidden" name="landing_url">
+      <label class="wl-label" for="wl-rise-email">Email</label>
+      <div class="wl-row">
+        <input id="wl-rise-email" class="wl-input" type="email" name="email" required autocomplete="email" inputmode="email">
+        <button type="submit" class="wl-submit">Tell me when it opens</button>
+      </div>
+      <p class="wl-line">Centurio Performance opens shortly. Leave your email and you will hear from Sterling the day it does, before it goes anywhere public.</p>
+      <p class="wl-status" role="status" aria-live="polite"></p>
+    </form>
     </div>
     <div class="feature-table ft-block">
       <h2 class="ft-head">Centurio Performance PRO</h2>
@@ -377,7 +416,28 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="ft-what">Sixty minutes on video each month where the next block gets decided, and WhatsApp between.</div>
         <div class="ft-out">Never more than a message from an answer.</div>
       </div>
-      <div class="ft-foot"><span class="ft-btn" role="link" aria-disabled="true">Booking opens soon</span><span class="ft-price">$890 a month. Twelve week minimum, then monthly.</span></div>
+      <div class="ft-foot"><button type="button" class="ft-btn wl-open" aria-expanded="false" aria-controls="wl-pro" data-wl="wl-pro">Tell me when it opens</button><span class="ft-price">$890 a month. Twelve week minimum, then monthly.</span></div>
+    <form class="wl-form" id="wl-pro" name="performance-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-attribution data-tier="pro" hidden>
+      <input type="hidden" name="form-name" value="performance-waitlist">
+      <input type="hidden" name="tier" value="pro">
+      <p hidden><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <input type="hidden" name="utm_source">
+      <input type="hidden" name="utm_medium">
+      <input type="hidden" name="utm_campaign">
+      <input type="hidden" name="utm_content">
+      <input type="hidden" name="utm_term">
+      <input type="hidden" name="fbclid">
+      <input type="hidden" name="gclid">
+      <input type="hidden" name="referrer">
+      <input type="hidden" name="landing_url">
+      <label class="wl-label" for="wl-pro-email">Email</label>
+      <div class="wl-row">
+        <input id="wl-pro-email" class="wl-input" type="email" name="email" required autocomplete="email" inputmode="email">
+        <button type="submit" class="wl-submit">Tell me when it opens</button>
+      </div>
+      <p class="wl-line">Centurio Performance opens shortly. Leave your email and you will hear from Sterling the day it does, before it goes anywhere public.</p>
+      <p class="wl-status" role="status" aria-live="polite"></p>
+    </form>
     </div>
   </div>
 </section>
@@ -410,8 +470,29 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="wrap">
     <h2>What are you training for?</h2>
     <p class="gold-line">It is a harder question than it looks. Ask a professional halfway through a season and watch them hesitate. Finding your answer is where every PRO engagement starts, and it is usually the thing that changes everything after it.</p>
-    <!-- BOOK A CALL: inert until the Centurio Performance Calendly event exists. Never The Conversation. -->
-    <span class="gold-btn is-disabled" role="link" aria-disabled="true">Booking opens soon</span>
+    <!-- PROMPT_94: the Performance waitlist (PRO) until the Centurio Performance Calendly event exists. Never The Conversation. -->
+    <button type="button" class="gold-btn wl-open" aria-expanded="false" aria-controls="wl-gold" data-wl="wl-gold">Tell me when it opens</button>
+    <form class="wl-form" id="wl-gold" name="performance-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-attribution data-tier="pro" hidden>
+      <input type="hidden" name="form-name" value="performance-waitlist">
+      <input type="hidden" name="tier" value="pro">
+      <p hidden><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <input type="hidden" name="utm_source">
+      <input type="hidden" name="utm_medium">
+      <input type="hidden" name="utm_campaign">
+      <input type="hidden" name="utm_content">
+      <input type="hidden" name="utm_term">
+      <input type="hidden" name="fbclid">
+      <input type="hidden" name="gclid">
+      <input type="hidden" name="referrer">
+      <input type="hidden" name="landing_url">
+      <label class="wl-label" for="wl-gold-email">Email</label>
+      <div class="wl-row">
+        <input id="wl-gold-email" class="wl-input" type="email" name="email" required autocomplete="email" inputmode="email">
+        <button type="submit" class="wl-submit">Tell me when it opens</button>
+      </div>
+      <p class="wl-line">Centurio Performance opens shortly. Leave your email and you will hear from Sterling the day it does, before it goes anywhere public.</p>
+      <p class="wl-status" role="status" aria-live="polite"></p>
+    </form>
     <p class="gold-micro">Twenty minutes, no obligation. If I am the wrong person for you I will say so on the call.</p>
   </div>
 </section>
@@ -445,6 +526,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
    <a href="/about.html" style="color:var(--muted); text-decoration:underline;">About</a>
 &middot;
  <a href="/corporate.html" style="color:var(--muted); text-decoration:underline;">Corporate</a>
+ &middot;
+ <a href="/performance" style="color:var(--muted); text-decoration:underline;">Performance</a>
     &middot;
  <a href="/affiliates.html" style="color:var(--muted); text-decoration:underline;">Gym Partners</a>
     &middot;
@@ -457,5 +540,50 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   <div class="ip-line">Progressive Capacity Theory<sup>&trade;</sup>, the Centurio Mental Fitness Score<sup>&trade;</sup> and the six Core Capacities are original methodologies of Centurio Collective.</div>
 </footer>
 
+
+<script src="/assets/js/attribution.js"></script>
+<script>
+  /* PROMPT_94. Each TELL ME WHEN IT OPENS opens its own capture, carrying the tier it sits
+     under. Posted to Netlify Forms like the site's other forms; netlify/functions/form-webhook.js
+     files it in performance_waitlist, apart from the membership waitlist. */
+  (function(){
+    function encode(d){ return Object.keys(d).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(d[k]); }).join('&'); }
+    document.querySelectorAll('.wl-open').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var form = document.getElementById(btn.getAttribute('data-wl'));
+        if (!form) return;
+        form.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+        btn.hidden = true;
+        var input = form.querySelector('.wl-input');
+        if (input) input.focus();
+        if (window.gtag) gtag('event', 'cta_click', { location: 'perf_waitlist_open_' + form.getAttribute('data-tier') });
+      });
+    });
+    document.querySelectorAll('.wl-form').forEach(function(form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var status = form.querySelector('.wl-status');
+        var submit = form.querySelector('.wl-submit');
+        var email = form.querySelector('.wl-input');
+        if (!email.checkValidity()) { email.reportValidity(); return; }
+        if (typeof attributionFillForm === 'function') attributionFillForm(form);
+        var data = {};
+        Array.prototype.forEach.call(form.querySelectorAll('input[name]'), function(el){ data[el.name] = el.value.trim(); });
+        submit.disabled = true;
+        status.textContent = '';
+        fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: encode(data) })
+          .then(function(res){
+            if (!res.ok) throw new Error('Request failed');
+            form.classList.add('is-done');
+            status.textContent = 'You are on the list. Nothing else to do.';
+            if (window.gtag) gtag('event', 'performance_waitlist', { tier: data.tier });
+          })
+          .catch(function(){ status.textContent = 'That did not send. Please email hello@centuriocollective.com and Sterling will add you.'; })
+          .finally(function(){ submit.disabled = false; });
+      });
+    });
+  })();
+</script>
 </body>
 </html>

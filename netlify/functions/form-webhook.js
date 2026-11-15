@@ -5,7 +5,7 @@
 //
 // Configure this as the target for the outgoing webhooks in Netlify
 // (Site settings -> Forms -> Form notifications -> Outgoing webhook), one
-// per form ("waitlist", "mental-fitness-score", "affiliate-application",
+// per form ("waitlist", "performance-waitlist", "mental-fitness-score", "affiliate-application",
 // "corporate-enquiry", "snapshot-request", "brand-partner", "pt-masterclass").
 // All point at the same function URL; the function branches on form_name.
 //
@@ -149,6 +149,23 @@ const CONSENT_TEXT = {
 };
 
 const FORM_HANDLERS = {
+  // PROMPT_94. Interest in Centurio Performance, from the buttons on
+  // /performance. Its own form and its own table, never waitlist_signups:
+  // these people asked about a paid coaching product, not the membership,
+  // and the membership waitlist's welcome sequence must never reach them.
+  // No notify trigger and no secret. Just the row, sorted by tier.
+  'performance-waitlist': {
+    table: 'performance_waitlist',
+    map: (data) => {
+      const tier = str(data.tier);
+      return {
+        email: str(data.email),
+        tier: tier === 'rise' || tier === 'pro' ? tier : null,
+        ...attribution(data),
+      };
+    },
+    required: ['email', 'tier'],
+  },
   waitlist: {
     table: 'waitlist_signups',
     map: (data) => ({
