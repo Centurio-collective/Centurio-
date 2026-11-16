@@ -327,19 +327,53 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .hero > .hero-bg{ position:absolute; inset:0; z-index:-2; }
   .hero > .hero-bg img{ display:block; width:100%; height:100%; object-fit:cover; object-position:center 30%; }
   .hero::before{ content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(10,11,10,.55) 0%, rgba(10,11,10,.75) 55%, rgba(10,11,10,.95) 100%); }
-  /* PROMPT_94. The Performance banner: a quiet band in the page flow under the header.
-     Not fixed, not dismissible, not animated. The whole band is the one link. */
-  .perf-banner{ display:block; background:var(--panel); border-bottom:1px solid var(--line); color:var(--text); text-decoration:none; }
-  .perf-banner .pb-row{ display:flex; align-items:center; gap:18px; padding-top:14px; padding-bottom:14px; }
-  .perf-banner .pb-label{ flex:none; font-family:'Inter',sans-serif; font-size:10px; font-weight:600; letter-spacing:.18em; color:var(--accent); }
-  .perf-banner .pb-text{ min-width:0; font-family:'Inter',sans-serif; font-size:15px; line-height:1.45; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .perf-banner .pb-link{ flex:none; margin-left:auto; font-family:'Inter',sans-serif; font-size:11px; font-weight:600; letter-spacing:.16em; color:var(--accent); white-space:nowrap; }
-  .perf-banner:hover .pb-link, .perf-banner:focus-visible .pb-link{ text-decoration:underline; text-underline-offset:4px; }
-  .perf-banner:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
-  @media (max-width:600px){
-    .perf-banner .pb-row{ flex-direction:column; align-items:flex-start; gap:6px; min-height:48px; }
-    .perf-banner .pb-text{ white-space:normal; }
-    .perf-banner .pb-link{ margin-left:0; margin-top:2px; }
+  /* PROMPT_95. The Performance ticker, in place of PROMPT_94's static band. Same position, same
+     link, same ground. In the page flow: not sticky, not fixed, not dismissible.
+     Load bearing: overflow:hidden on the band (the track is wider than the viewport); two
+     identical halves translated by exactly -50% (the seamless loop); the reduced motion block.
+     40s is tied to the content: one half width per 40s whatever the screen. Change the number
+     of units or the font size and the duration has to move with it. */
+  .perf-tick{position:relative;display:block;background:var(--panel);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    overflow:hidden;text-decoration:none;color:inherit}
+  .perf-tick-track{display:flex;width:max-content;
+    animation:perf-tick-slide 40s linear infinite;will-change:transform}
+  .perf-tick:hover .perf-tick-track,
+  .perf-tick:focus-visible .perf-tick-track{animation-play-state:paused}
+  .perf-tick:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .perf-tick-half{display:flex;align-items:center;flex:none}
+  .perf-tick-unit{display:flex;align-items:center;gap:26px;padding:0 26px;flex:none}
+  .perf-tick-word{font-family:'League Gothic',"Arial Narrow",Impact,sans-serif;
+    font-size:22px;letter-spacing:.06em;line-height:1;padding-block:15px;
+    white-space:nowrap;color:var(--text)}
+  .perf-tick-word.gold{color:var(--accent)}
+  .perf-tick-dot{width:6px;height:6px;background:var(--accent);
+    transform:rotate(45deg);flex:none}
+
+  @keyframes perf-tick-slide{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+  }
+
+  /* the call to action stays put, the ticker runs underneath it */
+  .perf-tick-cta{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;
+    padding:0 20px 0 70px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.16em;
+    color:var(--accent);pointer-events:none;
+    background:linear-gradient(90deg,
+      rgba(25,30,27,0) 0%, rgba(25,30,27,.92) 46%, var(--panel) 68%)}
+
+  @media(max-width:600px){
+    .perf-tick-cta{display:none}
+    .perf-tick-word{font-size:19px}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .perf-tick-track{animation:none;width:100%;justify-content:center}
+    .perf-tick-half:nth-child(2){display:none}
+    /* One set of words, not four: a half is four units, wider than most screens, so centring
+       it would clip a word at each edge. One unit, without its trailing diamond. */
+    .perf-tick-unit:nth-child(n+2){display:none}
+    .perf-tick-unit .perf-tick-dot:last-child{display:none}
   }
   /* centurio-header:start */
   /* One header, every page (PROMPT_79). Written into each page by tools/sync-header.py
@@ -387,12 +421,64 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   </div>
 </header>
 
-<a class="perf-banner" href="/performance" onclick="gtag('event','cta_click',{location:'home_perf_banner'})">
-  <span class="wrap pb-row">
-    <span class="pb-label">NEW</span>
-    <span class="pb-text">Centurio Performance. Training built for the length of a life.</span>
-    <span class="pb-link">SEE IT <span aria-hidden="true">&rarr;</span></span>
-  </span>
+<a class="perf-tick" href="/performance"
+   aria-label="Centurio Performance. Perform for life. See it."
+   onclick="gtag('event','cta_click',{location:'home_perf_ticker'})">
+    <div class="perf-tick-track" aria-hidden="true">
+      <div class="perf-tick-half">
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+      </div>
+      <div class="perf-tick-half">
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+        <span class="perf-tick-unit">
+          <span class="perf-tick-word">CENTURIO PERFORMANCE</span>
+          <span class="perf-tick-dot"></span>
+          <span class="perf-tick-word gold">PERFORM FOR LIFE</span>
+          <span class="perf-tick-dot"></span>
+        </span>
+      </div>
+    </div>
+    <span class="perf-tick-cta" aria-hidden="true">SEE IT &rarr;</span>
 </a>
 
 <section class="hero" style="border-top:0; padding-bottom:72px;">
