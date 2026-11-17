@@ -122,6 +122,19 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .greats{ list-style:none; margin-top:36px; }
   .greats li{ font-size:20px; line-height:1.9; color:var(--muted); }
   .founder-quote{ margin:56px 0 0; border-left:3px solid var(--accent); padding-left:28px; }
+  /* PROMPT_102. The row takes the quote's old top margin, so the quote and its gold rule sit
+     exactly where they did. At 1024 and up the portrait is pinned right and centred on the
+     quote, never moving it; below 1024 it sits above the quote, centred. */
+  .founder-row{ position:relative; margin-top:56px; }
+  .founder-row .founder-quote{ margin:0; }
+  .founder-portrait{ display:block; width:220px; margin:0 auto 32px; }
+  .founder-portrait img{ display:block; width:100%; height:auto; aspect-ratio:4/5; border-radius:0; }
+  @media (min-width:1024px){
+    .founder-row{ padding-right:340px; }
+    /* The portrait is taller than the quote it centres on, so the band gets room below it. */
+    section.perf-greats{ padding-bottom:168px; }
+    .founder-portrait{ position:absolute; right:0; top:50%; width:300px; margin:0; transform:translateY(-50%); }
+  }
   .founder-quote p:not(.byline){ font-size:26px; line-height:1.45; color:var(--text); max-width:44ch; }
   .founder-quote p.byline{ margin-top:18px; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
   .band-statement .rule{ width:80px; height:3px; background:var(--accent); margin-bottom:26px; }
@@ -313,10 +326,18 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <li>Andre Agassi had Reyes.</li>
       <li>Serena Williams had Mouratoglou.</li>
     </ul>
-    <blockquote class="founder-quote">
-      <p>I drive you. I hold you to it. And I make sure your habits line up with who you want to become.</p>
-      <p class="byline">Sterling Cincotta, Founder</p>
-    </blockquote>
+    <!-- PROMPT_102. The founder portrait, cropped above the chest: no logo in frame, and any
+         recrop keeps the chest out. A contained box, square like the feature tables, no border. -->
+    <div class="founder-row">
+      <picture class="founder-portrait">
+        <source type="image/webp" srcset="/assets/img/sterling-founder-440.webp 440w, /assets/img/sterling-founder-880.webp 880w" sizes="(min-width:1024px) 300px, 220px">
+        <img src="/assets/img/sterling-founder-880.jpg" srcset="/assets/img/sterling-founder-440.jpg 440w, /assets/img/sterling-founder-880.jpg 880w" sizes="(min-width:1024px) 300px, 220px" width="880" height="1100" alt="Sterling Cincotta, founder of Centurio" loading="lazy" decoding="async">
+      </picture>
+      <blockquote class="founder-quote">
+        <p>I drive you. I hold you to it. And I make sure your habits line up with who you want to become.</p>
+        <p class="byline">Sterling Cincotta, Founder</p>
+      </blockquote>
+    </div>
   </div>
 </section>
 
