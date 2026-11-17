@@ -96,6 +96,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
   .perf-hero .frags span{ display:block; }
   .perf-hero .lede{ margin-top:16px; font-size:18px; line-height:1.6; max-width:460px; color:#c5c9c3; }
   .perf-hero .btn{ margin-top:32px; }
+  /* PROMPT_105. The plan line: the lede's size and colour, the two plan names gold. */
+  .perf-hero .plan-line{ margin-top:14px; font-size:18px; line-height:1.6; color:#c5c9c3; }
+  .perf-hero .plan-line .pl-s{ display:inline-block; }
+  .perf-hero .plan-line .pl-nb{ white-space:nowrap; }
+  .perf-hero .plan-line a{ color:var(--accent); text-decoration:none; }
+  .perf-hero .plan-line a:hover, .perf-hero .plan-line a:focus-visible{ text-decoration:underline; text-underline-offset:3px; }
+  .perf-hero .plan-line a:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  #plan-rise, #plan-pro{ scroll-margin-top:24px; }
   /* Phones: the plate carries athletes across its full width in the top two thirds, so no
      object-position keeps them clear of the copy. The hero stacks instead: the photograph
      as a band at the top, the type beneath it on solid --bg. Desktop is unaffected. */
@@ -311,6 +319,11 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <h1 class="display">Perform<br class="m-br"> for life</h1>
     <p class="frags"><span>Stronger this year than last.</span><span>Stronger again the year after that.</span><span>Repeat that long enough and it is a different life.</span></p>
     <p class="lede">All of it gets built one week at a time, in your body and in the part of you that decides. Find out what you are capable of.</p>
+    <!-- PROMPT_105. Names the two plans, each with the one thing that separates it. The gold words
+         are in page anchors to each table's own id, whatever order ?tier= puts them in. They set
+         no tier and go to no checkout. Each sentence is one unit, so a wrap falls between them,
+         and each gold word stays joined to the word after it. -->
+    <p class="plan-line"><span class="pl-s"><span class="pl-nb"><a href="#plan-rise" onclick="gtag('event','cta_click',{location:'perf_hero_rise'})">RISE</a> if</span> you are building.</span> <span class="pl-s"><span class="pl-nb"><a href="#plan-pro" onclick="gtag('event','cta_click',{location:'perf_hero_pro'})">PRO</a> if you want</span> <span class="pl-nb">what an elite athlete gets.</span></span></p>
     <a class="btn" href="#plans" onclick="gtag('event','cta_click',{location:'perf_hero'})">See the plans</a>
   </div>
 </section>
@@ -372,7 +385,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     <!-- PROMPT_87: the two tiers, on the shipped index feature table component. Both buttons are
          inert until the page is cleared to launch; each then becomes a one line link. -->
     <div class="feature-table ft-block" id="plans" data-tier="rise">
-      <h2 class="ft-head">Centurio Performance RISE</h2>
+      <h2 class="ft-head" id="plan-rise">Centurio Performance RISE</h2>
       <div class="ft-grid">
         <div class="ft-th"></div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
         <div class="ft-prod"><span class="ft-num" aria-hidden="true">01</span><span class="ft-name">Your starting point</span></div>
@@ -403,7 +416,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <div class="ft-foot"><a class="ft-btn" href="https://buy.stripe.com/28EdRa9Da8b9cuU4Uw1kA08" onclick="gtag('event','cta_click',{location:'perf_buy_rise'})">Start now</a><span class="ft-price">$249 a month. Cancel anytime.</span></div>
     </div>
     <div class="feature-table ft-block" data-tier="pro">
-      <h2 class="ft-head">Centurio Performance PRO</h2>
+      <h2 class="ft-head" id="plan-pro">Centurio Performance PRO</h2>
       <div class="ft-grid">
         <div class="ft-th"></div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
         <div class="ft-prod"><span class="ft-num" aria-hidden="true">01</span><span class="ft-name">Everything in RISE</span></div>
