@@ -160,7 +160,8 @@ const FORM_HANDLERS = {
       const tier = str(data.tier);
       return {
         email: str(data.email),
-        tier: tier === 'rise' || tier === 'pro' ? tier : null,
+        // PROMPT_100: 'undecided' is the STILL DECIDING band, which asks Sterling which tier fits.
+        tier: tier === 'rise' || tier === 'pro' || tier === 'undecided' ? tier : null,
         ...attribution(data),
       };
     },

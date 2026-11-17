@@ -436,13 +436,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
 <section class="band-gold" id="start">
   <div class="wrap">
-    <h2>What are you training for?</h2>
-    <p class="gold-line">It is a harder question than it looks. Ask a professional halfway through a season and watch them hesitate. Finding your answer is where every PRO engagement starts, and it is usually the thing that changes everything after it.</p>
-    <!-- PROMPT_94: the Performance waitlist (PRO) until the Centurio Performance Calendly event exists. Never The Conversation. -->
-    <button type="button" class="gold-btn wl-open" aria-expanded="false" aria-controls="wl-gold" data-wl="wl-gold">Tell me when it opens</button>
-    <form class="wl-form" id="wl-gold" name="performance-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-attribution data-tier="pro" hidden>
+    <h2>STILL DECIDING</h2>
+    <p class="gold-line">Leave your email and I will come back to you myself, with a straight answer about which one fits and whether either of them does.</p>
+    <!-- PROMPT_100: the one email field on the page, open from the start. Same Netlify form and
+         table as the PROMPT_94 waitlist, filed as tier "undecided". Never The Conversation. -->
+    <form class="wl-form" id="wl-gold" name="performance-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-attribution data-tier="undecided">
       <input type="hidden" name="form-name" value="performance-waitlist">
-      <input type="hidden" name="tier" value="pro">
+      <input type="hidden" name="tier" value="undecided">
       <p hidden><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <input type="hidden" name="utm_source">
       <input type="hidden" name="utm_medium">
@@ -453,15 +453,13 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
       <input type="hidden" name="gclid">
       <input type="hidden" name="referrer">
       <input type="hidden" name="landing_url">
-      <label class="wl-label" for="wl-gold-email">Email</label>
+      <label class="wl-label" for="wl-gold-email">Your email</label>
       <div class="wl-row">
         <input id="wl-gold-email" class="wl-input" type="email" name="email" required autocomplete="email" inputmode="email">
-        <button type="submit" class="wl-submit">Tell me when it opens</button>
+        <button type="submit" class="wl-submit">Send</button>
       </div>
-      <p class="wl-line">Centurio Performance opens shortly. Leave your email and you will hear from Sterling the day it does, before it goes anywhere public.</p>
       <p class="wl-status" role="status" aria-live="polite"></p>
     </form>
-    <p class="gold-micro">Twenty minutes, no obligation. If I am the wrong person for you I will say so on the call.</p>
   </div>
 </section>
 
