@@ -210,6 +210,8 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
 
   /* PROMPT_87: two tables in the one bone surface, and the inert buttons. */
   .ft-block{ margin-top:80px; }
+  /* PROMPT_101. The cap note sits under the PRO table in the price line's treatment. */
+  .ft-note{ margin-top:14px; font-size:13px; color:#6a6f6b; }
   #plans{ scroll-margin-top:24px; }
   .ft-btn[aria-disabled="true"], .gold-btn.is-disabled{ cursor:default; pointer-events:none; }
   /* PROMPT_94. The Performance waitlist capture: one field, the brief's line under it. */
@@ -348,7 +350,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
     </div>
     <!-- PROMPT_87: the two tiers, on the shipped index feature table component. Both buttons are
          inert until the page is cleared to launch; each then becomes a one line link. -->
-    <div class="feature-table ft-block" id="plans">
+    <div class="feature-table ft-block" id="plans" data-tier="rise">
       <h2 class="ft-head">Centurio Performance RISE</h2>
       <div class="ft-grid">
         <div class="ft-th"></div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
@@ -362,26 +364,29 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="ft-what">Calories and macros calculated on your bodyweight and your goal, built around food you will eat.</div>
         <div class="ft-out">You eat for the result you asked for.</div>
         <div class="ft-prod"><span class="ft-num" aria-hidden="true">04</span><span class="ft-name">The weekly check in</span></div>
-        <div class="ft-what">Bodyweight, progress photos, measurements, your training log and how the week actually went. Your morning scores come in with it. Sterling reads every one and it changes what happens next.</div>
+        <div class="ft-what">Bodyweight, progress photos, measurements, your training log and how the week actually went. Sterling reads every one and it changes what happens next.</div>
         <div class="ft-out">Nothing drifts for more than seven days.</div>
-        <div class="ft-prod"><span class="ft-num" aria-hidden="true">05</span><span class="ft-name">Mental fitness support</span></div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">05</span><span class="ft-name">Recovery, measured weekly</span></div>
+        <div class="ft-what">Four questions and a number with your check in. Sleep, energy, freshness, and how heavy the week felt. Scored against your own baseline, so the direction is the thing and the single number means nothing on its own.</div>
+        <div class="ft-out">The week you are under recovered shows up before the scale does.</div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">06</span><span class="ft-name">Mental fitness support</span></div>
         <div class="ft-what">The Assessment finds which of the six capacities is costing you most in the gym. That one gets trained alongside the lifting.</div>
         <div class="ft-out">The part of you that decides gets trained too.</div>
-        <div class="ft-prod"><span class="ft-num" aria-hidden="true">06</span><span class="ft-name">Centurio Membership</span></div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">07</span><span class="ft-name">Centurio Membership</span></div>
         <div class="ft-what">The full library, included for as long as you train.</div>
         <div class="ft-out">The whole library, from the day you join.</div>
-        <div class="ft-prod"><span class="ft-num" aria-hidden="true">07</span><span class="ft-name">Sterling, every month</span></div>
+        <div class="ft-prod"><span class="ft-num" aria-hidden="true">08</span><span class="ft-name">Sterling, every month</span></div>
         <div class="ft-what">Thirty minutes on video, starting with the call that sets your first four weeks. Then every month after that: what moved, what did not, and what the next block is.</div>
         <div class="ft-out">Somebody is actually looking at your month.</div>
       </div>
       <div class="ft-foot"><a class="ft-btn" href="https://buy.stripe.com/28EdRa9Da8b9cuU4Uw1kA08" onclick="gtag('event','cta_click',{location:'perf_buy_rise'})">Start now</a><span class="ft-price">$249 a month. Cancel anytime.</span></div>
     </div>
-    <div class="feature-table ft-block">
+    <div class="feature-table ft-block" data-tier="pro">
       <h2 class="ft-head">Centurio Performance PRO</h2>
       <div class="ft-grid">
         <div class="ft-th"></div><div class="ft-th">What it is</div><div class="ft-th ft-th-out">What it does for you</div>
         <div class="ft-prod"><span class="ft-num" aria-hidden="true">01</span><span class="ft-name">Everything in RISE</span></div>
-        <div class="ft-what">All seven rows above, unchanged.</div>
+        <div class="ft-what">All eight rows of RISE, unchanged.</div>
         <div class="ft-out">The base is already running underneath.</div>
         <div class="ft-prod"><span class="ft-num" aria-hidden="true">02</span><span class="ft-name">Built backwards from the date</span></div>
         <div class="ft-what">Everything lines up behind the day you have to arrive. The training peaks to the week, and your nutrition, your recovery and your capacity work fall in behind it, whoever is writing the programme.</div>
@@ -406,7 +411,29 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
         <div class="ft-out">Never more than a message from an answer.</div>
       </div>
       <div class="ft-foot"><a class="ft-btn" href="https://buy.stripe.com/4gMeVeaHe6312Uk72E1kA09" onclick="gtag('event','cta_click',{location:'perf_buy_pro'})">Start now</a><span class="ft-price">$890 a month. Twelve week minimum, then monthly.</span></div>
+      <p class="ft-note">PRO is capped at ten clients.</p>
     </div>
+    <script>
+      /* PROMPT_101. /performance?tier=rise or ?tier=pro: the named tier's table leads and the other
+         follows under THE OTHER WAY IN. Nothing is hidden and nothing else on the page moves. With
+         no tier, or any other value, this returns before touching anything. */
+      (function(){
+        var t = null;
+        try { t = new URLSearchParams(window.location.search).get('tier'); } catch (e) {}
+        if (t !== 'rise' && t !== 'pro') return;
+        var rise = document.querySelector('.ft-block[data-tier="rise"]');
+        var pro = document.querySelector('.ft-block[data-tier="pro"]');
+        if (!rise || !pro) return;
+        var lead = t === 'pro' ? pro : rise, other = t === 'pro' ? rise : pro;
+        if (t === 'pro') rise.parentNode.insertBefore(pro, rise);
+        /* See the plans lands on whichever table leads. */
+        rise.removeAttribute('id'); lead.id = 'plans';
+        var label = document.createElement('div');
+        label.className = 'section-label ft-other';
+        label.textContent = 'THE OTHER WAY IN';
+        other.insertBefore(label, other.firstChild);
+      })();
+    </script>
   </div>
 </section>
 
@@ -542,7 +569,7 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
           .then(function(res){
             if (!res.ok) throw new Error('Request failed');
             form.classList.add('is-done');
-            status.textContent = 'You are on the list. Nothing else to do.';
+            status.textContent = 'Got it. I will come back to you myself.';
             if (window.gtag) gtag('event', 'performance_waitlist', { tier: data.tier });
           })
           .catch(function(){ status.textContent = 'That did not send. Please email hello@centuriocollective.com and Sterling will add you.'; })
