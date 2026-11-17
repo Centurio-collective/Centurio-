@@ -418,6 +418,14 @@ src="https://www.facebook.com/tr?id=2299379764149940&ev=PageView&noscript=1"
          follows under THE OTHER WAY IN. Nothing is hidden and nothing else on the page moves. With
          no tier, or any other value, this returns before touching anything. */
       (function(){
+        /* A link ending #plans opens on the tables. Content above them (fonts, images) can still
+           grow after the browser's first jump, which on a phone lands past the table heading, so
+           settle on the tables again once the page has loaded. Only acts when the link asks. */
+        window.addEventListener('load', function(){
+          if (window.location.hash !== '#plans') return;
+          var p = document.getElementById('plans');
+          if (p) p.scrollIntoView();
+        });
         var t = null;
         try { t = new URLSearchParams(window.location.search).get('tier'); } catch (e) {}
         if (t !== 'rise' && t !== 'pro') return;
