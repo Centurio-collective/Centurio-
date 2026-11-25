@@ -22,6 +22,16 @@
   status = 301
   force = true
 
+# SWT Society event link (Nov 2026). Short, branded and readable out loud;
+# lands on the Score with the same UTMs as the long tracked link, so the
+# tracking is unchanged. 302 rather than 301: a campaign link, so browsers
+# must not cache it permanently and it can be repointed later.
+[[redirects]]
+  from = "/swt"
+  to = "/score?utm_source=swt_society&utm_medium=partner&utm_campaign=swt_society_nov_2026"
+  status = 302
+  force = true
+
 # PROMPT_74. The Six Capacities guide opens in the browser rather than
 # forcing a save (a reader who can see it straight away is far more likely
 # to reach the last page, where the Score call to action sits), and saves
